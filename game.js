@@ -59,11 +59,11 @@ window.gameManager = {
             b.onclick = () => {
                 if (o === item.name) {
                     this.score += 20;
-                    app.addScore(20);
-                    app.playSound('correct');
+                    if (window.app) window.app.addScore(20);
+                    if (window.app) window.app.playSound('correct');
                     this.nextFusion();
                 } else {
-                    app.playSound('wrong');
+                    if (window.app) window.app.playSound('wrong');
                     b.style.borderColor = 'red';
                 }
             };
@@ -100,9 +100,11 @@ window.gameManager = {
             b.onclick = () => {
                 if (o === item.s) {
                     this.score += 20;
-                    app.addScore(20);
+                    if (window.app) window.app.addScore(20);
+                    if (window.app) window.app.playSound('correct');
                     this.nextFill();
                 } else {
+                    if (window.app) window.app.playSound('wrong');
                     b.style.borderColor = 'red';
                 }
             };
@@ -133,6 +135,7 @@ window.gameManager = {
         let activeSym = null;
         const symCon = document.getElementById('m-symbols');
         const nameCon = document.getElementById('m-names');
+        if (!symCon || !nameCon) return;
         symCon.innerHTML = ''; nameCon.innerHTML = '';
 
         symbols.forEach(s => {
@@ -143,6 +146,7 @@ window.gameManager = {
                 document.querySelectorAll('#m-symbols div').forEach(x => x.style.borderColor = 'var(--border-color)');
                 d.style.borderColor = 'var(--primary)';
                 activeSym = s;
+                if (window.app) window.app.playSound('click');
             };
             symCon.appendChild(d);
         });
@@ -162,10 +166,12 @@ window.gameManager = {
                         }
                     });
                     this.score += 20;
-                    app.addScore(20);
+                    if (window.app) window.app.addScore(20);
+                    if (window.app) window.app.playSound('correct');
                     activeSym = null;
                 } else {
                     d.style.borderColor = 'red';
+                    if (window.app) window.app.playSound('wrong');
                 }
             };
             nameCon.appendChild(d);
@@ -198,10 +204,12 @@ window.gameManager = {
     checkQuiz(choice, correct) {
         if (choice === correct) {
             this.score += 50;
-            app.addScore(50);
+            if (window.app) window.app.addScore(50);
+            if (window.app) window.app.playSound('correct');
             this.quizIdx++;
             this.renderQuiz();
         } else {
+            if (window.app) window.app.playSound('wrong');
             alert("Yanlış Cevap!");
         }
     },
