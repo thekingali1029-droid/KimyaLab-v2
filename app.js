@@ -60,39 +60,57 @@ const app = {
         // Theme Toggle
         this.els.themeBtn.addEventListener('click', () => this.toggleTheme());
     },
-
     handleLogin() {
-        const u = this.els.userInput.value;
-        const p = this.els.passInput.value;
+        const u = this.els.userInput.value.trim();
+        const p = this.els.passInput.value.trim();
+        
+        console.log("Giriş denemesi:", u);
+        
+        if (!KIMYALAB_DATA || !KIMYALAB_DATA.users) {
+            console.error("HATA: Veri katmanı yüklenemedi!");
+            return;
+        }
+
         const user = KIMYALAB_DATA.users.find(x => x.username === u && x.password === p);
 
-        if (user || u === 'admin') { // Bypass for easy testing
-            this.state.currentUser = u;
+        if (user || u === 'admin') {
+            console.log("Giriş başarılı!");
+            this.state.currentUser = u || 'Admin';
             this.loginSuccess();
         } else {
-            this.els.loginError.textContent = "Geçersiz kullanıcı adı veya şifre!";
+            console.warn("Giriş başarısız: Hatalı kimlik bilgileri.");
+            this.els.loginError.textContent = "Kullanıcı adı veya şifre hatalı!";
             this.els.loginError.style.display = 'block';
+            this.playSound('error');
         }
     },
 
     loginSuccess() {
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('dashboard-screen').classList.remove('hidden');
+        const loginScr = document.getElementById('login-screen');
+        const dashScr = document.getElementById('dashboard-screen');
+        
+        if (loginScr) loginScr.classList.add('hidden');
+        if (dashScr) dashScr.classList.remove('hidden');
+
         this.els.displayUser.textContent = this.state.currentUser;
-        this.els.quoteUser.textContent = this.state.currentUser;
+        if (this.els.quoteUser) this.els.quoteUser.textContent = this.state.currentUser;
+        
         this.updateStats();
         this.switchPage('page-home');
         this.playSound('login');
     },
 
     switchPage(pageId) {
-        this.els.pages.forEach(p => p.classList.add('hidden'));
-        this.els.pages.forEach(p => p.classList.remove('active-page'));
+        console.log("Sayfa geçişi:", pageId);
+        this.els.pages.forEach(p => {
+            p.classList.add('hidden');
+            p.classList.remove('active-page');
+        });
         
         const target = document.getElementById(pageId);
         if (target) {
             target.classList.remove('hidden');
-            target.classList.add('active-page');
+            setTimeout(() => target.classList.add('active-page'), 10);
         }
 
         this.els.navLinks.forEach(l => l.classList.remove('active'));
@@ -101,25 +119,23 @@ const app = {
 
         this.state.currentPage = pageId;
 
-        // Special renderers
         if (pageId === 'page-periodic-lab') this.renderPeriodicTable();
         if (pageId === 'page-tablolar') this.renderTablolar('cations');
     },
 
     updateStats() {
-        this.els.displayScore.textContent = this.state.score;
+        if (this.els.displayScore) this.els.displayScore.textContent = this.state.score;
         const level = KIMYALAB_DATA.levels.find(l => l.requiredScore <= this.state.score) || KIMYALAB_DATA.levels[0];
-        this.els.displayLevel.textContent = level.title;
+        if (this.els.displayLevel) this.els.displayLevel.textContent = level.title;
 
-        // Daily Target
         const progress = Math.min((this.state.score / this.state.dailyTarget) * 100, 100);
-        this.els.dailyProgress.style.width = `${progress}%`;
-        this.els.pointsNeeded.textContent = `${this.state.score} / ${this.state.dailyTarget} Puan`;
+        if (this.els.dailyProgress) this.els.dailyProgress.style.width = `${progress}%`;
+        if (this.els.pointsNeeded) this.els.pointsNeeded.textContent = `${this.state.score} / ${this.state.dailyTarget} Puan`;
     },
 
     renderTablolar(category) {
         const data = KIMYALAB_DATA[category];
-        if (!data) return;
+        if (!data || !this.els.tabloList) return;
 
         this.els.tabloList.innerHTML = data.map(item => `
             <div class="tablo-row">
@@ -127,14 +143,13 @@ const app = {
                     <div class="tr-symbol">${item.symbol || item.s}</div>
                     <div class="tr-name">${item.name}</div>
                 </div>
-                <div class="tr-charge">${item.charge || ''}</div>
+                <div class="tr-charge" style="font-weight:800; color:var(--primary)">${item.charge || ''}</div>
             </div>
         `).join('');
 
-        // Update active tab button style
         document.querySelectorAll('#page-tablolar .btn-back').forEach(btn => {
             btn.classList.remove('active-match');
-            if (btn.textContent.toLowerCase().includes(category.substring(0, 3).toLowerCase())) {
+            if (btn.getAttribute('onclick').includes(category)) {
                 btn.classList.add('active-match');
             }
         });
@@ -142,9 +157,9 @@ const app = {
 
     renderPeriodicTable() {
         const grid = this.els.periodicGrid;
+        if (!grid) return;
         grid.innerHTML = '';
         
-        // Define Grid Positions (Very simplified mapping)
         KIMYALAB_DATA.elements.forEach(el => {
             const div = document.createElement('div');
             div.className = `el-box cat-${el.cat}`;
@@ -154,7 +169,6 @@ const app = {
                 <span class="el-name">${el.name}</span>
             `;
             
-            // Manual Grid Positioning for Standard Periodic Table
             let row = 1, col = 1;
             const n = el.n;
             if (n === 1) { row = 1; col = 1; }
@@ -166,17 +180,16 @@ const app = {
             else if (n <= 36) { row = 4; col = n - 18; }
             else if (n <= 54) { row = 5; col = n - 36; }
             else if (n <= 86) { 
-                if (n >= 57 && n <= 71) { row = 8; col = n - 56 + 2; } // Lanthanides
+                if (n >= 57 && n <= 71) { row = 8; col = n - 56 + 2; } 
                 else { row = 6; col = n <= 56 ? n - 54 : n - 70 + 2; }
             }
             else if (n <= 118) {
-                if (n >= 89 && n <= 103) { row = 9; col = n - 88 + 2; } // Actinides
+                if (n >= 89 && n <= 103) { row = 9; col = n - 88 + 2; } 
                 else { row = 7; col = n <= 88 ? n - 86 : n - 102 + 2; }
             }
 
             div.style.gridRow = row;
             div.style.gridColumn = col;
-            
             div.onclick = () => this.showElementInfo(el);
             grid.appendChild(div);
         });
@@ -184,11 +197,14 @@ const app = {
 
     showElementInfo(el) {
         const details = document.getElementById('element-details');
+        if (!details) return;
         details.style.display = 'block';
         details.innerHTML = `
-            <h3>${el.name} (${el.s})</h3>
-            <p><b>Atom Numarası:</b> ${el.n}</p>
-            <p><b>Kategori:</b> ${el.cat.toUpperCase()}</p>
+            <div style="display:flex; justify-content:space-between; align-items:center">
+                <h3>${el.name} (${el.s})</h3>
+                <span style="background:var(--primary); color:white; padding:5px 10px; border-radius:10px; font-weight:800">#${el.n}</span>
+            </div>
+            <p style="margin-top:10px"><b>Kategori:</b> ${el.cat.toUpperCase()}</p>
         `;
     },
 
@@ -196,33 +212,47 @@ const app = {
         this.state.isDarkMode = !this.state.isDarkMode;
         document.body.classList.toggle('dark-theme', this.state.isDarkMode);
         localStorage.setItem('theme', this.state.isDarkMode ? 'dark' : 'light');
-        this.els.themeBtn.innerHTML = this.state.isDarkMode ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        if (this.els.themeBtn) {
+            this.els.themeBtn.innerHTML = this.state.isDarkMode ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        }
     },
 
     applyInitialTheme() {
         if (this.state.isDarkMode) {
             document.body.classList.add('dark-theme');
-            this.els.themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            if (this.els.themeBtn) this.els.themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
         }
     },
 
     startGame(mode) {
-        this.els.gameOverlay.classList.remove('hidden');
+        console.log("Oyun başlatılıyor:", mode);
+        const overlay = document.getElementById('game-overlay');
+        if (overlay) overlay.classList.remove('hidden');
+        
         if (window.gameManager) {
             window.gameManager.init(mode);
+        } else {
+            console.error("HATA: gameManager bulunamadı!");
         }
     },
 
     showDashboard() {
-        this.els.gameOverlay.classList.add('hidden');
+        const overlay = document.getElementById('game-overlay');
+        if (overlay) overlay.classList.add('hidden');
+        if (window.gameManager && window.gameManager.interval) {
+            clearInterval(window.gameManager.interval);
+        }
     },
 
     filterTables(query) {
-        const category = document.querySelector('#page-tablolar .active-match')?.textContent.toLowerCase();
+        const activeBtn = document.querySelector('#page-tablolar .active-match');
+        if (!activeBtn) return;
+        
+        const onclickAttr = activeBtn.getAttribute('onclick');
         let key = 'cations';
-        if (category?.includes('anyon')) key = 'anions';
-        if (category?.includes('metal')) key = 'metals';
-        if (category?.includes('ilk')) key = 'first20Elements';
+        if (onclickAttr.includes('anions')) key = 'anions';
+        if (onclickAttr.includes('metals')) key = 'metals';
+        if (onclickAttr.includes('first20Elements')) key = 'first20Elements';
 
         const data = KIMYALAB_DATA[key];
         const filtered = data.filter(item => 
@@ -237,7 +267,7 @@ const app = {
                     <div class="tr-symbol">${item.symbol || item.s}</div>
                     <div class="tr-name">${item.name}</div>
                 </div>
-                <div class="tr-charge">${item.charge || ''}</div>
+                <div class="tr-charge" style="font-weight:800; color:var(--primary)">${item.charge || ''}</div>
             </div>
         `).join('');
     },
@@ -257,9 +287,11 @@ const app = {
 
     playSound(type) {
         if (!this.state.soundEnabled) return;
-        console.log(`Oynatılan Ses: ${type}`);
+        console.log(`Ses: ${type}`);
     }
 };
 
-document.addEventListener('DOMContentLoaded', () => app.init());
-window.app = app;
+document.addEventListener('DOMContentLoaded', () => {
+    app.init();
+    window.app = app;
+});
