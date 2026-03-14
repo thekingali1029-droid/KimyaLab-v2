@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KimyaLab v2</title>
+    <!-- Google Fonts: Quicksand for a soft, modern look like the screenshot -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- EKRAN 1: Giriş Ekranı (Split Layout) -->
+    <section id="login-screen" class="view-screen active split-layout">
+        <!-- Sol Taraf (Form) -->
+        <div class="login-left">
+            <div class="logo-container">
+                <div class="circle-logo">
+                    <i class="fa-solid fa-flask"></i>
+                </div>
+            </div>
+            
+            <h1 class="main-title">Ramazan Hoca'nın<br>KimyaLab</h1>
+            <p class="subtitle">Kimyayı Fethedelim! 🛡️</p>
+
+            <form id="login-form">
+                <div id="login-error-msg" style="display:none; color: #e53e3e; background: #fff5f5; border: 1px solid #feb2b2; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold;"></div>
+
+                <div class="input-block">
+                    <i class="fa-solid fa-user icon-left"></i>
+                    <input type="text" id="username-input" placeholder="Kullanıcı adı" required autocomplete="off">
+                </div>
+                
+                <div class="input-block">
+                    <i class="fa-solid fa-lock icon-left"></i>
+                    <input type="password" id="password-input" placeholder="Şifre" required autocomplete="off">
+                </div>
+
+                <button type="submit" class="btn-primary">Giriş Yap 🚀</button>
+            </form>
+            
+            <div class="footer-text">
+                Rize Sosyal Bilimler Lisesi 🏫
+            </div>
+        </div>
+
+        <!-- Sağ Taraf (Bilgi Kartı) -->
+        <div class="login-right">
+            <div class="welcome-card">
+                <div class="circle-logo small">
+                    <i class="fa-solid fa-flask"></i>
+                </div>
+                <h2>Hoş geldin! 🧪</h2>
+                <p>Ramazan Hoca'nın öğrencisi</p>
+                
+                <div class="stats-row">
+                    <div class="stat-col">
+                        <i class="fa-solid fa-gamepad"></i> 4<br>Mod
+                    </div>
+                    <div class="stat-col">
+                        <i class="fa-solid fa-list-ol"></i> 600+<br>Soru
+                    </div>
+                    <div class="stat-col">
+                        <i class="fa-solid fa-trophy"></i> 8<br>Rozet
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EKRAN 2: Dashboard (Sidebar + Right Content) -->
+    <section id="dashboard-screen" class="view-screen hidden app-layout">
+        
+        <!-- Sol Menü (Sidebar) -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="circle-logo micro">
+                    <i class="fa-solid fa-flask"></i>
+                </div>
+                <div class="user-info">
+                    <span id="display-username" class="u-name">ofjsf</span>
+                    <span id="display-level" class="u-level">Çaylak</span>
+                </div>
+            </div>
+
+            <nav class="main-nav">
+                <p class="nav-title">ANA MENÜ</p>
+                <a href="#" class="nav-item active" data-target="page-home"><i class="fa-solid fa-house"></i> Ana Sayfa</a>
+                <a href="#" class="nav-item" data-target="page-home"><i class="fa-solid fa-gamepad"></i> Oyun Modları</a>
+                <a href="#" class="nav-item" data-target="page-tablolar"><i class="fa-regular fa-folder-open"></i> Tablolar</a>
+                <a href="#" class="nav-item" data-target="page-home"><i class="fa-solid fa-flask-vial"></i> P. Tablo Lab.</a>
+
+                <p class="nav-title mt-4">İSTATİSTİKLER</p>
+                <a href="#" class="nav-item" data-target="page-stats"><i class="fa-solid fa-chart-simple"></i> İstatistikler</a>
+                <a href="#" class="nav-item" data-target="page-badges"><i class="fa-solid fa-trophy"></i> Rozetler</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="score-mini">
+                    <span class="s-label">Puan: <span id="display-score">0</span></span>
+                    <div class="s-bar"><div class="s-fill" id="level-progress" style="width: 0%;"></div></div>
+                </div>
+                <div class="settings-row">
+                    <button class="toggle-btn"><i class="fa-solid fa-moon"></i> Tema</button>
+                    <button class="toggle-btn active-toggle" id="btn-sound-toggle"><i class="fa-solid fa-volume-high"></i> Ses AÇIK</button>
+                </div>
+                <button class="btn-secondary w-100 mt-2" onclick="playSound('click')"><i class="fa-solid fa-circle-exclamation"></i> Soru/Sorun Bildir</button>
+            </div>
+        </aside>
+
+        <!-- Sağ İçerik (Main Content Alanı) -->
+        <main class="main-content" id="main-view-area">
+            
+            <!-- ===== SAYFA 1: ANA SAYFA (Oyun Modları vb.) ===== -->
+            <div id="page-home" class="spa-page active-page">
+                <!-- Header Quote Banner -->
+                <div class="quote-banner">
+                    <i class="fa-regular fa-comment-dots q-icon"></i>
+                    <h3>Kimya dünyasının kapıları sana açık <span id="quote-username">ofjsf</span>! 🚀</h3>
+                    <p>— Ramazan Hoca</p>
+                </div>
+
+                <!-- Günlük Hedef -->
+                <div class="daily-goal-card">
+                    <div class="dg-header">
+                        <h4><i class="fa-solid fa-bullseye"></i> Günlük Hedef</h4>
+                        <span class="dg-count" id="points-needed">0/10</span>
+                    </div>
+                    <p class="dg-desc">Bugün 10 kart çevir</p>
+                    <div class="dg-bar">
+                        <div class="dg-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- Oyun Modları Grid -->
+                <div class="games-section">
+                    <h3 style="margin-bottom: 5px; color: var(--text-dark);">Hangi modda pratik yapmak istersin?</h3>
+                    <div class="games-grid mt-4">
+                        
+                        <!-- Kart 1: Element Füzyonu (Teal) -->
+                        <div class="game-card card-teal">
+                            <div class="gc-icon"><i class="fa-solid fa-images"></i></div>
+                            <h4>Flashcard</h4>
+                            <p>Kartları çevirerek elementleri öğren. Sembol ve isimleri eşleştir.</p>
+                            <p class="best-score"><i class="fa-solid fa-medal" style="color:#f6e05e;"></i> En iyi: 0</p>
+                            <button class="gc-btn" onclick="app.startGame('fusion')">Oyna →</button>
+                        </div>
+
+                        <!-- Kart 2: Boşluk Doldurma (Blue/Purple hue) -->
+                        <div class="game-card card-blueish">
+                            <div class="gc-icon"><i class="fa-solid fa-file-pen"></i></div>
+                            <h4>Boş Tablo Doldur</h4>
+                            <p>Tablodaki boş hücreleri doldurarak hafızanı test et.</p>
+                            <p class="best-score"><i class="fa-solid fa-medal" style="color:#f6e05e;"></i> En iyi: 0</p>
+                            <button class="gc-btn" onclick="app.startGame('fill')">Oyna →</button>
+                        </div>
+
+                        <!-- Kart 3: Eşleştirme (Magenta) -->
+                        <div class="game-card card-magenta">
+                            <div class="gc-icon"><i class="fa-solid fa-link"></i></div>
+                            <h4>Eşleştirme</h4>
+                            <p>Sembolleri doğru isimlerle eşleştir. Sürükle ve bırak!</p>
+                            <p class="best-score"><i class="fa-solid fa-medal" style="color:#f6e05e;"></i> En iyi: 0</p>
+                            <button class="gc-btn" onclick="app.startGame('classic')">Oyna →</button>
+                        </div>
+
+                        <!-- Kart 4: Quiz (Orange) -->
+                        <div class="game-card card-orange">
+                            <div class="gc-icon"><i class="fa-solid fa-vial"></i></div>
+                            <h4>Quiz</h4>
+                            <p>150 sorudan oluşan test bankasıyla kendini sına.</p>
+                            <p class="best-score"><i class="fa-solid fa-medal" style="color:#f6e05e;"></i> En iyi: 0</p>
+                            <button class="gc-btn" onclick="app.startGame('classic')">Oyna →</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div> <!-- End Page Home -->
+
+
+            <!-- ===== SAYFA 2: TABLOLAR ===== -->
+            <div id="page-tablolar" class="spa-page hidden">
+                <div class="tablo-container">
+                    <div class="search-bar-container">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Element ara..." class="search-input">
+                    </div>
+                    
+                    <div class="category-tabs">
+                        <button class="cat-btn active" onclick="app.renderTablolar('cations')"><i class="fa-solid fa-bolt"></i> Katyonlar</button>
+                        <button class="cat-btn" onclick="app.renderTablolar('anions')"><i class="fa-solid fa-flask"></i> Anyonlar</button>
+                        <button class="cat-btn"><i class="fa-solid fa-car-battery"></i> Metaller</button>
+                        <button class="cat-btn"><i class="fa-solid fa-atom"></i> İlk 20 Element</button>
+                    </div>
+
+                    <div id="tablo-listesi" class="tablo-liste-alani">
+                        <!-- JS tarafından render edilecek -->
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ===== SAYFA 3: İSTATİSTİKLER ===== -->
+            <div id="page-stats" class="spa-page hidden">
+                <div class="stats-header">
+                    <div class="s-box">
+                        <div class="s-icon"><i class="fa-solid fa-stopwatch"></i></div>
+                        <div class="s-val">0 saniye</div>
+                        <div class="s-title">Toplam Çalışma</div>
+                    </div>
+                    <div class="s-box">
+                        <div class="s-icon"><i class="fa-solid fa-gamepad"></i></div>
+                        <div class="s-val">0</div>
+                        <div class="s-title">Oyun Sayısı</div>
+                    </div>
+                    <div class="s-box">
+                        <div class="s-icon" style="color:var(--card-teal);"><i class="fa-solid fa-bullseye"></i></div>
+                        <div class="s-val">0%</div>
+                        <div class="s-title">Genel Doğruluk</div>
+                    </div>
+                    <div class="s-box">
+                        <div class="s-icon" style="color:var(--card-orange);"><i class="fa-solid fa-fire"></i></div>
+                        <div class="s-val">1</div>
+                        <div class="s-title">Gün Serisi</div>
+                    </div>
+                </div>
+
+                <div class="stats-body-card mt-4">
+                    <h4 class="sb-title"><i class="fa-solid fa-chart-line"></i> Tablo Bazında Doğruluk</h4>
+                    
+                    <!-- Progress Rows -->
+                    <div class="prog-row">
+                        <span class="pr-label"><i class="fa-solid fa-bolt" style="color:var(--card-orange);"></i> Katyonlar</span>
+                        <div class="pr-track"><div class="pr-fill" style="width: 0%;"></div></div>
+                        <span class="pr-val">0%</span>
+                    </div>
+                    <div class="prog-row">
+                        <span class="pr-label"><i class="fa-solid fa-flask" style="color:var(--text-muted);"></i> Anyonlar</span>
+                        <div class="pr-track"><div class="pr-fill" style="width: 0%;"></div></div>
+                        <span class="pr-val">0%</span>
+                    </div>
+                    <div class="prog-row">
+                        <span class="pr-label"><i class="fa-solid fa-car-battery" style="color:var(--text-muted);"></i> Metaller</span>
+                        <div class="pr-track"><div class="pr-fill" style="width: 0%;"></div></div>
+                        <span class="pr-val">0%</span>
+                    </div>
+                    <div class="prog-row">
+                        <span class="pr-label"><i class="fa-solid fa-atom" style="color:#a0aec0;"></i> İlk 20 Element</span>
+                        <div class="pr-track"><div class="pr-fill" style="width: 0%;"></div></div>
+                        <span class="pr-val">0%</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ===== SAYFA 4: ROZETLER ===== -->
+            <div id="page-badges" class="spa-page hidden">
+                <div class="rozet-head-area">
+                    <h3 style="color:var(--text-dark); margin-bottom: 5px;"><i class="fa-solid fa-trophy" style="color:#d69e2e;"></i> Rozetler</h3>
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom: 20px;" id="rozet-sayaci">0 / 8 rozet kazanıldı</p>
+                    
+                    <div class="gold-banner">
+                        <i class="fa-solid fa-coins"></i> 336 Altın İle Özel Fotoğraf Koy (2000 Altın)
+                    </div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); text-align:center; margin-bottom:30px;">*2000 Altın karşılığında internetten/galerinden bir resim URL'si koyabilirsin.</p>
+                </div>
+
+                <!-- 8 Rozet Grid -->
+                <div class="rozet-grid" id="rozet-grid">
+                    <!-- JS üzerinden data.js kullanılarak render edilecek -->
+                </div>
+            </div>
+
+        </main>
+    </section>
+
+    <!-- Oyun Ekranı: Overlay Pop-up -->
+    <div id="game-overlay" class="hidden">
+        <div class="game-popup">
+            <div class="game-header">
+                <button class="btn-back" onclick="app.showDashboard()"><i class="fa-solid fa-arrow-left"></i> Geri Dön</button>
+                <div class="game-timer" id="game-timer">Süre: <span>--</span></div>
+            </div>
+            <div id="game-container" class="game-area">
+                <!-- Oyun İçeriği js'den gelecek -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Müzik/Ses Dosyaları bağlanabilir buraya, app.js kendi ses sentezleyicisini taşıyor -->
+
+    <script src="data.js"></script>
+    <script src="game.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
