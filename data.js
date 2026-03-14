@@ -1,132 +1,185 @@
-// data.js - Veri Katmanı
-
 const KIMYALAB_DATA = {
-    // KULLANICI HESAPLARI (Sadece bu 10 kişi giriş yapabilir)
     users: [
         { username: 'ahmet123', password: '123' },
         { username: 'mehmet456', password: '123' },
         { username: 'ayse789', password: '123' },
-        { username: 'fatma000', password: '123' },
-        { username: 'ali111', password: '123' },
-        { username: 'veli222', password: '123' },
-        { username: 'zeynep333', password: '123' },
-        { username: 'elif444', password: '123' },
-        { username: 'mustafa555', password: '123' },
-        { username: 'ofjsf', password: '123' } // Ekran görüntüsündeki isim
+        { username: 'ofjsf', password: '123' }
     ],
 
-    // 1. Temel Elementler (Genişletilmiş)
+    // FULL PERİODİC TABLE (1-118)
     elements: [
-        { symbol: 'H', name: 'Hidrojen', number: 1 },
-        { symbol: 'He', name: 'Helyum', number: 2 },
-        { symbol: 'Li', name: 'Lityum', number: 3 },
-        { symbol: 'Be', name: 'Berilyum', number: 4 },
-        { symbol: 'B', name: 'Bor', number: 5 },
-        { symbol: 'C', name: 'Karbon', number: 6 },
-        { symbol: 'N', name: 'Azot', number: 7 },
-        { symbol: 'O', name: 'Oksijen', number: 8 },
-        { symbol: 'F', name: 'Flor', number: 9 },
-        { symbol: 'Ne', name: 'Neon', number: 10 },
-        { symbol: 'Na', name: 'Sodyum', number: 11 },
-        { symbol: 'Mg', name: 'Magnezyum', number: 12 },
-        { symbol: 'Al', name: 'Alüminyum', number: 13 },
-        { symbol: 'Si', name: 'Silisyum', number: 14 },
-        { symbol: 'P', name: 'Fosfor', number: 15 },
-        { symbol: 'S', name: 'Kükürt', number: 16 },
-        { symbol: 'Cl', name: 'Klor', number: 17 },
-        { symbol: 'Ar', name: 'Argon', number: 18 },
-        { symbol: 'K', name: 'Potasyum', number: 19 },
-        { symbol: 'Ca', name: 'Kalsiyum', number: 20 },
-        // Yaygın kullanılan diğer elementler
-        { symbol: 'Fe', name: 'Demir', number: 26 },
-        { symbol: 'Cu', name: 'Bakır', number: 29 },
-        { symbol: 'Zn', name: 'Çinko', number: 30 },
-        { symbol: 'Ag', name: 'Gümüş', number: 47 },
-        { symbol: 'Au', name: 'Altın', number: 79 },
-        { symbol: 'Hg', name: 'Cıva', number: 80 },
-        { symbol: 'Pb', name: 'Kurşun', number: 82 }
+        { n: 1, s: "H", name: "Hidrojen", cat: "nonmetal" },
+        { n: 2, s: "He", name: "Helyum", cat: "noble" },
+        { n: 3, s: "Li", name: "Lityum", cat: "alkali" },
+        { n: 4, s: "Be", name: "Berilyum", cat: "alkaline" },
+        { n: 5, s: "B", name: "Bor", cat: "metalloid" },
+        { n: 6, s: "C", name: "Karbon", cat: "nonmetal" },
+        { n: 7, s: "N", name: "Azot", cat: "nonmetal" },
+        { n: 8, s: "O", name: "Oksijen", cat: "nonmetal" },
+        { n: 9, s: "F", name: "Flor", cat: "halogen" },
+        { n: 10, s: "Ne", name: "Neon", cat: "noble" },
+        { n: 11, s: "Na", name: "Sodyum", cat: "alkali" },
+        { n: 12, s: "Mg", name: "Magnezyum", cat: "alkaline" },
+        { n: 13, s: "Al", name: "Alüminyum", cat: "transition" },
+        { n: 14, s: "Si", name: "Silisyum", cat: "metalloid" },
+        { n: 15, s: "P", name: "Fosfor", cat: "nonmetal" },
+        { n: 16, s: "S", name: "Kükürt", cat: "nonmetal" },
+        { n: 17, s: "Cl", name: "Klor", cat: "halogen" },
+        { n: 18, s: "Ar", name: "Argon", cat: "noble" },
+        { n: 19, s: "K", name: "Potasyum", cat: "alkali" },
+        { n: 20, s: "Ca", name: "Kalsiyum", cat: "alkaline" },
+        { n: 21, s: "Sc", name: "Skandiyum", cat: "transition" },
+        { n: 22, s: "Ti", name: "Titanyum", cat: "transition" },
+        { n: 23, s: "V", name: "Vanadyum", cat: "transition" },
+        { n: 24, s: "Cr", name: "Krom", cat: "transition" },
+        { n: 25, s: "Mn", name: "Manganez", cat: "transition" },
+        { n: 26, s: "Fe", name: "Demir", cat: "transition" },
+        { n: 27, s: "Co", name: "Kobalt", cat: "transition" },
+        { n: 28, s: "Ni", name: "Nikel", cat: "transition" },
+        { n: 29, s: "Cu", name: "Bakır", cat: "transition" },
+        { n: 30, s: "Zn", name: "Çinko", cat: "transition" },
+        { n: 31, s: "Ga", name: "Galyum", cat: "transition" },
+        { n: 32, s: "Ge", name: "Germanyum", cat: "metalloid" },
+        { n: 33, s: "As", name: "Arsenik", cat: "metalloid" },
+        { n: 34, s: "Se", name: "Selenyum", cat: "nonmetal" },
+        { n: 35, s: "Br", name: "Brom", cat: "halogen" },
+        { n: 36, s: "Kr", name: "Kripton", cat: "noble" },
+        { n: 37, s: "Rb", name: "Rubidyum", cat: "alkali" },
+        { n: 38, s: "Sr", name: "Stronsiyum", cat: "alkaline" },
+        { n: 39, s: "Y", name: "İtriyum", cat: "transition" },
+        { n: 40, s: "Zr", name: "Zirkonyum", cat: "transition" },
+        { n: 41, s: "Nb", name: "Niyobyum", cat: "transition" },
+        { n: 42, s: "Mo", name: "Molibden", cat: "transition" },
+        { n: 43, s: "Tc", name: "Teknesyum", cat: "transition" },
+        { n: 44, s: "Ru", name: "Rutenyum", cat: "transition" },
+        { n: 45, s: "Rh", name: "Rodyum", cat: "transition" },
+        { n: 46, s: "Pd", name: "Paladyum", cat: "transition" },
+        { n: 47, s: "Ag", name: "Gümüş", cat: "transition" },
+        { n: 48, s: "Cd", name: "Kadmiyum", cat: "transition" },
+        { n: 49, s: "In", name: "İndiyum", cat: "transition" },
+        { n: 50, s: "Sn", name: "Kalay", cat: "transition" },
+        { n: 51, s: "Sb", name: "Antimon", cat: "metalloid" },
+        { n: 52, s: "Te", name: "Tellür", cat: "metalloid" },
+        { n: 53, s: "I", name: "İyot", cat: "halogen" },
+        { n: 54, s: "Xe", name: "Ksenon", cat: "noble" },
+        { n: 55, s: "Cs", name: "Sezyum", cat: "alkali" },
+        { n: 56, s: "Ba", name: "Baryum", cat: "alkaline" },
+        { n: 57, s: "La", name: "Lantan", cat: "lanthanide" },
+        { n: 58, s: "Ce", name: "Seryum", cat: "lanthanide" },
+        { n: 59, s: "Pr", name: "Prasedim", cat: "lanthanide" },
+        { n: 60, s: "Nd", name: "Neodimyum", cat: "lanthanide" },
+        { n: 61, s: "Pm", name: "Prometyum", cat: "lanthanide" },
+        { n: 62, s: "Sm", name: "Samaryum", cat: "lanthanide" },
+        { n: 63, s: "Eu", name: "Europiyum", cat: "lanthanide" },
+        { n: 64, s: "Gd", name: "Gadolinyum", cat: "lanthanide" },
+        { n: 65, s: "Tb", name: "Terbiyum", cat: "lanthanide" },
+        { n: 66, s: "Dy", name: "Disprozyum", cat: "lanthanide" },
+        { n: 67, s: "Ho", name: "Holmiyum", cat: "lanthanide" },
+        { n: 68, s: "Er", name: "Erbiyum", cat: "lanthanide" },
+        { n: 69, s: "Tm", name: "Tulyum", cat: "lanthanide" },
+        { n: 70, s: "Yb", name: "İterbiyum", cat: "lanthanide" },
+        { n: 71, s: "Lu", name: "Lutesyum", cat: "lanthanide" },
+        { n: 72, s: "Hf", name: "Hafniyum", cat: "transition" },
+        { n: 73, s: "Ta", name: "Tantal", cat: "transition" },
+        { n: 74, s: "W", name: "Volfram", cat: "transition" },
+        { n: 75, s: "Re", name: "Renyum", cat: "transition" },
+        { n: 76, s: "Os", name: "Osmiyum", cat: "transition" },
+        { n: 77, s: "Ir", name: "İridyum", cat: "transition" },
+        { n: 78, s: "Pt", name: "Platin", cat: "transition" },
+        { n: 79, s: "Au", name: "Altın", cat: "transition" },
+        { n: 80, s: "Hg", name: "Cıva", cat: "transition" },
+        { n: 81, s: "Tl", name: "Talyum", cat: "transition" },
+        { n: 82, s: "Pb", name: "Kurşun", cat: "transition" },
+        { n: 83, s: "Bi", name: "Bizmut", cat: "transition" },
+        { n: 84, s: "Po", name: "Polonyum", cat: "metalloid" },
+        { n: 85, s: "At", name: "Astatin", cat: "halogen" },
+        { n: 86, s: "Rn", name: "Radon", cat: "noble" },
+        { n: 87, s: "Fr", name: "Fransiyum", cat: "alkali" },
+        { n: 88, s: "Ra", name: "Radyum", cat: "alkaline" },
+        { n: 89, s: "Ac", name: "Aktinyum", cat: "actinide" },
+        { n: 90, s: "Th", name: "Toryum", cat: "actinide" },
+        { n: 91, s: "Pa", name: "Protaktinyum", cat: "actinide" },
+        { n: 92, s: "U", name: "Uranyum", cat: "actinide" },
+        { n: 93, s: "Np", name: "Neptunyum", cat: "actinide" },
+        { n: 94, s: "Pu", name: "Plutonyum", cat: "actinide" },
+        { n: 95, s: "Am", name: "Amerikyum", cat: "actinide" },
+        { n: 96, s: "Cm", name: "Küriyum", cat: "actinide" },
+        { n: 97, s: "Bk", name: "Berkelyum", cat: "actinide" },
+        { n: 98, s: "Cf", name: "Kaliforniyum", cat: "actinide" },
+        { n: 99, s: "Es", name: "Aynştaynyum", cat: "actinide" },
+        { n: 100, s: "Fm", name: "Fermiyum", cat: "actinide" },
+        { n: 101, s: "Md", name: "Mendelevyum", cat: "actinide" },
+        { n: 102, s: "No", name: "Nobelyum", cat: "actinide" },
+        { n: 103, s: "Lr", name: "Lavrensiyum", cat: "actinide" },
+        { n: 104, s: "Rf", name: "Rutherfordiyum", cat: "transition" },
+        { n: 105, s: "Db", name: "Dubniyum", cat: "transition" },
+        { n: 106, s: "Sg", name: "Seaborgiyum", cat: "transition" },
+        { n: 107, s: "Bh", name: "Bohriyum", cat: "transition" },
+        { n: 108, s: "Hs", name: "Hassiyum", cat: "transition" },
+        { n: 109, s: "Mt", name: "Meitneriyum", cat: "transition" },
+        { n: 110, s: "Ds", name: "Darmstadtiyum", cat: "transition" },
+        { n: 111, s: "Rg", name: "Röntgenyum", cat: "transition" },
+        { n: 112, s: "Cn", name: "Kopernikyum", cat: "transition" },
+        { n: 113, s: "Nh", name: "Nihonyum", cat: "transition" },
+        { n: 114, s: "Fl", name: "Flerovyum", cat: "transition" },
+        { n: 115, s: "Mc", name: "Moskovyum", cat: "transition" },
+        { n: 116, s: "Lv", name: "Livermoryum", cat: "transition" },
+        { n: 117, s: "Ts", name: "Tennessin", cat: "halogen" },
+        { n: 118, s: "Og", name: "Oganesson", cat: "noble" }
     ],
 
-    // 2. Kökler ve İyonlar (Tablo Ekranı için Genişletilmiş)
     cations: [
+        { symbol: 'H⁺', name: 'Hidrojen', charge: '+1' },
         { symbol: 'Li⁺', name: 'Lityum', charge: '+1' },
         { symbol: 'Na⁺', name: 'Sodyum', charge: '+1' },
         { symbol: 'K⁺', name: 'Potasyum', charge: '+1' },
-        { symbol: 'Rb⁺', name: 'Rubidyum', charge: '+1' },
-        { symbol: 'Cs⁺', name: 'Sezyum', charge: '+1' },
-        { symbol: 'Ag⁺', name: 'Gümüş', charge: '+1' },
-        { symbol: 'NH₄⁺', name: 'Amonyum', charge: '+1' }
+        { symbol: 'NH₄⁺', name: 'Amonyum', charge: '+1' },
+        { symbol: 'Mg²⁺', name: 'Magnezyum', charge: '+2' },
+        { symbol: 'Ca²⁺', name: 'Kalsiyum', charge: '+2' },
+        { symbol: 'Ba²⁺', name: 'Baryum', charge: '+2' },
+        { symbol: 'Fe²⁺', name: 'Demir (II)', charge: '+2' },
+        { symbol: 'Fe³⁺', name: 'Demir (III)', charge: '+3' },
+        { symbol: 'Al³⁺', name: 'Alüminyum', charge: '+3' }
     ],
     anions: [
         { symbol: 'F⁻', name: 'Florür', charge: '-1' },
         { symbol: 'Cl⁻', name: 'Klorür', charge: '-1' },
-        { symbol: 'Br⁻', name: 'Bromür', charge: '-1' },
-        { symbol: 'I⁻', name: 'İyodür', charge: '-1' },
-        { symbol: 'OH⁻', name: 'Hidroksit', charge: '-1' },
-        { symbol: 'NO₃⁻', name: 'Nitrat', charge: '-1' }
-    ],
-
-    // Tüm kökler karışık
-    radicals: [
         { symbol: 'OH⁻', name: 'Hidroksit', charge: '-1' },
         { symbol: 'NO₃⁻', name: 'Nitrat', charge: '-1' },
         { symbol: 'SO₄²⁻', name: 'Sülfat', charge: '-2' },
-        { symbol: 'PO₄³⁻', name: 'Fosfat', charge: '-3' },
         { symbol: 'CO₃²⁻', name: 'Karbonat', charge: '-2' },
-        { symbol: 'NH₄⁺', name: 'Amonyum', charge: '+1' }
+        { symbol: 'PO₄³⁻', name: 'Fosfat', charge: '-3' }
     ],
-
-    // 3. İlerleme Sistemi (Seviyeler)
+    metals: [
+        { symbol: 'Fe', name: 'Demir' }, { symbol: 'Cu', name: 'Bakır' },
+        { symbol: 'Au', name: 'Altın' }, { symbol: 'Ag', name: 'Gümüş' }
+    ],
+    first20Elements: [
+        { symbol: 'H', name: 'Hidrojen', number: 1 }, { symbol: 'He', name: 'Helyum', number: 2 },
+        { symbol: 'Li', name: 'Lityum', number: 3 }, { symbol: 'Be', name: 'Berilyum', number: 4 }
+    ],
+    quizQuestions: [
+        { q: "Ametallerin kendi aralarında elektron ortaklaşması ile oluşturduğu bağ nedir?", a: "Kovalent Bağ", options: ["İyonik Bağ", "Metalik Bağ", "Kovalent Bağ", "Hidrojen Bağı"] },
+        { q: "Hangisi bir asal gazdır?", a: "Neon", options: ["Azot", "Oksijen", "Neon", "Flor"] },
+        { q: "Sülfat kökünün formülü hangisidir?", a: "SO₄²⁻", options: ["SO₃²⁻", "SO₄²⁻", "S²⁻", "HSO₄⁻"] },
+        { q: "NH₄⁺ iyonunun adı nedir?", a: "Amonyum", options: ["Amonyak", "Amonyum", "Nitrat", "Azotür"] },
+        { q: "Atomun çekirdeğinde hangi tanecikler bulunur?", a: "Proton ve Nötron", options: ["Proton ve Elektron", "Proton ve Nötron", "Elektron ve Nötron", "Sadece Proton"] }
+    ],
+    badges: [
+        { id: 'b_ilk_oyun', name: 'İlk Adım', desc: 'İlk oyununu tamamladın!', icon: 'fa-shoe-prints' },
+        { id: 'b_quiz_master', name: 'Quiz Master', desc: '10 quiz sorusunu doğru bil.', icon: 'fa-brain' }
+    ],
     levels: [
         { title: 'Çaylak', requiredScore: 0 },
-        { title: 'Asistan', requiredScore: 50 },
-        { title: 'Şef', requiredScore: 150 },
-        { title: 'Uzman', requiredScore: 300 },
-        { title: 'Araştırmacı', requiredScore: 500 },
-        { title: 'Profesör', requiredScore: 1000 }
-    ],
-
-    // 4. Rozetler (Ekran Görüntüsüne Göre Güncellendi)
-    badges: [
-        { id: 'b_ilk_oyun', name: 'İlk Oyun', desc: 'İlk oyununu tamamla', icon: 'fa-medal', locked: true },
-        { id: 'b_kombo_ustasi', name: 'Kombo Ustası', desc: '5 ardışık doğru cevap ver', icon: 'fa-fire', locked: true },
-        { id: 'b_super_kombo', name: 'Süper Kombo', desc: '10 ardışık doğru cevap ver', icon: 'fa-bolt', locked: true },
-        { id: 'b_efsane', name: 'Efsane', desc: '15 ardışık doğru cevap ver', icon: 'fa-crown', locked: true },
-        { id: 'b_mukemmel', name: 'Mükemmel', desc: 'Bir oyunda tam puan al', icon: 'fa-100', locked: true },
-        { id: 'b_tablo_fatihi', name: 'Tablo Fatihi', desc: '4 tabloyu da bitir', icon: 'fa-trophy', locked: true },
-        { id: 'b_kararli', name: 'Kararlı', desc: '3 günlük seri yap', icon: 'fa-calendar-days', locked: true },
-        { id: 'b_profesor', name: 'Profesör', desc: '601+ puan topla', icon: 'fa-user-graduate', locked: true }
+        { title: 'Deha', requiredScore: 500 }
     ]
 };
 
-// Basit Utility Fonksiyonları
 const utils = {
-    // Array'den rastgele eleman seç
     getRandomItem: (arr) => arr[Math.floor(Math.random() * arr.length)],
-    
-    // Array'i karıştır
-    shuffleArray: (arr) => {
-        let array = [...arr];
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    },
-    
-    // N tane benzersiz yanlış cevap üret (Tüm elementler listesinden)
-    getWrongAnswers: (correctName, count, dataType = 'elements') => {
-        let allItems = KIMYALAB_DATA[dataType];
-        let wrongOptions = [];
-        let limit = 0; // infinite loop guard
-        
-        while(wrongOptions.length < count && limit < 100) {
-            let randItem = utils.getRandomItem(allItems);
-            if(randItem.name !== correctName && !wrongOptions.includes(randItem.name)) {
-                wrongOptions.push(randItem.name);
-            }
-            limit++;
-        }
-        return wrongOptions;
+    shuffleArray: (arr) => [...arr].sort(() => Math.random() - 0.5),
+    getWrongAnswers: (correct, count, type) => {
+        const pool = KIMYALAB_DATA[type] || KIMYALAB_DATA.elements;
+        return utils.shuffleArray(pool.filter(e => (e.name || e.s) !== correct)).slice(0, count).map(e => e.name || e.s);
     }
 };
