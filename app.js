@@ -4,19 +4,51 @@ const app = {
     state: {
         currentUser: null,
         score: 0,
-        dailyTarget: 100,
+        dailyTarget: 500, // ZORLAŞTIRILDI
         currentPage: 'page-home',
         isDarkMode: localStorage.getItem('theme') === 'dark',
-        soundEnabled: true
+        soundEnabled: true,
+        selectedGameMode: null,
+        maxCombo: 0,
+        title: 'Çaylak',
+        loginMode: 'normal',
+        isVIP: false
     },
 
     els: {},
 
     init() {
+        if (typeof KIMYALAB_DATA === 'undefined') {
+            console.error("KRİTİK HATA: Veri katmanı (data.js) yüklenemedi!");
+            return;
+        }
         this.cacheElements();
         this.bindEvents();
         this.applyInitialTheme();
+        this.handleSplash();
         console.log("KimyaLab v2 Başlatıldı!");
+    },
+
+    handleSplash() {
+        const splash = document.getElementById('splash-screen');
+        const bar = document.getElementById('splash-progress');
+        if (!splash || !bar) return;
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 30;
+            if (progress >= 100) {
+                progress = 100;
+                bar.style.width = '100%';
+                clearInterval(interval);
+                setTimeout(() => {
+                    splash.classList.remove('active');
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.style.display = 'none', 500);
+                }, 500);
+            }
+            bar.style.width = `${progress}%`;
+        }, 200);
     },
 
     cacheElements() {
@@ -37,7 +69,10 @@ const app = {
             tabloList: document.getElementById('tablo-listesi'),
             periodicGrid: document.getElementById('periodic-grid'),
             gameOverlay: document.getElementById('game-overlay'),
-            themeBtn: document.getElementById('btn-theme-toggle')
+            themeBtn: document.getElementById('btn-theme-toggle'),
+            soundBtn: document.getElementById('btn-sound-toggle'),
+            displayTitle: document.getElementById('display-title'),
+            userAvatar: document.getElementById('user-avatar')
         };
     },
 
@@ -59,42 +94,93 @@ const app = {
 
         // Theme Toggle
         this.els.themeBtn.addEventListener('click', () => this.toggleTheme());
+
+        // Sound Toggle
+        if (this.els.soundBtn) {
+            this.els.soundBtn.addEventListener('click', () => this.toggleSound());
+        }
     },
+    setLoginMode(mode) {
+        this.state.loginMode = mode;
+        const normalTab = document.getElementById('tab-normal');
+        const guestTab = document.getElementById('tab-guest');
+        const passBlock = document.getElementById('pass-block');
+        const userInput = document.getElementById('username-input');
+
+        if (mode === 'normal') {
+            normalTab.classList.add('active-match');
+            guestTab.classList.remove('active-match');
+            passBlock.style.display = 'flex';
+            userInput.placeholder = "Kullanıcı adı";
+        } else {
+            guestTab.classList.add('active-match');
+            normalTab.classList.remove('active-match');
+            passBlock.style.display = 'flex'; // VIP needs password too
+            userInput.placeholder = "V.I.P Erişim Adı";
+        }
+        this.playSound('click');
+    },
+
     handleLogin() {
         const u = this.els.userInput.value.trim();
         const p = this.els.passInput.value.trim();
-        
-        console.log("Giriş denemesi:", u);
-        
-        if (!KIMYALAB_DATA || !KIMYALAB_DATA.users) {
-            console.error("HATA: Veri katmanı yüklenemedi!");
+
+        if (!u) return;
+
+        if (this.state.loginMode === 'guest') {
+            if (u === 'kaydek' && p === 'ela') {
+                this.state.currentUser = 'Kaydek';
+                this.state.isVIP = true;
+                this.state.title = 'V.I.P Prenses 👑';
+                this.els.userAvatar.src = 'vip_1.png'; // Default VIP avatar
+                this.applyVIPTheme();
+                this.loginSuccess();
+            } else {
+                this.els.loginError.textContent = "V.I.P Girişi Reddedildi! Geçersiz Kimlik.";
+                this.els.loginError.style.display = 'block';
+                this.playSound('wrong');
+            }
             return;
         }
 
         const user = KIMYALAB_DATA.users.find(x => x.username === u && x.password === p);
 
-        if (user || u === 'admin') {
-            console.log("Giriş başarılı!");
-            this.state.currentUser = u || 'Admin';
+        if (user || (u === 'admin' && p === 'admin')) {
+            this.state.currentUser = user ? user.username : 'Admin';
             this.loginSuccess();
         } else {
-            console.warn("Giriş başarısız: Hatalı kimlik bilgileri.");
-            this.els.loginError.textContent = "Kullanıcı adı veya şifre hatalı!";
+            this.els.loginError.textContent = "Hatalı kullanıcı adı veya şifre!";
             this.els.loginError.style.display = 'block';
-            this.playSound('error');
+            this.playSound('wrong');
         }
     },
 
     loginSuccess() {
         const loginScr = document.getElementById('login-screen');
         const dashScr = document.getElementById('dashboard-screen');
-        
-        if (loginScr) loginScr.classList.add('hidden');
-        if (dashScr) dashScr.classList.remove('hidden');
 
-        this.els.displayUser.textContent = this.state.currentUser;
-        if (this.els.quoteUser) this.els.quoteUser.textContent = this.state.currentUser;
-        
+        if (loginScr) {
+            loginScr.classList.remove('active'); // CRITICAL: active has display:flex !important
+            loginScr.classList.add('hidden');
+        }
+        if (dashScr) {
+            dashScr.classList.remove('hidden');
+        }
+
+        // Royal Name Display with Tiara for VIP
+        let nameHtml = this.state.currentUser;
+        if (this.state.isVIP) {
+            nameHtml = `<i class="fa-solid fa-crown" style="color:#ff85a1; filter:drop-shadow(0 0 8px #ff4d6d); margin-right:8px;"></i>${this.state.currentUser}`;
+        }
+
+        if (this.els.displayUser) this.els.displayUser.innerHTML = nameHtml;
+        if (this.els.quoteUser) this.els.quoteUser.innerHTML = nameHtml;
+
+        // Load user-specific data
+        const userData = KIMYALAB_DATA.users.find(u => u.username === this.state.currentUser) || {};
+        if (userData.avatar) this.els.userAvatar.src = userData.avatar;
+        if (userData.title) this.state.title = userData.title;
+
         this.updateStats();
         this.switchPage('page-home');
         this.playSound('login');
@@ -106,7 +192,7 @@ const app = {
             p.classList.add('hidden');
             p.classList.remove('active-page');
         });
-        
+
         const target = document.getElementById(pageId);
         if (target) {
             target.classList.remove('hidden');
@@ -121,16 +207,113 @@ const app = {
 
         if (pageId === 'page-periodic-lab') this.renderPeriodicTable();
         if (pageId === 'page-tablolar') this.renderTablolar('cations');
+        if (pageId === 'page-stats') this.renderStats();
+        if (pageId === 'page-badges') this.renderBadges();
+    },
+
+    renderStats() {
+        const pgScore = document.getElementById('pg-stat-score');
+        const pgCombo = document.getElementById('pg-stat-combo');
+        const pgLevel = document.getElementById('pg-stat-level');
+        const pgBar = document.getElementById('pg-level-bar');
+
+        if (pgScore) pgScore.textContent = this.state.score;
+        if (pgCombo) pgCombo.textContent = this.state.maxCombo;
+
+        const level = [...KIMYALAB_DATA.levels].reverse().find(l => this.state.score >= l.requiredScore) || KIMYALAB_DATA.levels[0];
+        const nextLevel = KIMYALAB_DATA.levels[KIMYALAB_DATA.levels.indexOf(level) + 1];
+
+        if (pgLevel) pgLevel.textContent = level.title;
+        if (pgBar && nextLevel) {
+            const currentReq = level.requiredScore;
+            const nextReq = nextLevel.requiredScore;
+            const progress = ((this.state.score - currentReq) / (nextReq - currentReq)) * 100;
+            pgBar.style.width = `${Math.min(Math.max(progress, 0), 100)}%`;
+        } else if (pgBar) {
+            pgBar.style.width = '100%';
+        }
+    },
+
+    renderBadges() {
+        const grid = document.getElementById('rozet-grid');
+        if (!grid) return;
+
+        const earned = JSON.parse(localStorage.getItem('badges') || '[]');
+
+        grid.innerHTML = KIMYALAB_DATA.badges.map(b => {
+            const isEarned = earned.includes(b.id);
+            return `
+                <div class="glass-card animate-slide-up" style="text-align:center; opacity: ${isEarned ? '1' : '0.4'}; filter: ${isEarned ? 'none' : 'grayscale(1)'}">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; color: ${isEarned ? 'var(--accent)' : 'var(--text-muted)'}">
+                        <i class="fa-solid ${b.icon}"></i>
+                    </div>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 5px;">${b.name}</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted)">${b.desc}</p>
+                    ${isEarned ? '<span style="font-size:0.7rem; color:var(--success); font-weight:800; text-transform:uppercase; margin-top:10px; display:block">KAZANILDI</span>' : ''}
+                </div>
+            `;
+        }).join('');
     },
 
     updateStats() {
         if (this.els.displayScore) this.els.displayScore.textContent = this.state.score;
-        const level = KIMYALAB_DATA.levels.find(l => l.requiredScore <= this.state.score) || KIMYALAB_DATA.levels[0];
+
+        // Find highest level available for current score
+        const level = [...KIMYALAB_DATA.levels].reverse().find(l => this.state.score >= l.requiredScore) || KIMYALAB_DATA.levels[0];
+
+        if (this.els.displayLevel && this.els.displayLevel.textContent !== level.title) {
+            this.handleLevelUp(level);
+        }
+
         if (this.els.displayLevel) this.els.displayLevel.textContent = level.title;
+
+        // Title System
+        const titlePool = this.state.isVIP ? KIMYALAB_DATA.vipTitles : KIMYALAB_DATA.titles;
+        const currentTitle = [...titlePool].reverse().find(t => this.state.score >= t.score) || titlePool[0];
+
+        if (this.state.title !== currentTitle.title) {
+            this.state.title = currentTitle.title;
+            this.showRewardModal("YENİ LAKAP!", `Tebrikler, artık bir: ${this.state.title} ✨`);
+        }
+        if (this.els.displayTitle) this.els.displayTitle.textContent = this.state.title;
+
+        // Home Page Stats Sync
+        const mainScore = document.getElementById('stat-main-score');
+        const mainCombo = document.getElementById('stat-main-combo');
+        if (mainScore) mainScore.textContent = this.state.score;
+        if (mainCombo) mainCombo.textContent = this.state.maxCombo;
 
         const progress = Math.min((this.state.score / this.state.dailyTarget) * 100, 100);
         if (this.els.dailyProgress) this.els.dailyProgress.style.width = `${progress}%`;
         if (this.els.pointsNeeded) this.els.pointsNeeded.textContent = `${this.state.score} / ${this.state.dailyTarget} Puan`;
+    },
+
+    handleLevelUp(level) {
+        this.showRewardModal("SEVİYE ATLADIN!", `Tebrikler, yeni rütben: ${level.title} ✨`);
+        this.playSound('levelup');
+    },
+
+    showRewardModal(title, desc) {
+        const backdrop = document.getElementById('modal-backdrop');
+        const modal = document.getElementById('level-up-modal');
+        const tEl = document.getElementById('reward-title');
+        const dEl = document.getElementById('reward-desc');
+
+        if (backdrop && modal) {
+            tEl.textContent = title;
+            dEl.textContent = desc;
+            backdrop.classList.add('active');
+            modal.classList.add('active');
+        }
+    },
+
+    closeRewardModal() {
+        const backdrop = document.getElementById('modal-backdrop');
+        const modal = document.getElementById('level-up-modal');
+        if (backdrop && modal) {
+            backdrop.classList.remove('active');
+            modal.classList.remove('active');
+        }
     },
 
     renderTablolar(category) {
@@ -138,7 +321,7 @@ const app = {
         if (!data || !this.els.tabloList) return;
 
         this.els.tabloList.innerHTML = data.map(item => `
-            <div class="tablo-row">
+            <div class="tablo-row" onmouseenter="app.playSound('hover')" onclick="app.showItemInfo(\`${item.symbol || item.s}\`, \`${category}\`)">
                 <div class="tr-left">
                     <div class="tr-symbol">${item.symbol || item.s}</div>
                     <div class="tr-name">${item.name}</div>
@@ -159,7 +342,7 @@ const app = {
         const grid = this.els.periodicGrid;
         if (!grid) return;
         grid.innerHTML = '';
-        
+
         KIMYALAB_DATA.elements.forEach(el => {
             const div = document.createElement('div');
             div.className = `el-box cat-${el.cat}`;
@@ -168,7 +351,7 @@ const app = {
                 <span class="el-sym">${el.s}</span>
                 <span class="el-name">${el.name}</span>
             `;
-            
+
             let row = 1, col = 1;
             const n = el.n;
             if (n === 1) { row = 1; col = 1; }
@@ -179,18 +362,18 @@ const app = {
             else if (n <= 18) { row = 3; col = n; }
             else if (n <= 36) { row = 4; col = n - 18; }
             else if (n <= 54) { row = 5; col = n - 36; }
-            else if (n <= 86) { 
-                if (n >= 57 && n <= 71) { row = 8; col = n - 56 + 2; } 
+            else if (n <= 86) {
+                if (n >= 57 && n <= 71) { row = 8; col = n - 56 + 2; }
                 else { row = 6; col = n <= 56 ? n - 54 : n - 70 + 2; }
             }
             else if (n <= 118) {
-                if (n >= 89 && n <= 103) { row = 9; col = n - 88 + 2; } 
+                if (n >= 89 && n <= 103) { row = 9; col = n - 88 + 2; }
                 else { row = 7; col = n <= 88 ? n - 86 : n - 102 + 2; }
             }
 
-            div.style.gridRow = row;
             div.style.gridColumn = col;
             div.onclick = () => this.showElementInfo(el);
+            div.onmouseenter = () => this.playSound('hover');
             grid.appendChild(div);
         });
     },
@@ -205,7 +388,67 @@ const app = {
                 <span style="background:var(--primary); color:white; padding:5px 10px; border-radius:10px; font-weight:800">#${el.n}</span>
             </div>
             <p style="margin-top:10px"><b>Kategori:</b> ${el.cat.toUpperCase()}</p>
+            <p style="margin-top:10px; color:var(--text-muted); font-size:0.9rem; line-height:1.5;">${el.desc || 'Bu element hakkında henüz detaylı bilgi eklenmedi.'}</p>
         `;
+        this.speak(`${el.name}. ${el.desc || ''}`);
+    },
+
+    showItemInfo(symbol, category) {
+        const item = KIMYALAB_DATA[category].find(x => (x.symbol || x.s) === symbol);
+        if (!item) return;
+
+        const details = document.getElementById('item-details');
+        if (!details) return;
+
+        this.playSound('click');
+        details.style.display = 'block';
+        details.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom:15px">
+                <h3 style="color:var(--primary); font-size:1.5rem;">${item.name}</h3>
+                <span class="glass-card" style="padding:5px 15px; font-weight:800; color:var(--primary-glow); font-size:1.2rem; border-color:var(--primary)">${item.symbol || item.s}</span>
+            </div>
+            <p style="color:var(--text-main); line-height:1.6; font-size:1rem;">
+                ${item.desc || 'Bu madde hakkında henüz detaylı bilgi eklenmedi bilim dostu! 🧪'}
+            </p>
+            ${item.charge ? `<p style="margin-top:10px; font-size:0.85rem; color:var(--text-muted)"><b>Yük / Grup:</b> ${item.charge}</p>` : ''}
+        `;
+
+        // Scroll to details on mobile
+        details.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        this.speak(`${item.name}. ${item.desc || ''}`);
+    },
+
+    speak(text) {
+        if (!this.state.soundEnabled || !window.speechSynthesis) return;
+
+        window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'tr-TR';
+
+        const voices = window.speechSynthesis.getVoices();
+
+        // Comprehensive search for a high-quality Turkish female voice
+        let femaleVoice = voices.find(v =>
+            v.lang.includes('tr') &&
+            (v.name.includes('Google') || v.name.includes('Female') || v.name.includes('Emel') || v.name.includes('Duygu'))
+        );
+
+        // Secondary fallback: Any Turkish voice that isn't known to be male
+        if (!femaleVoice) {
+            femaleVoice = voices.find(v => v.lang.includes('tr') && !v.name.includes('Tolga') && !v.name.includes('Male'));
+        }
+
+        if (femaleVoice) {
+            utterance.voice = femaleVoice;
+            console.log("Seçilen Kadın Sesi:", femaleVoice.name);
+        }
+
+        utterance.rate = 0.95;
+        utterance.pitch = 1.15; // Slightly higher for female tone
+        utterance.volume = 0.8;
+
+        window.speechSynthesis.speak(utterance);
     },
 
     toggleTheme() {
@@ -217,6 +460,14 @@ const app = {
         }
     },
 
+    toggleSound() {
+        this.state.soundEnabled = !this.state.soundEnabled;
+        if (this.els.soundBtn) {
+            this.els.soundBtn.innerHTML = this.state.soundEnabled ? '<i class="fa-solid fa-volume-high"></i>' : '<i class="fa-solid fa-volume-xmark"></i>';
+        }
+        console.log("Ses:", this.state.soundEnabled ? "Açık" : "Kapalı");
+    },
+
     applyInitialTheme() {
         if (this.state.isDarkMode) {
             document.body.classList.add('dark-theme');
@@ -224,16 +475,116 @@ const app = {
         }
     },
 
-    startGame(mode) {
-        console.log("Oyun başlatılıyor:", mode);
+    applyVIPTheme() {
+        document.body.classList.add('theme-vip-pink');
+        document.body.classList.remove('dark-theme');
+
+        const container = document.getElementById('butterfly-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+        const bTypes = ['🦋', '🧚', '🌸', '✨'];
+        const hTypes = ['💖', '💕', '💗', '💓'];
+        
+        // Add Imperial Butterflies & Hearts
+        for (let i = 0; i < 20; i++) {
+            const b = document.createElement('div');
+            b.className = 'butterfly';
+            b.textContent = bTypes[Math.floor(Math.random() * bTypes.length)];
+            b.style.left = Math.random() * 100 + 'vw';
+            b.style.animationDelay = Math.random() * 15 + 's';
+            b.style.fontSize = (2 + Math.random() * 2.5) + 'rem';
+            container.appendChild(b);
+            
+            const h = document.createElement('div');
+            h.className = 'heart-particle';
+            h.textContent = hTypes[Math.floor(Math.random() * hTypes.length)];
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.animationDelay = Math.random() * 10 + 's';
+            h.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+            container.appendChild(h);
+        }
+
+        // Add 80 Tiny Stars
+        for (let i = 0; i < 80; i++) {
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.style.left = Math.random() * 100 + 'vw';
+            s.style.top = Math.random() * 100 + 'vh';
+            s.style.animationDelay = Math.random() * 5 + 's';
+            container.appendChild(s);
+        }
+
+        const logos = document.querySelectorAll('.circle-logo-img');
+        logos.forEach(l => {
+            l.style.borderColor = '#ffb7c5';
+            l.style.boxShadow = '0 0 30px rgba(255, 77, 109, 0.6)';
+        });
+    },
+
+    openDifficultyModal(mode) {
+        this.state.selectedGameMode = mode;
+        const modal = document.getElementById('difficulty-modal');
+        if (modal) modal.classList.add('active');
+    },
+
+    closeDifficultyModal() {
+        const modal = document.getElementById('difficulty-modal');
+        if (modal) modal.classList.remove('active');
+    },
+
+    startGameWithDifficulty(difficulty) {
+        this.closeDifficultyModal();
         const overlay = document.getElementById('game-overlay');
         if (overlay) overlay.classList.remove('hidden');
-        
+
         if (window.gameManager) {
-            window.gameManager.init(mode);
-        } else {
-            console.error("HATA: gameManager bulunamadı!");
+            window.gameManager.init(this.state.selectedGameMode, difficulty);
         }
+    },
+
+    showProfileModal() {
+        const modal = document.getElementById('profile-modal');
+        if (!modal) return;
+
+        modal.classList.add('active');
+        document.getElementById('modal-display-username').textContent = this.state.currentUser;
+        document.getElementById('modal-display-title').textContent = this.state.title;
+        document.getElementById('modal-user-avatar').src = this.els.userAvatar.src;
+        document.getElementById('stat-total-score').textContent = this.state.score;
+        document.getElementById('stat-max-combo').textContent = this.state.maxCombo;
+
+        // Render Avatars
+        const avatarList = document.getElementById('avatar-list');
+        const availableAvatars = this.state.isVIP ? [...KIMYALAB_DATA.vipAvatars, ...KIMYALAB_DATA.avatars] : KIMYALAB_DATA.avatars;
+
+        avatarList.innerHTML = availableAvatars.map(url => `
+            <img src="${url}" class="avatar-option ${url === this.els.userAvatar.src ? 'active' : ''}" onclick="app.changeAvatar('${url}')" onmouseenter="app.playSound('hover')">
+        `).join('');
+
+        // Render Badges
+        const earned = JSON.parse(localStorage.getItem('badges') || '[]');
+        const badgeList = document.getElementById('modal-badge-list');
+        badgeList.innerHTML = earned.map(bid => {
+            const b = KIMYALAB_DATA.badges.find(x => x.id === bid);
+            return `<div class="mini-badge"><i class="fa-solid ${b.icon}"></i> ${b.name}</div>`;
+        }).join('') || '<p style="font-size:0.8rem; color:var(--text-muted)">Henüz rozet kazanılmadı.</p>';
+    },
+
+    closeProfileModal() {
+        document.getElementById('profile-modal').classList.remove('active');
+    },
+
+    changeAvatar(url) {
+        this.els.userAvatar.src = url;
+        document.getElementById('modal-user-avatar').src = url;
+        document.querySelectorAll('.avatar-option').forEach(img => img.classList.remove('active'));
+        const active = Array.from(document.querySelectorAll('.avatar-option')).find(img => img.src === url);
+        if (active) active.classList.add('active');
+    },
+
+    startGame(mode) {
+        this.openDifficultyModal(mode);
     },
 
     showDashboard() {
@@ -247,22 +598,24 @@ const app = {
     filterTables(query) {
         const activeBtn = document.querySelector('#page-tablolar .active-match');
         if (!activeBtn) return;
-        
+
         const onclickAttr = activeBtn.getAttribute('onclick');
         let key = 'cations';
         if (onclickAttr.includes('anions')) key = 'anions';
         if (onclickAttr.includes('metals')) key = 'metals';
         if (onclickAttr.includes('first20Elements')) key = 'first20Elements';
+        if (onclickAttr.includes('acidsBases')) key = 'acidsBases';
+        if (onclickAttr.includes('labEquip')) key = 'labEquip';
 
         const data = KIMYALAB_DATA[key];
-        const filtered = data.filter(item => 
-            (item.name && item.name.toLowerCase().includes(query.toLowerCase())) || 
+        const filtered = data.filter(item =>
+            (item.name && item.name.toLowerCase().includes(query.toLowerCase())) ||
             (item.symbol && item.symbol.toLowerCase().includes(query.toLowerCase())) ||
             (item.s && item.s.toLowerCase().includes(query.toLowerCase()))
         );
 
         this.els.tabloList.innerHTML = filtered.map(item => `
-            <div class="tablo-row">
+            <div class="tablo-row" onmouseenter="app.playSound('hover')" onclick="app.showItemInfo(\`${item.symbol || item.s}\`, \`${key}\`)">
                 <div class="tr-left">
                     <div class="tr-symbol">${item.symbol || item.s}</div>
                     <div class="tr-name">${item.name}</div>
@@ -275,19 +628,84 @@ const app = {
     addScore(points) {
         this.state.score += points;
         this.updateStats();
+
+        // Achievement checks
+        if (this.state.score >= 100) this.awardBadge('b_caylak');
         if (this.state.score >= 500) this.awardBadge('b_profesor');
+        if (this.state.score >= 1000) this.awardBadge('b_legend');
     },
 
     awardBadge(badgeId) {
+        const earned = JSON.parse(localStorage.getItem('badges') || '[]');
+        if (earned.includes(badgeId)) return;
+
         const badge = KIMYALAB_DATA.badges.find(b => b.id === badgeId);
         if (badge) {
-            console.log(`Rozet Kazanıldı: ${badge.name}`);
+            earned.push(badgeId);
+            localStorage.setItem('badges', JSON.stringify(earned));
+            this.showRewardModal("YENİ ROZET!", `${badge.name}: ${badge.desc} 🏅`);
+            this.playSound('badge');
         }
     },
 
     playSound(type) {
         if (!this.state.soundEnabled) return;
-        console.log(`Ses: ${type}`);
+
+        const sounds = {
+            click: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
+            hover: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
+            correct: 'https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3',
+            wrong: 'https://assets.mixkit.co/active_storage/sfx/2573/2573-preview.mp3',
+            levelup: 'https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3',
+            badge: 'https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3'
+        };
+
+        if (sounds[type]) {
+            const audio = new Audio(sounds[type]);
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log("Audio play failed:", e));
+        }
+    },
+
+    // TOURNAMENT LOGIC
+    showTournamentSetup() {
+        this.switchPage('page-tournament-setup');
+        this.setTournamentTeams(3); // Default
+    },
+
+    setTournamentTeams(count) {
+        document.querySelectorAll('.team-count-btn').forEach(b => {
+            b.classList.remove('active');
+            if (parseInt(b.textContent) === count) b.classList.add('active');
+        });
+
+        const container = document.getElementById('tournament-names-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+        for (let i = 1; i <= count; i++) {
+            container.innerHTML += `
+                <div>
+                    <label style="color:var(--text-muted); font-size:0.8rem;">Takım ${i} Lakabı:</label>
+                    <input type="text" class="input-block" id="t-name-${i}" placeholder="Lakap yaz..." value="Takım ${i}" 
+                           style="padding:12px; margin-top:5px; background:var(--bg-white); border:1px solid var(--border-color); color:var(--text-main); width:100%; border-radius:10px;">
+                </div>
+            `;
+        }
+        this.state.tournamentTeamCount = count;
+    },
+
+    startTournament() {
+        const teams = [];
+        for (let i = 1; i <= this.state.tournamentTeamCount; i++) {
+            const name = document.getElementById(`t-name-${i}`).value || `Takım ${i}`;
+            teams.push({ name: name, score: 0, lives: 5, hints: 3, active: true });
+        }
+
+        if (window.gameManager) {
+            this.playSound('click');
+            gameManager.initTournament(teams);
+        }
     }
 };
 

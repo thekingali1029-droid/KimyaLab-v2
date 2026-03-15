@@ -3,35 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KimyaLab v2 | Yeşilvadi Anadolu Lisesi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>KimyaLab v2 | Profesyonel Kimya Simülasyonu</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="loading">
+
+    <!-- SPLASH SCREEN / LOADING -->
+    <div id="splash-screen" class="modal-backdrop active" style="z-index: 2000; background: var(--bg-main); display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div class="circle-logo animate-glow" style="width: 150px; height: 150px; margin-bottom: 2rem; border-width: 8px;">
+            <img src="school_logo.jpg" class="circle-logo-img">
+        </div>
+        <h2 style="color:var(--primary); font-weight:800; letter-spacing:4px;">KİMYALAB v2</h2>
+        <p style="color:var(--text-muted); margin-top:1rem; font-weight:600;">Sistemler optimize ediliyor...</p>
+        <div style="width: 200px; height: 4px; background: var(--border-color); border-radius: 2px; margin-top: 2rem; overflow: hidden;">
+            <div id="splash-progress" style="width: 0%; height: 100%; background: var(--primary); transition: width 0.5s;"></div>
+        </div>
+    </div>
+
+    <!-- VIP BUTTERFLIES -->
+    <div id="butterfly-container" class="butterfly-container"></div>
 
     <!-- SECTION 1: LOGIN -->
     <section id="login-screen" class="view-screen active split-layout">
         <div class="login-left">
             <div class="circle-logo">
-                <img src="profil.jpg" class="circle-logo-img" onerror="this.src='https://via.placeholder.com/150'">
+                <img src="school_logo.jpg" class="circle-logo-img">
             </div>
             <h1 class="main-title">Yeşilvadi<br>Anadolu Lisesi</h1>
             <p class="subtitle">Kimya Laboratuvarı v2</p>
 
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <button type="button" class="btn-back active-match" id="tab-normal" onclick="app.setLoginMode('normal')" style="flex:1; font-weight:800; border-radius:10px;">Öğrenci Girişi</button>
+                <button type="button" class="btn-back" id="tab-guest" onclick="app.setLoginMode('guest')" style="flex:1; font-weight:800; border-radius:10px;">V.I.P Giriş 💎</button>
+            </div>
+
             <form id="login-form">
                 <div id="login-error-msg" style="display:none; color: #e53e3e; background: #fff5f5; border: 1px solid #feb2b2; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center; font-weight: bold;"></div>
-                <div class="input-block">
-                    <i class="fa-solid fa-user"></i>
-                    <input type="text" id="username-input" placeholder="Kullanıcı adı" required autocomplete="off">
+                
+                <div id="login-inputs-area">
+                    <div class="input-block">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="username-input" placeholder="Kullanıcı adı" required autocomplete="off">
+                    </div>
+                    <div class="input-block" id="pass-block">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="password-input" placeholder="Şifre" required autocomplete="off">
+                    </div>
                 </div>
-                <div class="input-block">
-                    <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="password-input" placeholder="Şifre" required autocomplete="off">
-                </div>
-                <button type="submit" class="btn-primary">Giriş Yap 🚀</button>
+
+                <button type="submit" class="btn-primary" id="login-submit-btn">Laboratuvara Gir 🚀</button>
             </form>
-            <div class="footer-text" style="margin-top:2rem; font-weight:700; color:var(--text-muted)">Ramazan Hoca Sunar 🏫</div>
+            <div class="footer-text" style="margin-top:2rem; font-weight:700; color:var(--text-muted)">Ali EL Feriz</div>
         </div>
         <div class="login-right">
             <div class="welcome-card glass-card">
@@ -49,13 +73,14 @@
     <!-- SECTION 2: APP AREA -->
     <section id="dashboard-screen" class="view-screen hidden app-layout">
         <aside class="sidebar">
-            <div class="user-profile">
-                <div class="circle-logo" style="width:50px; height:50px; margin:0; border-width:2px;">
-                    <img src="profil.jpg" class="circle-logo-img" onerror="this.src='https://via.placeholder.com/50'">
+            <div class="user-profile clickable" onclick="app.showProfileModal()">
+                <div class="circle-logo animate-glow" style="width:60px; height:60px; margin:0; border-width:3px;">
+                    <img id="user-avatar" src="school_logo.jpg" class="circle-logo-img">
                 </div>
                 <div class="user-info">
                     <span id="display-username" class="u-name">Misafir</span>
-                    <span id="display-level" class="u-level">Çaylak</span>
+                    <span id="display-title" class="u-title" style="display:block; font-size:0.7rem; color:var(--accent); font-weight:800">Çaylak</span>
+                    <span id="display-level" class="u-level">Seviye 1</span>
                 </div>
             </div>
 
@@ -89,15 +114,45 @@
         <main class="main-content">
             <!-- PAGE 1: HOME -->
             <div id="page-home" class="spa-page active-page">
-                <div class="hero-banner">
-                    <h1>Hoş Geldin, <span id="quote-username">Gezgin</span>!</h1>
-                    <p>Bugün atomların gizemini çözmeye ne dersin?</p>
+                <div class="hero-banner animate-slide-up">
+                    <h1>Hoş Geldin, <span id="quote-username" class="animate-glow">Gezgin</span>! 🧪</h1>
+                    <p style="opacity:0.8">Bugün atomların gizemini çözmeye ve bilim efsanesi olmaya hazır mısın?</p>
                 </div>
-                <div class="glass-card" style="margin-bottom:2rem">
-                    <h3 style="margin-bottom:1rem"><i class="fa-solid fa-bullseye" style="color:var(--primary)"></i> Günlük Hedef</h3>
-                    <p id="points-needed" style="font-weight:700; color:var(--text-muted); margin-bottom:10px;">0 / 100 Puan</p>
-                    <div style="height:12px; background:var(--bg-main); border-radius:6px; overflow:hidden">
-                        <div id="daily-progress" style="width:0%; height:100%; background:var(--primary); transition:width 1s"></div>
+
+                <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:20px; margin-bottom:2rem">
+                    <div class="glass-card animate-slide-up">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem">
+                            <h3 style="margin:0"><i class="fa-solid fa-bullseye" style="color:var(--primary)"></i> GÜNLÜK HEDEF</h3>
+                            <span style="background:linear-gradient(90deg, var(--danger), #ff8a00); color:white; padding:4px 12px; border-radius:30px; font-size:0.65rem; font-weight:900; letter-spacing:1px">HARDCORE</span>
+                        </div>
+                        <p id="points-needed" style="font-weight:800; font-size:1.5rem; color:var(--primary); margin-bottom:15px;">0 / 500 Puan</p>
+                        <div style="height:14px; background:rgba(255,255,255,0.05); border-radius:10px; overflow:hidden; border:1px solid var(--border-color)">
+                            <div id="daily-progress" style="width:0%; height:100%; background:linear-gradient(90deg, var(--primary), var(--secondary)); box-shadow: 0 0 15px var(--primary-glow); transition:width 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card animate-slide-up" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center">
+                        <div style="font-size:2rem; color:var(--accent); margin-bottom:10px;"><i class="fa-solid fa-bolt"></i></div>
+                        <h4 style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px">Aktif Seri</h4>
+                        <div style="font-size:2rem; font-weight:800">1 GÜN</div>
+                    </div>
+                </div>
+
+                <div class="stats-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
+                    <div class="glass-card animate-slide-up" style="padding:1.5rem">
+                        <i class="fa-solid fa-flask" style="color:var(--card-teal); font-size:1.2rem; margin-bottom:10px"></i>
+                        <p style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase">Deney Sayısı</p>
+                        <h3 id="stat-total-games">24</h3>
+                    </div>
+                    <div class="glass-card animate-slide-up" style="padding:1.5rem">
+                        <i class="fa-solid fa-fire" style="color:var(--danger); font-size:1.2rem; margin-bottom:10px"></i>
+                        <p style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase">Max Kombo</p>
+                        <h3 id="stat-main-combo">12</h3>
+                    </div>
+                    <div class="glass-card animate-slide-up" style="padding:1.5rem">
+                        <i class="fa-solid fa-award" style="color:var(--accent); font-size:1.2rem; margin-bottom:10px"></i>
+                        <p style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase">Başarı Puanı</p>
+                        <h3 id="stat-main-score">150</h3>
                     </div>
                 </div>
             </div>
@@ -106,35 +161,37 @@
             <div id="page-games" class="spa-page hidden">
                 <h2 style="margin-bottom:2rem">Laboratuvar Oyunları 🧪</h2>
                 <div class="games-grid">
-                    <div class="game-card" style="background:var(--card-teal)" onclick="app.startGame('fusion')">
-                        <i class="fa-solid fa-bolt" style="font-size:2rem; margin-bottom:1rem"></i>
+                    <div class="game-card" style="background:var(--card-teal)" onclick="app.startGame('fusion')" onmouseenter="app.playSound('hover')">
+                        <i class="fa-solid fa-bolt"></i>
                         <h3>Füzyon</h3>
                         <p>Hızlı sembol eşleştirme testi.</p>
-                        <button class="btn-primary" style="background:rgba(255,255,255,0.2); margin-top:1rem; box-shadow:none">Oyna</button>
                     </div>
-                    <div class="game-card" style="background:var(--card-purple)" onclick="app.startGame('fill')">
-                        <i class="fa-solid fa-pen-nib" style="font-size:2rem; margin-bottom:1rem"></i>
+                    <div class="game-card" style="background:var(--card-green)" onclick="app.startGame('fill')" onmouseenter="app.playSound('hover')">
+                        <i class="fa-solid fa-pen-nib"></i>
                         <h3>Tahmin</h3>
                         <p>İsimden sembol tahmini yap.</p>
-                        <button class="btn-primary" style="background:rgba(255,255,255,0.2); margin-top:1rem; box-shadow:none">Oyna</button>
                     </div>
-                    <div class="game-card" style="background:var(--card-pink)" onclick="app.startGame('classic')">
-                        <i class="fa-solid fa-layer-group" style="font-size:2rem; margin-bottom:1rem"></i>
+                    <div class="game-card" style="background:var(--card-pink)" onclick="app.startGame('classic')" onmouseenter="app.playSound('hover')">
+                        <i class="fa-solid fa-link"></i>
                         <h3>Eşleştirme</h3>
-                        <p>Kartları hafızanla eşleştir.</p>
-                        <button class="btn-primary" style="background:rgba(255,255,255,0.2); margin-top:1rem; box-shadow:none">Oyna</button>
+                        <p>Kartları doğru eşle.</p>
                     </div>
-                    <div class="game-card" style="background:var(--card-orange)" onclick="app.startGame('quiz')">
-                        <i class="fa-solid fa-vial" style="font-size:2rem; margin-bottom:1rem"></i>
-                        <h3>Quiz</h3>
+                    <div class="game-card" style="background:var(--accent)" onclick="app.showTournamentSetup()" onmouseenter="app.playSound('hover')">
+                        <i class="fa-solid fa-trophy"></i>
+                        <h3>Turnuva</h3>
+                        <p>Sınıfça büyük rekabet!</p>
+                    </div>
+                    <div class="game-card" style="background:var(--card-purple)" onclick="app.startGame('quiz')" onmouseenter="app.playSound('hover')">
+                        <i class="fa-solid fa-vial"></i>
+                        <h3>Süper Quiz</h3>
                         <p>Bilgini geniş bir testle sına.</p>
-                        <button class="btn-primary" style="background:rgba(255,255,255,0.2); margin-top:1rem; box-shadow:none">Oyna</button>
                     </div>
                 </div>
             </div>
 
             <!-- PAGE 3: TABLES -->
             <div id="page-tablolar" class="spa-page hidden">
+                <h2 style="margin-bottom:2rem">Ders Materyalleri 📚</h2>
                 <div class="glass-card">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem">
                         <div class="search-bar-container" style="max-width:300px">
@@ -145,10 +202,16 @@
                             <button class="btn-back active-match" onclick="app.renderTablolar('cations')">Katyonlar</button>
                             <button class="btn-back" onclick="app.renderTablolar('anions')">Anyonlar</button>
                             <button class="btn-back" onclick="app.renderTablolar('metals')">Metaller</button>
+                            <button class="btn-back" onclick="app.renderTablolar('acidsBases')">Asit/Bazlar</button>
+                            <button class="btn-back" onclick="app.renderTablolar('labEquip')">Lab Araçları</button>
                             <button class="btn-back" onclick="app.renderTablolar('first20Elements')">İlk 20</button>
                         </div>
                     </div>
                     <div id="tablo-listesi" class="tablo-liste-alani"></div>
+                    <!-- New Item Detail Section -->
+                    <div id="item-details" class="glass-card animate-slide-up" style="margin-top:20px; border:2px dashed var(--primary); display:none; background:rgba(251, 192, 45, 0.05)">
+                        <!-- Details injected via JS -->
+                    </div>
                 </div>
             </div>
 
@@ -165,12 +228,37 @@
                 </div>
             </div>
 
-            <!-- PAGE 5: STATS/BADGES -->
+            <!-- PAGE 5: STATS -->
             <div id="page-stats" class="spa-page hidden">
-                <div class="stats-header" id="stats-summary"></div>
+                <h2 style="margin-bottom:2rem">Kişisel Başarılarım 📈</h2>
+                <div class="stats-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+                    <div class="glass-card animate-slide-up">
+                        <i class="fa-solid fa-star" style="color:var(--primary); font-size:1.5rem; margin-bottom:1rem"></i>
+                        <h4 style="color:var(--text-muted); font-size:0.8rem; text-transform:uppercase">Güncel Puan</h4>
+                        <h3 id="pg-stat-score" style="font-size:2.5rem; font-weight:800">0</h3>
+                    </div>
+                    <div class="glass-card animate-slide-up" style="animation-delay:0.1s">
+                        <i class="fa-solid fa-fire-flame-curved" style="color:var(--danger); font-size:1.5rem; margin-bottom:1rem"></i>
+                        <h4 style="color:var(--text-muted); font-size:0.8rem; text-transform:uppercase">Maksimum Kombo</h4>
+                        <h3 id="pg-stat-combo" style="font-size:2.5rem; font-weight:800">0</h3>
+                    </div>
+                    <div class="glass-card animate-slide-up" style="animation-delay:0.2s">
+                        <i class="fa-solid fa-vials" style="color:var(--secondary); font-size:1.5rem; margin-bottom:1rem"></i>
+                        <h4 style="color:var(--text-muted); font-size:0.8rem; text-transform:uppercase">Seviye İlerlemesi</h4>
+                        <h3 id="pg-stat-level" style="font-size:1.5rem; font-weight:800">Seviye 1</h3>
+                        <div style="height:8px; background:rgba(255,255,255,0.05); border-radius:10px; margin-top:10px; overflow:hidden">
+                            <div id="pg-level-bar" style="height:100%; width:30%; background:var(--primary)"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- PAGE 6: BADGES -->
             <div id="page-badges" class="spa-page hidden">
-                <div class="rozet-grid" id="rozet-grid"></div>
+                <h2 style="margin-bottom:2rem">Bilim Rozetlerim 🏅</h2>
+                <div id="rozet-grid" class="rozet-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:20px;">
+                    <!-- Badge cards injected here -->
+                </div>
             </div>
         </main>
     </section>
@@ -180,9 +268,90 @@
         <div class="game-popup glass-card">
             <div style="display:flex; justify-content:space-between; margin-bottom:2rem; align-items:center">
                 <button class="btn-back" onclick="app.showDashboard()"><i class="fa-solid fa-xmark"></i> Çıkış</button>
-                <div id="game-timer" style="font-size:1.5rem; font-weight:800; color:var(--primary)">Süre: <span>60</span></div>
+                <div style="display:flex; align-items:center; gap:15px">
+                    <div id="game-hints" class="hidden" onclick="gameManager.useHint()" style="cursor:pointer; background:var(--primary); color:black; padding:5px 15px; border-radius:20px; font-weight:800; font-size:0.8rem; box-shadow:0 0 10px var(--primary-glow)">💡 İpucu: <span>3</span></div>
+                    <div id="game-lives" style="font-size:1.5rem; color:var(--accent); display:flex; gap:5px;"></div>
+                    <div id="game-combo" class="hidden" style="background:var(--accent); color:white; padding:5px 15px; border-radius:20px; font-weight:800; font-size:0.8rem;">COMBO x1</div>
+                    <div id="game-timer" style="font-size:1.5rem; font-weight:800; color:var(--primary)">Süre: <span>60</span></div>
+                </div>
             </div>
             <div id="game-container"></div>
+        </div>
+    </div>
+
+    <!-- REWARD / LEVEL UP MODAL -->
+    <div id="modal-backdrop" class="modal-backdrop"></div>
+    <div id="level-up-modal">
+        <div style="font-size: 5rem; margin-bottom: 1rem;">🏆</div>
+        <h2 id="reward-title" style="color:var(--primary); font-size:2.5rem; margin-bottom:1rem;">TEBRİKLER!</h2>
+        <p id="reward-desc" style="font-weight:600; color:var(--text-muted); margin-bottom:2rem;">Yeni bir başarı kazandın!</p>
+        <button class="btn-primary" onclick="app.closeRewardModal()">Harika! 🚀</button>
+    </div>
+
+    <!-- GAME DIFFICULTY MODAL -->
+    <div id="difficulty-modal" class="modal-backdrop">
+        <div class="glass-card animate-slide-up" style="max-width:400px; text-align:center; margin: auto;">
+            <h2 style="margin-bottom:1.5rem">Zorluk Seç ✨</h2>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <button class="btn-back" onclick="app.startGameWithDifficulty('easy')" style="border-color:#10b981; color:#10b981">Kolay (90sn, +10 Puan)</button>
+                <button class="btn-back" onclick="app.startGameWithDifficulty('normal')" style="border-color:#3b82f6; color:#3b82f6">Normal (60sn, +20 Puan)</button>
+                <button class="btn-back" onclick="app.startGameWithDifficulty('hard')" style="border-color:#ef4444; color:#ef4444">Zor (30sn, +50 Puan)</button>
+            </div>
+            <button class="btn-back" onclick="app.closeDifficultyModal()" style="margin-top:1.5rem; width:100%">Vazgeç</button>
+        </div>
+    </div>
+
+    <!-- PROFILE MODAL -->
+    <div id="profile-modal" class="modal-backdrop" style="display:flex; justify-content:center; align-items:center;">
+        <div class="glass-card animate-slide-up" style="max-width:600px; width:90%; position:relative;">
+            <button class="btn-back" onclick="app.closeProfileModal()" style="position:absolute; right:20px; top:20px; padding:5px 10px;"><i class="fa-solid fa-times"></i></button>
+            <div style="display:flex; gap:30px; align-items:flex-start;">
+                <div style="text-align:center;">
+                    <div class="circle-logo animate-glow" style="width:120px; height:120px; border-width:5px;">
+                        <img id="modal-user-avatar" src="school_logo.jpg" class="circle-logo-img">
+                    </div>
+                    <h3 id="modal-display-username" style="margin-top:10px;">Kullanıcı Adı</h3>
+                    <p id="modal-display-title" style="color:var(--accent); font-weight:800; font-size:0.9rem;">Süper Simyacı</p>
+                </div>
+                <div style="flex:1;">
+                    <h4 style="margin-bottom:10px;"><i class="fa-solid fa-image-portrait"></i> Avatar Değiştir</h4>
+                    <div id="avatar-list" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:20px;"></div>
+                    
+                    <h4 style="margin-bottom:10px;"><i class="fa-solid fa-trophy"></i> İstatistiklerim</h4>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div class="glass-card" style="padding:10px; font-size:0.8rem;"><b>Toplam Puan:</b> <span id="stat-total-score">0</span></div>
+                        <div class="glass-card" style="padding:10px; font-size:0.8rem;"><b>En Yüksek Kombo:</b> <span id="stat-max-combo">0</span></div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:20px; border-top:1px solid var(--border-color); padding-top:20px;">
+                <h4 style="margin-bottom:15px;"><i class="fa-solid fa-medal"></i> Son Başarılar</h4>
+                <div id="modal-badge-list" style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tournament Setup Page -->
+    <div id="page-tournament-setup" class="spa-page animate-slide-up">
+        <div class="modal-content glass-card" style="max-width:600px; margin:50px auto; padding:40px; position:relative;">
+            <button class="btn-back" onclick="app.switchPage('page-games')" style="position:absolute; top:20px; right:20px"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="text-align:center; color:var(--primary); margin-bottom:2rem;"><i class="fa-solid fa-users-gear"></i> Turnuva Kurulumu</h2>
+            
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:10px; color:var(--text-muted)">Takım Sayısı Seç:</label>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-back team-count-btn" onclick="app.setTournamentTeams(1)" style="flex:1">1</button>
+                    <button class="btn-back team-count-btn" onclick="app.setTournamentTeams(2)" style="flex:1">2</button>
+                    <button class="btn-back team-count-btn active" onclick="app.setTournamentTeams(3)" style="flex:1">3</button>
+                    <button class="btn-back team-count-btn" onclick="app.setTournamentTeams(4)" style="flex:1">4</button>
+                </div>
+            </div>
+
+            <div id="tournament-names-container" style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:30px;">
+                <!-- Dynamic Inputs -->
+            </div>
+
+            <button class="btn-primary" onclick="app.startTournament()">Turnuvayı Başlat! 🚀</button>
         </div>
     </div>
 
