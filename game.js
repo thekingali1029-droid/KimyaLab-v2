@@ -207,11 +207,21 @@ window.gameManager = {
     },
 
     initFusionMode(container) {
+        // Diversified Pool: Elements, Cations, Anions, Acids/Bases, Lab Equipment
+        this.currentPool = [
+            ...KIMYALAB_DATA.elements,
+            ...KIMYALAB_DATA.cations.map(c => ({ s: c.symbol, n: c.name })),
+            ...KIMYALAB_DATA.anions.map(a => ({ s: a.symbol, n: a.name })),
+            ...KIMYALAB_DATA.acidsBases.map(ab => ({ s: ab.symbol, n: ab.name })),
+            ...KIMYALAB_DATA.labEquip.map(le => ({ s: le.symbol, n: le.name }))
+        ];
+
         container.innerHTML = `
             <div class="animate-slide-up" style="text-align:center">
-                <h3 style="color:var(--primary); margin-bottom:1rem;">Element Füzyonu ⚡</h3>
+                <h3 style="color:var(--primary); margin-bottom:1rem;">Profesyonel Element Füzyonu ⚛️</h3>
                 <div id="q-sym" class="glass-card animate-glow" style="font-size:5rem; font-weight:800; margin:20px 0; padding:30px; border:2px solid var(--primary); text-shadow: 0 0 20px var(--primary-glow)">--</div>
                 <div id="opts" style="display:grid; grid-template-columns:1fr 1fr; gap:15px"></div>
+                <div style="margin-top:20px; color:var(--text-muted); font-size:0.9rem">Katyonlar, Anyonlar, Asitler ve Malzemeler dahil edildi!</div>
             </div>
         `;
         this.startTimer();
@@ -219,15 +229,9 @@ window.gameManager = {
     },
 
     nextFusion() {
-        let pool;
-        if (this.isRetryMode) {
-            pool = this.wrongQuestions;
-            if (pool.length === 0) return this.endGame("Tekrar Testi Bitti! ✨");
-        } else {
-            pool = (KIMYALAB_DATA.fusionQuestions && KIMYALAB_DATA.fusionQuestions.length > 0) 
-                         ? KIMYALAB_DATA.fusionQuestions : KIMYALAB_DATA.elements;
-        }
-        
+        let pool = this.isRetryMode ? this.wrongQuestions : this.currentPool;
+        if (!pool || pool.length === 0) pool = this.currentPool;
+
         const item = utils.getRandomItem(pool);
         if (!item) return;
 
@@ -236,6 +240,7 @@ window.gameManager = {
         if (symEl) symEl.textContent = item.s || item.symbol;
         
         const correctName = item.n || item.name;
+        // Distractors from the same pool for more difficulty
         const wrongPool = pool.map(x => x.n || x.name).filter(n => n !== correctName);
         const distractors = utils.shuffleArray([...new Set(wrongPool)]).slice(0, 3);
         const opts = utils.shuffleArray([correctName, ...distractors]);
@@ -265,11 +270,19 @@ window.gameManager = {
     },
 
     initFillMode(container) {
+        this.currentPool = [
+            ...KIMYALAB_DATA.elements,
+            ...KIMYALAB_DATA.compounds.map(c => ({ symbol: c.symbol, name: c.name })),
+            ...KIMYALAB_DATA.acidsBases.map(ab => ({ symbol: ab.symbol, name: ab.name })),
+            ...KIMYALAB_DATA.labEquip.map(le => ({ symbol: le.symbol, name: le.name }))
+        ];
+
         container.innerHTML = `
             <div class="animate-slide-up" style="text-align:center">
-                <h3 style="color:var(--primary); margin-bottom:1rem;">İsim Tahmini 🧩</h3>
-                <div id="q-name" class="glass-card" style="font-size:2.5rem; font-weight:800; margin:20px 0; padding:20px; border:2px solid var(--primary); box-shadow: 0 0 20px rgba(251, 192, 45, 0.2)">--</div>
+                <h3 style="color:var(--primary); margin-bottom:1rem;">Profesyonel İsim Tahmini 🧩</h3>
+                <div id="q-name" class="glass-card" style="font-size:1.8rem; font-weight:800; margin:20px 0; padding:20px; border:2px solid var(--primary); box-shadow: 0 0 20px rgba(37, 99, 235, 0.2)">--</div>
                 <div id="opts-fill" style="display:grid; grid-template-columns:1fr 1fr; gap:15px"></div>
+                <div style="margin-top:20px; color:var(--text-muted); font-size:0.9rem">Bileşikler ve Karışımlar eklendi.</div>
             </div>
         `;
         this.startTimer();
@@ -277,13 +290,8 @@ window.gameManager = {
     },
 
     nextFill() {
-        let pool;
-        if (this.isRetryMode) {
-            pool = this.wrongQuestions;
-            if (pool.length === 0) return this.endGame("Tekrar Testi Bitti! ✨");
-        } else {
-            pool = KIMYALAB_DATA.elements;
-        }
+        let pool = this.isRetryMode ? this.wrongQuestions : this.currentPool;
+        if (!pool || pool.length === 0) pool = this.currentPool;
 
         const item = utils.getRandomItem(pool);
         if (!item) return;
@@ -292,7 +300,8 @@ window.gameManager = {
         if (nameEl) nameEl.textContent = item.name;
         
         const correctSym = item.s || item.symbol;
-        const distractors = utils.getWrongAnswers(correctSym, 3, 'elements');
+        // Generic distractors fallback if category logic fails
+        const distractors = utils.shuffleArray(pool.map(p => p.s || p.symbol).filter(s => s !== correctSym)).slice(0, 3);
         const opts = utils.shuffleArray([correctSym, ...distractors]);
 
         const optContainer = document.getElementById('opts-fill');
@@ -520,6 +529,13 @@ window.gameManager = {
         }
         
         this.updateComboUI();
+        if (this.combo > this.maxCombo) {
+            this.maxCombo = this.combo;
+            if (window.app) {
+                // Special sound for combo milestones
+                if (this.combo % 5 === 0) window.app.playSound('levelup');
+            }
+        }
         setTimeout(() => {
             if (this.currentMode === 'classic') {
                 // Classic mode might need earlier UI clearing if we don't wait for nextFn
@@ -690,15 +706,46 @@ window.gameManager = {
         const con = document.getElementById('game-container');
         if (!con) return;
 
+        // Stat tracking
+        let totalGames = parseInt(localStorage.getItem('totalGames') || '0');
+        totalGames++;
+        localStorage.setItem('totalGames', totalGames);
+
+        // Achievement Logic
+        if (window.app) {
+            window.app.awardBadge('b_ilk_oyun');
+            if (totalGames >= 50) window.app.awardBadge('b_lab_faresi');
+            if (this.maxCombo >= 15) window.app.awardBadge('b_combo_15');
+            if (this.currentMode === 'quiz' && this.score >= 100) window.app.awardBadge('b_quiz_master');
+            if (this.difficulty === 'hard' && this.lives === 5 && this.score >= 200) window.app.awardBadge('b_nobel');
+            
+            // Check for acid expert if they did many acid questions
+            if (this.currentMode === 'fusion' && this.score >= 300) window.app.awardBadge('b_asit_uzmani');
+        }
+
         con.innerHTML = `
             <div class="animate-slide-up" style="text-align:center; padding:40px;">
                 <h2 style="font-size:3rem; margin-bottom:1rem; color: var(--primary)">${msg}</h2>
-                <div class="glass-card" style="padding:40px; margin:20px auto; max-width: 400px; border: 2px solid var(--primary-glow)">
-                    <p style="text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted)">Toplam Skor</p>
+                <div class="glass-card" style="padding:40px; margin:20px auto; max-width: 450px; border: 2px solid var(--primary-glow)">
+                    <p style="text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted)">BU SEANS SKORU</p>
                     <h3 style="font-size:4.5rem; color:var(--primary); font-weight: 900;">${this.score}</h3>
+                    <div style="display:flex; justify-content:space-around; margin-top:20px; border-top:1px solid var(--border-color); padding-top:20px;">
+                        <div style="text-align:center">
+                            <i class="fa-solid fa-fire" style="color:#ff8a00"></i><br>
+                            <span style="font-size:0.8rem">MAX KOMBO</span><br>
+                            <span style="font-weight:800; font-size:1.2rem">${this.maxCombo}</span>
+                        </div>
+                        <div style="text-align:center">
+                            <i class="fa-solid fa-flask-vial" style="color:var(--primary)"></i><br>
+                            <span style="font-size:0.8rem">TOPLAM DENEY</span><br>
+                            <span style="font-weight:800; font-size:1.2rem">${totalGames}</span>
+                        </div>
+                    </div>
                 </div>
-                <button class="btn-primary" onclick="app.showDashboard()" style="max-width:200px">PANEL'E DÖN</button>
-                ${(this.wrongQuestions.length > 0 && !this.isRetryMode) ? `<button class="btn-primary" onclick="gameManager.retryWrongQuestions()" style="margin-top:15px; background:var(--accent); border: none;">HATALARI TEKRAR ET (${this.wrongQuestions.length})</button>` : ''}
+                <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap">
+                    <button class="btn-primary" onclick="app.showDashboard()" style="max-width:200px">PANEL'E DÖN</button>
+                    ${(this.wrongQuestions.length > 0 && !this.isRetryMode) ? `<button class="btn-primary" onclick="gameManager.retryWrongQuestions()" style="background:var(--accent); border: none; max-width:250px">HATALARI TEKRAR ET (${this.wrongQuestions.length})</button>` : ''}
+                </div>
             </div>
         `;
         if (window.app) window.app.playSound('levelup');

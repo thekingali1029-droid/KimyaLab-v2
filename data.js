@@ -1,15 +1,15 @@
 const KIMYALAB_DATA = {
     users: [
-        { username: 'ahmet123', password: '123', title: 'Çaylak', avatar: 'school_logo.jpg' },
-        { username: 'admin', password: 'admin', title: 'Süper Simyacı', avatar: 'school_logo.jpg' },
-        { username: 'zeynep', password: '456', title: 'Atom Avcısı', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka' },
-        { username: 'can', password: '789', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jasper' },
-        { username: 'elif', password: '111', title: 'Karışım Ustası', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sasha' },
-        { username: 'murat', password: '222', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Caleb' },
-        { username: 'asli', password: '333', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Willow' },
-        { username: 'berat', password: '444', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix' },
-        { username: 'deniz', password: '555', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka' },
-        { username: 'umut', password: '666', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jasper' }
+        { username: 'ali', password: '123', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ali' },
+        { username: 'ayse', password: '456', title: 'Atom Avcısı', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ayse' },
+        { username: 'mehmet', password: '789', title: 'Karışım Ustası', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mehmet' },
+        { username: 'fatma', password: '101', title: 'Elektron Efendisi', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Fatma' },
+        { username: 'can', password: '202', title: 'Süper Simyacı', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Can' },
+        { username: 'elif', password: '303', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elif' },
+        { username: 'ozan', password: '404', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ozan' },
+        { username: 'sude', password: '505', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sude' },
+        { username: 'berk', password: '606', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Berk' },
+        { username: 'ipek', password: '707', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ipek' }
     ],
 
     // FULL PERİODİC TABLE (1-118)
@@ -423,9 +423,14 @@ const KIMYALAB_DATA = {
         { id: 'b_caylak', name: 'Bilim Yolcusu', desc: '100 puana ulaştın!', icon: 'fa-walking' },
         { id: 'b_ilk_oyun', name: 'Deney Başladı', desc: 'İlk oyununu tamamladın!', icon: 'fa-flask' },
         { id: 'b_combo_5', name: 'Hızlı Reaksiyon', desc: '5x Combo yaptın!', icon: 'fa-bolt' },
+        { id: 'b_combo_15', name: 'Atom Parçalayıcı', desc: '15x Combo yaptın!', icon: 'fa-atom' },
         { id: 'b_quiz_master', name: 'Quiz Master', desc: '10 quiz sorusunu doğru bil.', icon: 'fa-brain' },
+        { id: 'b_asit_uzmani', name: 'Asitlerin Efendisi', desc: 'Asit/Baz oyununda uzmanlaştın.', icon: 'fa-vial-circle-check' },
         { id: 'b_profesor', name: 'Kimya Profesörü', desc: '500 puana ulaştın!', icon: 'fa-graduation-cap' },
-        { id: 'b_legend', name: 'Bilim Efsanesi', desc: '1000 puan barajını aştın!', icon: 'fa-crown' }
+        { id: 'b_lab_faresi', name: 'Laboratuvar Faresi', desc: '50 oyun tamamladın!', icon: 'fa-microscope' },
+        { id: 'b_legend', name: 'Bilim Efsanesi', desc: '1000 puan barajını aştın!', icon: 'fa-crown' },
+        { id: 'b_nobel', name: 'Nobel Yolcusu', desc: 'Zor modda kusursuz galibiyet!', icon: 'fa-award' },
+        { id: 'b_simyaci', name: 'Büyük Simyacı', desc: '50,000 toplama puana ulaştın!', icon: 'fa-wand-magic-sparkles' }
     ],
     levels: [
         { title: 'Çaylak', requiredScore: 0 },

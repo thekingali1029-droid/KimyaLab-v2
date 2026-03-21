@@ -198,6 +198,8 @@ const app = {
         this.updateStats();
         this.switchPage('page-home');
         this.playSound('login');
+        
+        // Check for basic "Deney Başladı" badge on login is not ideal, do it in game end.
     },
 
     switchPage(pageId) {
@@ -738,12 +740,24 @@ const app = {
 
     addScore(points) {
         this.state.score += points;
+        
+        // Total score across all sessions
+        let totalScore = parseInt(localStorage.getItem('totalScore') || '0');
+        totalScore += points;
+        localStorage.setItem('totalScore', totalScore);
+
         this.updateStats();
 
-        // Achievement checks
+        // Achievement checks for current session score
         if (this.state.score >= 100) this.awardBadge('b_caylak');
         if (this.state.score >= 500) this.awardBadge('b_profesor');
         if (this.state.score >= 1000) this.awardBadge('b_legend');
+        
+        // Global progress badges
+        if (totalScore >= 50000) this.awardBadge('b_simyaci');
+        
+        const totalGames = parseInt(localStorage.getItem('totalGames') || '0');
+        if (totalGames >= 50) this.awardBadge('b_lab_faresi');
     },
 
     awardBadge(badgeId) {

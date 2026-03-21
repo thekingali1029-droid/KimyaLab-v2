@@ -843,3 +843,127 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
     background: linear-gradient(#ff85a1, #c9184a); 
     border-color: #1a0a12;
 }
+/* --- RESPONSIVE DESIGN (MOBILE) --- */
+@media screen and (max-width: 768px) {
+    .split-layout {
+        flex-direction: column;
+        height: auto;
+        overflow-y: auto;
+    }
+    
+    .login-left {
+        flex: 1;
+        padding: 40px 20px;
+        order: 2;
+        min-height: 100vh;
+    }
+    
+    .login-right {
+        height: 300px;
+        flex: none;
+        order: 1;
+    }
+
+    .main-title {
+        font-size: 1.8rem;
+    }
+
+    .app-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0 10px;
+        z-index: 1000;
+        border-right: none;
+        border-top: 1px solid var(--border-color);
+        background: rgba(10, 11, 30, 0.95);
+        gap: 0;
+    }
+
+    .sidebar .user-profile,
+    .sidebar .nav-item span {
+        display: none;
+    }
+
+    .nav-item {
+        padding: 10px;
+        flex: 1;
+        justify-content: center;
+        border-left: none !important;
+        border-bottom: 3px solid transparent;
+    }
+
+    .nav-item.active {
+        background: none;
+        border-bottom: 3px solid var(--primary);
+    }
+
+    .nav-item i {
+        font-size: 1.5rem;
+    }
+
+    .main-content {
+        padding: 20px;
+        padding-bottom: 90px;
+    }
+
+    .hero-banner {
+        padding: 25px;
+        margin-bottom: 25px;
+    }
+
+    .hero-banner h1 {
+        font-size: 1.5rem;
+    }
+
+    .games-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .game-card {
+        padding: 15px;
+    }
+
+    /* Modal Mobile Adjustments */
+    .modal-content {
+        width: 95% !important;
+        padding: 20px !important;
+    }
+
+    #game-container {
+        padding: 10px;
+    }
+
+    #q-sym {
+        font-size: 3rem !important;
+    }
+
+    #opts, #opts-fill {
+        grid-template-columns: 1fr !important;
+    }
+
+    .periodic-table-grid {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .main-title {
+        font-size: 1.5rem;
+    }
+    
+    .btn-primary {
+        padding: 15px;
+        font-size: 1rem;
+    }
+}
