@@ -138,7 +138,7 @@
                     </div>
                 </div>
 
-                <div class="stats-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
+                <div class="stats-grid" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:15px;">
                     <div class="glass-card animate-slide-up" style="padding:1.5rem">
                         <i class="fa-solid fa-flask" style="color:var(--card-teal); font-size:1.2rem; margin-bottom:10px"></i>
                         <p style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase">Deney Sayısı</p>
@@ -153,6 +153,12 @@
                         <i class="fa-solid fa-award" style="color:var(--accent); font-size:1.2rem; margin-bottom:10px"></i>
                         <p style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase">Başarı Puanı</p>
                         <h3 id="stat-main-score">150</h3>
+                    </div>
+                    <!-- Wrong Questions Card -->
+                    <div id="wrong-questions-card" class="glass-card animate-slide-up clickable" onclick="gameManager.retryWrongQuestions()" style="padding:1.5rem; border-color:var(--danger); background:rgba(239, 68, 68, 0.05); display:none;">
+                        <i class="fa-solid fa-circle-exclamation" style="color:var(--danger); font-size:1.2rem; margin-bottom:10px"></i>
+                        <p style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase">Yanlışların</p>
+                        <h3 id="stat-wrong-count" style="color:var(--danger)">0</h3>
                     </div>
                 </div>
             </div>
@@ -202,6 +208,7 @@
                             <button class="btn-back active-match" onclick="app.renderTablolar('cations')">Katyonlar</button>
                             <button class="btn-back" onclick="app.renderTablolar('anions')">Anyonlar</button>
                             <button class="btn-back" onclick="app.renderTablolar('metals')">Metaller</button>
+                            <button class="btn-back" onclick="app.renderTablolar('compounds')">Bileşikler</button>
                             <button class="btn-back" onclick="app.renderTablolar('acidsBases')">Asit/Bazlar</button>
                             <button class="btn-back" onclick="app.renderTablolar('labEquip')">Lab Araçları</button>
                             <button class="btn-back" onclick="app.renderTablolar('first20Elements')">İlk 20</button>
@@ -249,6 +256,11 @@
                         <div style="height:8px; background:rgba(255,255,255,0.05); border-radius:10px; margin-top:10px; overflow:hidden">
                             <div id="pg-level-bar" style="height:100%; width:30%; background:var(--primary)"></div>
                         </div>
+                    </div>
+                    <div class="glass-card animate-slide-up" style="animation-delay:0.3s">
+                        <i class="fa-solid fa-flask-vial" style="color:var(--card-teal); font-size:1.5rem; margin-bottom:1rem"></i>
+                        <h4 style="color:var(--text-muted); font-size:0.8rem; text-transform:uppercase">Toplam Deney</h4>
+                        <h3 id="pg-stat-games" style="font-size:2.5rem; font-weight:800">0</h3>
                     </div>
                 </div>
             </div>

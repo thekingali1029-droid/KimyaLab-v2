@@ -26,7 +26,8 @@ window.gameManager = {
         this.combo = 0;
         this.lives = 5;
         this.hints = 3;
-        this.wrongQuestions = this.isRetryMode ? this.wrongQuestions : [];
+        const storedWrong = JSON.parse(localStorage.getItem('wrongQuestions') || '[]');
+        this.wrongQuestions = this.isRetryMode ? this.wrongQuestions : storedWrong;
         
         this.resetState();
         this.updateLivesUI();
@@ -249,7 +250,11 @@ window.gameManager = {
             b.textContent = o;
             b.onclick = () => {
                 if (o === correctName) {
-                    if (this.isRetryMode) this.wrongQuestions = this.wrongQuestions.filter(x => (x.n || x.name) !== correctName);
+                    if (this.isRetryMode) {
+                        this.wrongQuestions = this.wrongQuestions.filter(x => (x.n || x.name) !== correctName);
+                        localStorage.setItem('wrongQuestions', JSON.stringify(this.wrongQuestions));
+                        if (window.app) window.app.updateStats();
+                    }
                     this.handleCorrect(b, () => this.nextFusion());
                 } else {
                     this.handleWrong(b, item);
@@ -300,7 +305,11 @@ window.gameManager = {
             b.textContent = o;
             b.onclick = () => {
                 if (o === correctSym) {
-                    if (this.isRetryMode) this.wrongQuestions = this.wrongQuestions.filter(x => x.name !== item.name);
+                    if (this.isRetryMode) {
+                        this.wrongQuestions = this.wrongQuestions.filter(x => x.name !== item.name);
+                        localStorage.setItem('wrongQuestions', JSON.stringify(this.wrongQuestions));
+                        if (window.app) window.app.updateStats();
+                    }
                     this.handleCorrect(b, () => this.nextFill());
                 } else {
                     this.handleWrong(b, item);
@@ -439,7 +448,11 @@ window.gameManager = {
         const q = pool[this.quizIdx];
 
         if (choice === correct) {
-            if (this.isRetryMode) this.wrongQuestions = this.wrongQuestions.filter(x => x.q !== q.q);
+            if (this.isRetryMode) {
+                this.wrongQuestions = this.wrongQuestions.filter(x => x.q !== q.q);
+                localStorage.setItem('wrongQuestions', JSON.stringify(this.wrongQuestions));
+                if (window.app) window.app.updateStats();
+            }
             this.handleCorrect(btn, () => {
                 this.quizIdx++;
                 this.renderQuiz();
@@ -464,6 +477,9 @@ window.gameManager = {
         this.resetState();
         this.updateLivesUI();
         
+        const overlay = document.getElementById('game-overlay');
+        if (overlay) overlay.classList.remove('hidden');
+
         const container = document.getElementById('game-container');
         if (!container) return;
         
@@ -534,6 +550,8 @@ window.gameManager = {
             const qStr = qObj.q || qObj.name;
             if (!this.wrongQuestions.find(x => (x.q || x.name) === qStr)) {
                 this.wrongQuestions.push(qObj);
+                localStorage.setItem('wrongQuestions', JSON.stringify(this.wrongQuestions));
+                if (window.app) window.app.updateStats();
             }
         }
         

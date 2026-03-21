@@ -12,7 +12,9 @@ const app = {
         maxCombo: 0,
         title: 'Çaylak',
         loginMode: 'normal',
-        isVIP: false
+        isVIP: false,
+        vipTheme: null,
+        totalGames: parseInt(localStorage.getItem('totalGames') || '0')
     },
 
     els: {},
@@ -128,12 +130,21 @@ const app = {
         if (!u) return;
 
         if (this.state.loginMode === 'guest') {
-            if (u === 'kaydek' && p === 'ela') {
-                this.state.currentUser = 'Kaydek';
+            // VIP Hesapları
+            const vipAccounts = [
+                { username: 'kaydek', password: 'ela', displayName: 'Kaydek', title: 'V.I.P Prenses 👑', avatar: 'vip_1.png', theme: 'pink' },
+                { username: 'eye', password: 'ali', displayName: 'Ali EL Feriz', title: 'V.I.P Süper Simyacı 🧪', avatar: 'school_logo.jpg', theme: 'blue' }
+            ];
+
+            const vipUser = vipAccounts.find(v => v.username === u.toLowerCase() && v.password === p);
+
+            if (vipUser) {
+                this.state.currentUser = vipUser.displayName;
                 this.state.isVIP = true;
-                this.state.title = 'V.I.P Prenses 👑';
-                this.els.userAvatar.src = 'vip_1.png'; // Default VIP avatar
-                this.applyVIPTheme();
+                this.state.vipTheme = vipUser.theme;
+                this.state.title = vipUser.title;
+                if (this.els.userAvatar) this.els.userAvatar.src = vipUser.avatar;
+                this.applyVIPTheme(vipUser.theme);
                 this.loginSuccess();
             } else {
                 this.els.loginError.textContent = "V.I.P Girişi Reddedildi! Geçersiz Kimlik.";
@@ -141,12 +152,13 @@ const app = {
                 this.playSound('wrong');
             }
             return;
+            
         }
 
         const user = KIMYALAB_DATA.users.find(x => x.username === u && x.password === p);
 
-        if (user || (u === 'admin' && p === 'admin')) {
-            this.state.currentUser = user ? user.username : 'Admin';
+        if (user) {
+            this.state.currentUser = user.username;
             this.loginSuccess();
         } else {
             this.els.loginError.textContent = "Hatalı kullanıcı adı veya şifre!";
@@ -160,7 +172,7 @@ const app = {
         const dashScr = document.getElementById('dashboard-screen');
 
         if (loginScr) {
-            loginScr.classList.remove('active'); // CRITICAL: active has display:flex !important
+            loginScr.classList.remove('active');
             loginScr.classList.add('hidden');
         }
         if (dashScr) {
@@ -176,10 +188,12 @@ const app = {
         if (this.els.displayUser) this.els.displayUser.innerHTML = nameHtml;
         if (this.els.quoteUser) this.els.quoteUser.innerHTML = nameHtml;
 
-        // Load user-specific data
-        const userData = KIMYALAB_DATA.users.find(u => u.username === this.state.currentUser) || {};
-        if (userData.avatar) this.els.userAvatar.src = userData.avatar;
-        if (userData.title) this.state.title = userData.title;
+        // Load user-specific data (VIP ise zaten handleLogin'de ayarlandı, ezme)
+        if (!this.state.isVIP) {
+            const userData = KIMYALAB_DATA.users.find(u => u.username === this.state.currentUser) || {};
+            if (userData.avatar && this.els.userAvatar) this.els.userAvatar.src = userData.avatar;
+            if (userData.title) this.state.title = userData.title;
+        }
 
         this.updateStats();
         this.switchPage('page-home');
@@ -216,9 +230,11 @@ const app = {
         const pgCombo = document.getElementById('pg-stat-combo');
         const pgLevel = document.getElementById('pg-stat-level');
         const pgBar = document.getElementById('pg-level-bar');
+        const pgGames = document.getElementById('pg-stat-games');
 
         if (pgScore) pgScore.textContent = this.state.score;
         if (pgCombo) pgCombo.textContent = this.state.maxCombo;
+        if (pgGames) pgGames.textContent = this.state.totalGames;
 
         const level = [...KIMYALAB_DATA.levels].reverse().find(l => this.state.score >= l.requiredScore) || KIMYALAB_DATA.levels[0];
         const nextLevel = KIMYALAB_DATA.levels[KIMYALAB_DATA.levels.indexOf(level) + 1];
@@ -283,9 +299,22 @@ const app = {
         if (mainScore) mainScore.textContent = this.state.score;
         if (mainCombo) mainCombo.textContent = this.state.maxCombo;
 
+        const totalGamesEl = document.getElementById('stat-total-games');
+        if (totalGamesEl) totalGamesEl.textContent = this.state.totalGames;
+
         const progress = Math.min((this.state.score / this.state.dailyTarget) * 100, 100);
         if (this.els.dailyProgress) this.els.dailyProgress.style.width = `${progress}%`;
         if (this.els.pointsNeeded) this.els.pointsNeeded.textContent = `${this.state.score} / ${this.state.dailyTarget} Puan`;
+
+        // Wrong Questions Sync
+        const wrongCard = document.getElementById('wrong-questions-card');
+        const wrongCount = document.getElementById('stat-wrong-count');
+        const storedWrong = JSON.parse(localStorage.getItem('wrongQuestions') || '[]');
+        
+        if (wrongCount) wrongCount.textContent = storedWrong.length;
+        if (wrongCard) {
+            wrongCard.style.display = storedWrong.length > 0 ? 'block' : 'none';
+        }
     },
 
     handleLevelUp(level) {
@@ -453,11 +482,29 @@ const app = {
 
     toggleTheme() {
         this.state.isDarkMode = !this.state.isDarkMode;
-        document.body.classList.toggle('dark-theme', this.state.isDarkMode);
         localStorage.setItem('theme', this.state.isDarkMode ? 'dark' : 'light');
-        if (this.els.themeBtn) {
-            this.els.themeBtn.innerHTML = this.state.isDarkMode ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+
+        if (this.state.isVIP) {
+            // VIP: dark-theme ASLA kullanılmaz
+            document.body.classList.remove('dark-theme');
+
+            if (this.state.vipTheme === 'blue') {
+                document.body.classList.toggle('theme-vip-blue-dark', this.state.isDarkMode);
+            } else {
+                document.body.classList.toggle('theme-vip-pink-dark', this.state.isDarkMode);
+            }
+        } else {
+            // Normal kullanıcı
+            document.body.classList.remove('theme-vip-pink-dark', 'theme-vip-blue-dark');
+            document.body.classList.toggle('dark-theme', this.state.isDarkMode);
         }
+
+        if (this.els.themeBtn) {
+            this.els.themeBtn.innerHTML = this.state.isDarkMode
+                ? '<i class="fa-solid fa-sun"></i>'
+                : '<i class="fa-solid fa-moon"></i>';
+        }
+        this.playSound('click');
     },
 
     toggleSound() {
@@ -465,7 +512,6 @@ const app = {
         if (this.els.soundBtn) {
             this.els.soundBtn.innerHTML = this.state.soundEnabled ? '<i class="fa-solid fa-volume-high"></i>' : '<i class="fa-solid fa-volume-xmark"></i>';
         }
-        console.log("Ses:", this.state.soundEnabled ? "Açık" : "Kapalı");
     },
 
     applyInitialTheme() {
@@ -475,51 +521,112 @@ const app = {
         }
     },
 
-    applyVIPTheme() {
-        document.body.classList.add('theme-vip-pink');
-        document.body.classList.remove('dark-theme');
+    applyVIPTheme(themeType) {
+        const t = themeType || this.state.vipTheme || 'pink';
 
+        // Tüm tema class'larını temizle
+        document.body.classList.remove('dark-theme', 'theme-vip-pink', 'theme-vip-pink-dark', 'theme-vip-blue', 'theme-vip-blue-dark');
+
+        // Seçilen VIP temasını uygula
+        if (t === 'blue') {
+            document.body.classList.add('theme-vip-blue');
+            if (this.state.isDarkMode) document.body.classList.add('theme-vip-blue-dark');
+        } else {
+            document.body.classList.add('theme-vip-pink');
+            if (this.state.isDarkMode) document.body.classList.add('theme-vip-pink-dark');
+        }
+
+        // Tema butonunu güncelle
+        if (this.els.themeBtn) {
+            this.els.themeBtn.innerHTML = this.state.isDarkMode
+                ? '<i class="fa-solid fa-sun"></i>'
+                : '<i class="fa-solid fa-moon"></i>';
+        }
+
+        // Parçacık efektlerini oluştur
         const container = document.getElementById('butterfly-container');
         if (!container) return;
-
         container.innerHTML = '';
-        const bTypes = ['🦋', '🧚', '🌸', '✨'];
-        const hTypes = ['💖', '💕', '💗', '💓'];
-        
-        // Add Imperial Butterflies & Hearts
-        for (let i = 0; i < 20; i++) {
-            const b = document.createElement('div');
-            b.className = 'butterfly';
-            b.textContent = bTypes[Math.floor(Math.random() * bTypes.length)];
-            b.style.left = Math.random() * 100 + 'vw';
-            b.style.animationDelay = Math.random() * 15 + 's';
-            b.style.fontSize = (2 + Math.random() * 2.5) + 'rem';
-            container.appendChild(b);
-            
-            const h = document.createElement('div');
-            h.className = 'heart-particle';
-            h.textContent = hTypes[Math.floor(Math.random() * hTypes.length)];
-            h.style.left = Math.random() * 100 + 'vw';
-            h.style.animationDelay = Math.random() * 10 + 's';
-            h.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
-            container.appendChild(h);
-        }
 
-        // Add 80 Tiny Stars
-        for (let i = 0; i < 80; i++) {
-            const s = document.createElement('div');
-            s.className = 'sparkle';
-            s.style.left = Math.random() * 100 + 'vw';
-            s.style.top = Math.random() * 100 + 'vh';
-            s.style.animationDelay = Math.random() * 5 + 's';
-            container.appendChild(s);
-        }
+        if (t === 'blue') {
+            // MAVİ TEMA: Güller 🌹 ve Papatyalar 🌼
+            const flowerTypes = ['🌹', '🌼', '🌻', '🌺', '🌷', '💐'];
+            const leafTypes = ['🍃', '🌿', '☘️', '🪻'];
 
-        const logos = document.querySelectorAll('.circle-logo-img');
-        logos.forEach(l => {
-            l.style.borderColor = '#ffb7c5';
-            l.style.boxShadow = '0 0 30px rgba(255, 77, 109, 0.6)';
-        });
+            for (let i = 0; i < 25; i++) {
+                const f = document.createElement('div');
+                f.className = 'butterfly';
+                f.textContent = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+                f.style.left = Math.random() * 100 + 'vw';
+                f.style.animationDelay = Math.random() * 15 + 's';
+                f.style.fontSize = (1.8 + Math.random() * 2) + 'rem';
+                container.appendChild(f);
+
+                const l = document.createElement('div');
+                l.className = 'heart-particle';
+                l.textContent = leafTypes[Math.floor(Math.random() * leafTypes.length)];
+                l.style.left = Math.random() * 100 + 'vw';
+                l.style.animationDelay = Math.random() * 12 + 's';
+                l.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+                container.appendChild(l);
+            }
+
+            // Mavi parıltılar
+            for (let i = 0; i < 60; i++) {
+                const s = document.createElement('div');
+                s.className = 'sparkle';
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.top = Math.random() * 100 + 'vh';
+                s.style.animationDelay = Math.random() * 5 + 's';
+                s.style.background = '#60a5fa';
+                container.appendChild(s);
+            }
+
+            // Logo stilini güncelle
+            const logos = document.querySelectorAll('.circle-logo-img');
+            logos.forEach(l => {
+                l.style.borderColor = '#60a5fa';
+                l.style.boxShadow = '0 0 30px rgba(59, 130, 246, 0.5)';
+            });
+
+        } else {
+            // PEMBE TEMA: Kelebekler 🦋 ve Kalpler 💖
+            const bTypes = ['🦋', '🧚', '🌸', '✨'];
+            const hTypes = ['💖', '💕', '💗', '💓'];
+
+            for (let i = 0; i < 20; i++) {
+                const b = document.createElement('div');
+                b.className = 'butterfly';
+                b.textContent = bTypes[Math.floor(Math.random() * bTypes.length)];
+                b.style.left = Math.random() * 100 + 'vw';
+                b.style.animationDelay = Math.random() * 15 + 's';
+                b.style.fontSize = (2 + Math.random() * 2.5) + 'rem';
+                container.appendChild(b);
+
+                const h = document.createElement('div');
+                h.className = 'heart-particle';
+                h.textContent = hTypes[Math.floor(Math.random() * hTypes.length)];
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.animationDelay = Math.random() * 10 + 's';
+                h.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+                container.appendChild(h);
+            }
+
+            for (let i = 0; i < 80; i++) {
+                const s = document.createElement('div');
+                s.className = 'sparkle';
+                s.style.left = Math.random() * 100 + 'vw';
+                s.style.top = Math.random() * 100 + 'vh';
+                s.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(s);
+            }
+
+            const logos = document.querySelectorAll('.circle-logo-img');
+            logos.forEach(l => {
+                l.style.borderColor = '#ffb7c5';
+                l.style.boxShadow = '0 0 30px rgba(255, 77, 109, 0.6)';
+            });
+        }
     },
 
     openDifficultyModal(mode) {
@@ -584,6 +691,9 @@ const app = {
     },
 
     startGame(mode) {
+        this.state.totalGames++;
+        localStorage.setItem('totalGames', this.state.totalGames);
+        this.updateStats();
         this.openDifficultyModal(mode);
     },
 
@@ -603,6 +713,7 @@ const app = {
         let key = 'cations';
         if (onclickAttr.includes('anions')) key = 'anions';
         if (onclickAttr.includes('metals')) key = 'metals';
+        if (onclickAttr.includes('compounds')) key = 'compounds';
         if (onclickAttr.includes('first20Elements')) key = 'first20Elements';
         if (onclickAttr.includes('acidsBases')) key = 'acidsBases';
         if (onclickAttr.includes('labEquip')) key = 'labEquip';

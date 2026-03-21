@@ -1,7 +1,15 @@
 const KIMYALAB_DATA = {
     users: [
         { username: 'ahmet123', password: '123', title: 'Çaylak', avatar: 'school_logo.jpg' },
-        { username: 'admin', password: 'admin', title: 'Süper Simyacı', avatar: 'school_logo.jpg' }
+        { username: 'admin', password: 'admin', title: 'Süper Simyacı', avatar: 'school_logo.jpg' },
+        { username: 'zeynep', password: '456', title: 'Atom Avcısı', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka' },
+        { username: 'can', password: '789', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jasper' },
+        { username: 'elif', password: '111', title: 'Karışım Ustası', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sasha' },
+        { username: 'murat', password: '222', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Caleb' },
+        { username: 'asli', password: '333', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Willow' },
+        { username: 'berat', password: '444', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix' },
+        { username: 'deniz', password: '555', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka' },
+        { username: 'umut', password: '666', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jasper' }
     ],
 
     // FULL PERİODİC TABLE (1-118)
@@ -186,7 +194,27 @@ const KIMYALAB_DATA = {
         { symbol: 'K', name: 'Potasyum', desc: 'Bitki beslenmesi için hayati önem taşıyan çok aktif bir alkali metal.' },
         { symbol: 'Mg', name: 'Magnezyum', desc: 'Hafif alaşımlarda ve fotoğraf makinesi flaşlarında kullanılır.' },
         { symbol: 'Ca', name: 'Kalsiyum', desc: 'Kemiklerin ve dişlerin yapısında bulunan alkali toprak metal.' },
-        { symbol: 'Li', name: 'Lityum', desc: 'Pillerde kullanılan, bilinen en hafif katı elementtir.' }
+        { symbol: 'Li', name: 'Lityum', desc: 'Pillerde kullanılan, bilinen en hafif katı elementtir.' },
+        { symbol: 'Co', name: 'Kobalt', desc: 'Mıknatıs yapımında ve lityum pillerin katotlarında kullanılan önemli bir metaldir.' },
+        { symbol: 'Pd', name: 'Paladyum', desc: 'Katalizör olarak kullanılan, hidrojeni emme özelliğiyle bilinen nadir bir metaldir.' },
+        { symbol: 'Cd', name: 'Kadmiyum', desc: 'Pillerde ve pigmentlerde kullanılan, ancak zehirli özelliği olan bir metaldir.' },
+        { symbol: 'Ba', name: 'Baryum', desc: 'X-ışını kontrast maddelerinde ve havai fişeklere yeşil renk vermede kullanılır.' },
+        { symbol: 'Cs', name: 'Sezyum', desc: 'Atom saatlerinde kullanılan, en reaktif kararlı alkali metallerden biridir.' },
+        { symbol: 'Fr', name: 'Fransiyum', desc: 'Doğada çok nadir bulunan ve çok kısa ömürlü olan radyoaktif bir alkali metal.' },
+        { symbol: 'Ra', name: 'Radyum', desc: 'Marie Curie tarafından keşfedilen, eskiden karanlıkta parlayan boyalar için kullanılan radyoaktif metal.' },
+        { symbol: 'U', name: 'Uranyum', desc: 'Nükleer enerji ve savunma sanayisinin temel hammaddesi olan ağır metal.' },
+        { symbol: 'Pu', name: 'Plutonyum', desc: 'Nükleer reaktörlerde yakıt veya nükleer silahlarda kullanılan yapay metal.' },
+        { symbol: 'Th', name: 'Toryum', desc: 'Gelecekte nükleer yakıt olarak kullanılması planlanan, uranyuma göre daha güvenli bir metal.' },
+        { symbol: 'Ga', name: 'Galyum', desc: 'Vücut sıcaklığında (29.7°C) eriyebilen, yarı iletkenlerde kullanılan ilginç bir metal.' },
+        { symbol: 'Ge', name: 'Germanyum', desc: 'Transistörlerin icadında rol oynamış, kızılötesi optiklerde kullanılan bir yarı iletkendir.' },
+        { symbol: 'In', name: 'İndiyum', desc: 'LCD ekranlarda ve dokunmatik panellerde şeffaf elektrot olarak kullanılır.' },
+        { symbol: 'Bi', name: 'Bizmut', desc: 'En az zehirli ağır metaldir; kozmetikte ve ilaçlarda (mide rahatsızlıkları) kullanılır.' },
+        { symbol: 'Po', name: 'Polonyum', desc: 'Çok güçlü bir alfa radyasyon kaynağı olan, Curie ailesi tarafından keşfedilen metal.' },
+        { symbol: 'Sc', name: 'Skandiyum', desc: 'Yüksek mukavemetli alüminyum alaşımları yapmak için kullanılan hafif bir geçiş metali.' },
+        { symbol: 'V', name: 'Vanadyum', desc: 'Çelik alaşımlarına yüksek darbe dayanımı ve esneklik kazandıran gümüşi metal.' },
+        { symbol: 'Y', name: 'İtriyum', desc: 'Lazerlerde (YAG) ve TV tüplerinde kırmızı renk oluşturmak için kullanılır.' },
+        { symbol: 'Zr', name: 'Zirkonyum', desc: 'Korozyona aşırı dirençli olduğu için nükleer reaktör kılıflarında tercih edilir.' },
+        { symbol: 'Nb', name: 'Niyobyum', desc: 'MR cihazlarındaki süper iletken mıknatısların yapımında kullanılan kritik metal.' }
     ],
     first20Elements: [
         { symbol: 'H', name: 'Hidrojen', number: 1, desc: 'Evrenin en bol ve en hafif elementidir.' },
@@ -215,17 +243,27 @@ const KIMYALAB_DATA = {
         { symbol: 'H₂SO₄', name: 'Sülfürik Asit (Zaç Yağı)', charge: 'Asit', desc: 'Sanayinin temel taşı olan en önemli asitlerden biri.' },
         { symbol: 'HNO₃', name: 'Nitrik Asit (Kezzap)', charge: 'Asit', desc: 'Gübre ve patlayıcı üretiminde kullanılan yakıcı asit.' },
         { symbol: 'CH₃COOH', name: 'Asetik Asit (Sirke Ruhu)', charge: 'Asit', desc: 'Zayıf bir asit olup gıdalarda kullanılır.' },
+        { symbol: 'H₃PO₄', name: 'Fosforik Asit', charge: 'Asit', desc: 'Gübre üretiminde ve gıda sektöründe asitlik düzenleyici olarak kullanılır.' },
+        { symbol: 'H₂CO₃', name: 'Karbonik Asit', charge: 'Asit', desc: 'Gazlı içeceklerde bulunan, karbondioksitin suda çözünmesiyle oluşan zayıf asit.' },
+        { symbol: 'HCOOH', name: 'Formik Asit (Karınca Asidi)', charge: 'Asit', desc: 'Doğada karıncaların salgısında bulunan, tekstil ve deri sanayisinde kullanılan asit.' },
         { symbol: 'NaOH', name: 'Sodyum Hidroksit (Sud Kostik)', charge: 'Baz', desc: 'Sabun ve temizlik ürünleri yapımında kullanılan kuvvetli baz.' },
         { symbol: 'KOH', name: 'Potasyum Hidroksit (Potas Kostik)', charge: 'Baz', desc: 'Arap sabunu ve pillerde kullanılan bazdır.' },
         { symbol: 'NH₃', name: 'Amonyak', charge: 'Baz', desc: 'Keskin kokulu, azotlu gübrelerin hammaddesi olan zayıf baz.' },
-        { symbol: 'Ca(OH)₂', name: 'Kalsiyum Hidroksit (Sönmüş Kireç)', charge: 'Baz', desc: 'İnşaat ve su arıtma işlemlerinde kullanılır.' }
+        { symbol: 'Ca(OH)₂', name: 'Kalsiyum Hidroksit (Sönmüş Kireç)', charge: 'Baz', desc: 'İnşaat ve su arıtma işlemlerinde kullanılır.' },
+        { symbol: 'Mg(OH)₂', name: 'Magnezyum Hidroksit (Magnesia Sütü)', charge: 'Baz', desc: 'Mide asidini dengelemek için antiasit olarak kullanılan bazdır.' },
+        { symbol: 'Al(OH)₃', name: 'Alüminyum Hidroksit', charge: 'Baz', desc: 'Su arıtma ve mide ilaçlarında kullanılan bir bazik bileşiktir.' }
     ],
     labEquip: [
         { symbol: '🧪', name: 'Beherglas', charge: 'Sıvı Karıştırma', desc: 'Çözelti hazırlama ve karıştırma için kullanılır.' },
+        { symbol: '⚗️', name: 'Erlenmayer', charge: 'Saklama/Çalkalama', desc: 'Ağzının dar olması sayesinde sıvıların çalkalanması ve saklanması için idealdir.' },
         { symbol: '🌡️', name: 'Dereceli Silindir', charge: 'Hacim Ölçümü', desc: 'Sıvıların hacmini hassas ölçmek için kullanılır.' },
         { symbol: '🔥', name: 'Bunzen Beki', charge: 'Isıtma', desc: 'Laboratuvarda kontrol edilebilir alev kaynağıdır.' },
         { symbol: '📏', name: 'Büret', charge: 'Titrasyon', desc: 'Hacim analizi (titrasyon) işlemlerinde kullanılır.' },
-        { symbol: '⚖️', name: 'Analitik Terazi', charge: 'Hassas Tartım', desc: 'Kütleyi çok yüksek hassasiyetle ölçer.' }
+        { symbol: '⚖️', name: 'Analitik Terazi', charge: 'Hassas Tartım', desc: 'Kütleyi çok yüksek hassasiyetle ölçer.' },
+        { symbol: '🥣', name: 'Havan', charge: 'Ezme/Öğütme', desc: 'Katı maddeleri toz haline getirmek için kullanılan porselen kap.' },
+        { symbol: '🔬', name: 'Ayırma Hunisi', charge: 'Ayırma', desc: 'Birbiriyle karışmayan sıvıları (zeytinyağı-su gibi) ayırmak için kullanılır.' },
+        { symbol: '🥢', name: 'Spatül', charge: 'Madda Taşıma', desc: 'Toz halindeki kimyasalları tartım veya aktarım sırasında almak için kullanılır.' },
+        { symbol: '🍵', name: 'Saat Camı', charge: 'Kurutma/Tartım', desc: 'Az miktardaki katıların kurutulması veya tartılması için kullanılır.' }
     ],
     quizQuestions: [
         { q: "Doğada atomik yapıda bulunan elementler hangileridir?", a: "Soygazlar", options: ["Halojenler", "Metaller", "Soygazlar", "Ametaller"] },
@@ -326,7 +364,29 @@ const KIMYALAB_DATA = {
         { q: "Hangisi bir halojendir?", a: "İyot", options: ["Neon", "Azot", "İyot", "Kalsiyum"] },
         { q: "Atom modeli teorisini ilk atan kimdir?", a: "Democritus", options: ["Dalton", "Thomson", "Democritus", "Rutherford"] },
         { q: "Hücre zarının temel yapısı hangisidir?", a: "Fosfolipit", options: ["Glikoz", "Fosfolipit", "Tuz", "Su"] },
-        { q: "Buzdolabı gazı olarak bilinen gaz grubu hangisidir?", a: "Freon", options: ["Neon", "Oksijen", "Freon", "Metan"] }
+        { q: "Buzdolabı gazı olarak bilinen gaz grubu hangisidir?", a: "Freon", options: ["Neon", "Oksijen", "Freon", "Metan"] },
+        { q: "Yemek sodasının (NaHCO₃) kimyasal adı nedir?", a: "Sodyum Bikarbonat", options: ["Sodyum Karbonat", "Sodyum Bikarbonat", "Kalsiyum Karbonat", "Sodyum Klorür"] },
+        { q: "Hangi metal oda sıcaklığında vücut ısısıyla eriyebilir?", a: "Galyum", options: ["Cıva", "Altın", "Galyum", "Gümüş"] },
+        { q: "Mide asidini dengelemek için kullanılan 'Magnesia Sütü' hangi bazdır?", a: "Mg(OH)₂", options: ["NaOH", "KOH", "Mg(OH)₂", "Ca(OH)₂"] },
+        { q: "MR cihazlarında süper iletken mıknatıslar için kullanılan metal hangisidir?", a: "Niyobyum", options: ["Demir", "Bakır", "Niyobyum", "Altın"] },
+        { q: "Kireç taşının formülü hangisidir?", a: "CaCO₃", options: ["CaO", "Ca(OH)₂", "CaCO₃", "CaCl₂"] },
+        { q: "Hangi radyoaktif element Marie Curie tarafından keşfedilmiştir?", a: "Radyum", options: ["Uranyum", "Plutonyum", "Radyum", "Demir"] },
+        { q: "Barut yapımında ve gübrede kullanılan 'Güherçile' hangisidir?", a: "KNO₃", options: ["NaCl", "KNO₃", "NH₄Cl", "AgNO₃"] },
+        { q: "LCD ekranlarda şeffaf elektrot olarak kullanılan metal hangisidir?", a: "İndiyum", options: ["Alüminyum", "Bakır", "İndiyum", "Çinko"] },
+        { q: "Karınca asidi olarak bilinen asit hangisidir?", a: "Formik Asit", options: ["Sülfürik Asit", "Asetik Asit", "Formik Asit", "Nitrik Asit"] },
+        { q: "Hangi metal nükleer reaktör kılıflarında korozyon direnci için kullanılır?", a: "Zirkonyum", options: ["Kurşun", "Demir", "Zirkonyum", "Bakır"] },
+        { q: "Nişadırın kimyasal formülü nedir?", a: "NH₄Cl", options: ["NaCl", "NH₄Cl", "KCl", "LiCl"] },
+        { q: "Gelecekte daha güvenli nükleer yakıt olması planlanan element hangisidir?", a: "Toryum", options: ["Uranyum", "Plutonyum", "Toryum", "Radyum"] },
+        { q: "En az zehirli ağır metal hangisidir?", a: "Bizmut", options: ["Kurşun", "Cıva", "Bizmut", "Kadmiyum"] },
+        { q: "Gazlı içeceklerde asitlik veren madde hangisidir?", a: "Karbonik Asit", options: ["Hidroklorik Asit", "Karbonik Asit", "Sülfürik Asit", "Nitrik Asit"] },
+        { q: "Hangi element güneş panellerinde yarı iletken olarak kullanılır?", a: "Silisyum", options: ["Karbon", "Demir", "Silisyum", "Bakır"] },
+        { q: "Mıknatıs yapımında kullanılan geçiş metali hangisidir?", a: "Kobalt", options: ["Bakır", "Altın", "Kobalt", "Gümüş"] },
+        { q: "Etil alkolün formülü hangisidir?", a: "C₂H₅OH", options: ["CH₃OH", "C₂H₅OH", "C₃H₇OH", "CH₃COOH"] },
+        { q: "Göz taşı olarak bilinen bileşik hangisidir?", a: "CuSO₄", options: ["FeSO₄", "ZnSO₄", "CuSO₄", "MgSO₄"] },
+        { q: "Hangi asit gübre üretiminde ve kolalarda asitlik düzenleyici olarak kullanılır?", a: "Fosforik Asit", options: ["Nitrik Asit", "Fosforik Asit", "Hidroklorik Asit", "Asetik Asit"] },
+        { q: "Laboratuvarda birbiriyle karışmayan sıvıları ayırmak için ne kullanılır?", a: "Ayırma Hunisi", options: ["Beherglas", "Büret", "Ayırma Hunisi", "Pipet"] },
+        { q: "Toz kimyasalları taşımak için kullanılan metal veya plastik kaşığa ne denir?", a: "Spatül", options: ["Büret", "Spatül", "Pipet", "Havan"] },
+        { q: "Katı maddeleri toz haline getirmek için kullanılan porselen araç hangisidir?", a: "Havan", options: ["Beher", "Havan", "Erlenmayer", "Saat Camı"] }
     ],
     titles: [
         { score: 0, title: "Çaylak" },
@@ -375,12 +435,30 @@ const KIMYALAB_DATA = {
         { title: 'Deha', requiredScore: 7000 },
         { title: 'Nobel Adayı', requiredScore: 15000 }
     ],
+    compounds: [
+        { symbol: 'NaCl', name: 'Yemek Tuzu (Sodyum Klorür)', desc: 'Sofra tuzu olarak bilinir, gıdaları korumak ve tatlandırmak için kullanılır.' },
+        { symbol: 'CaCO₃', name: 'Kireç Taşı (Kalsiyum Karbonat)', desc: 'İnşaat malzemesi, tebeşir ve mermerin ana bileşenidir.' },
+        { symbol: 'NaHCO₃', name: 'Yemek Sodası (Sodyum Bikarbonat)', desc: 'Hamur işlerinde kabartma tozu olarak kullanılır.' },
+        { symbol: 'NH₄Cl', name: 'Nişadır (Amonyum Klorür)', desc: 'Pillerde, lehimlemede ve bazı öksürük şuruplarında bulunur.' },
+        { symbol: 'CaO', name: 'Sönmemiş Kireç (Kalsiyum Oksit)', desc: 'Sanayide, özellikle çimento ve cam üretiminde yaygın kullanılır.' },
+        { symbol: 'Ca(OH)₂', name: 'Sönmüş Kireç (Kalsiyum Hidroksit)', desc: 'Badana yapımında ve su arıtma işlemlerinde kullanılır.' },
+        { symbol: 'CuSO₄', name: 'Göz Taşı (Bakır (II) Sülfat)', desc: 'Tarımda fungusit (mantar öldürücü) olarak kullanılır.' },
+        { symbol: 'KNO₃', name: 'Güherçile (Potasyum Nitrat)', desc: 'Barut yapımında ve gübre sektöründe kullanılan oksitleyici bir maddedir.' },
+        { symbol: 'CH₃OH', name: 'Metil Alkol (Odun Alkolü)', desc: 'Çok zehirlidir, endüstride çözücü olarak kullanılır.' },
+        { symbol: 'C₂H₅OH', name: 'Etil Alkol', desc: 'Dezenfektanlarda ve içeceklerde kullanılan alkol türüdür.' },
+        { symbol: 'C₆H₁₂O₆', name: 'Glikoz (Şeker)', desc: 'Canlıların temel enerji kaynağı olan basit bir şekerdir.' },
+        { symbol: 'H₂O', name: 'Su', desc: 'Yaşamın temel sıvısı, en yaygın çözücüdür.' },
+        { symbol: 'CO₂', name: 'Karbondioksit', desc: 'Solunum sonucu dışarı atılan gazdır, kuru buz bunun katı halidir.' }
+    ],
     fusionQuestions: [
         { s: 'H', n: 'Hidrojen' }, { s: 'He', n: 'Helyum' }, { s: 'Li', n: 'Lityum' }, { s: 'Be', n: 'Berilyum' },
         { s: 'B', n: 'Bor' }, { s: 'C', n: 'Karbon' }, { s: 'N', n: 'Azot' }, { s: 'O', n: 'Oksijen' },
         { s: 'F', n: 'Flor' }, { s: 'Ne', n: 'Neon' }, { s: 'Na', n: 'Sodyum' }, { s: 'Mg', n: 'Magnezyum' },
         { s: 'Al', n: 'Alüminyum' }, { s: 'Si', n: 'Silisyum' }, { s: 'P', n: 'Fosfor' }, { s: 'S', n: 'Kükürt' },
         { s: 'Cl', n: 'Klor' }, { s: 'Ar', n: 'Argon' }, { s: 'K', n: 'Potasyum' }, { s: 'Ca', n: 'Kalsiyum' },
+        { s: 'NaCl', n: 'Sodyum Klorür' }, { s: 'CaCO₃', n: 'Kalsiyum Karbonat' }, { s: 'H₂O', n: 'Su' },
+        { s: 'NH₄Cl', n: 'Amonyum Klorür' }, { s: 'NaHCO₃', n: 'Sodyum Bikarbonat' }, { s: 'CaO', n: 'Kalsiyum Oksit' },
+        { s: 'CuSO₄', n: 'Bakır (II) Sülfat' }, { s: 'KNO₃', n: 'Potasyum Nitrat' }, { s: 'CO₂', n: 'Karbondioksit' },
         { s: 'Sc', n: 'Skandiyum' }, { s: 'Ti', n: 'Titanyum' }, { s: 'V', n: 'Vanadyum' }, { s: 'Cr', n: 'Krom' },
         { s: 'Mn', n: 'Manganez' }, { s: 'Fe', n: 'Demir' }, { s: 'Co', n: 'Kobalt' }, { s: 'Ni', n: 'Nikel' },
         { s: 'Cu', n: 'Bakır' }, { s: 'Zn', n: 'Çinko' }, { s: 'Ga', n: 'Galyum' }, { s: 'Ge', n: 'Germanyum' },

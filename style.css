@@ -422,6 +422,7 @@ body.theme-vip-pink {
     --accent: #ff4d6d; /* Ruby Rose */
     --bg-main: #fffafc;
     --bg-card: rgba(255, 255, 255, 0.85);
+    --bg-white: #ffffff;
     --text-main: #590d22; /* Deep Wine Burgundy */
     --text-muted: #800f2f;
     --border-color: rgba(255, 133, 161, 0.2);
@@ -429,8 +430,9 @@ body.theme-vip-pink {
     background: 
         radial-gradient(circle at 0% 0%, #fff0f3 0%, transparent 50%),
         radial-gradient(circle at 100% 100%, #ffccd5 0%, transparent 50%),
-        #fffafc;
+        #fffafc !important;
     background-attachment: fixed;
+    color: #590d22 !important;
 }
 
 body.theme-vip-pink .glass-card, 
@@ -465,7 +467,8 @@ body.theme-vip-pink h3 {
     display: none;
 }
 
-body.theme-vip-pink .butterfly-container {
+body.theme-vip-pink .butterfly-container,
+body.theme-vip-blue .butterfly-container {
     display: block;
 }
 
@@ -499,4 +502,344 @@ body.theme-vip-pink .butterfly-container {
 @keyframes star-sparkle {
     0%, 100% { transform: scale(0); opacity: 0; }
     50% { transform: scale(1.5); opacity: 1; boxShadow: 0 0 10px white; }
+}
+
+/* ═══════════════════════════════════════════════════════════ */
+/* VIP MAVİ TEMA: "Royal Sapphire" — Güller & Papatyalar      */
+/* ═══════════════════════════════════════════════════════════ */
+body.theme-vip-blue {
+    --primary: #3b82f6; /* Royal Blue */
+    --primary-glow: rgba(59, 130, 246, 0.4);
+    --secondary: #eff6ff; /* Ice Sky */
+    --accent: #1d4ed8; /* Sapphire */
+    --bg-main: #f0f7ff;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-white: #ffffff;
+    --text-main: #1e3a5f; /* Deep Ocean Text */
+    --text-muted: #4a6fa5;
+    --border-color: rgba(59, 130, 246, 0.15);
+
+    background:
+        radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(96, 165, 250, 0.1) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(147, 197, 253, 0.06) 0%, transparent 60%),
+        #f0f7ff !important;
+    background-attachment: fixed;
+    color: #1e3a5f !important;
+}
+
+body.theme-vip-blue .glass-card,
+body.theme-vip-blue .sidebar,
+body.theme-vip-blue .tablo-row {
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(59, 130, 246, 0.12) !important;
+    box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.08) !important;
+    border-radius: var(--radius-lg);
+}
+
+body.theme-vip-blue h1,
+body.theme-vip-blue h2,
+body.theme-vip-blue h3 {
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6, #60a5fa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+}
+
+body.theme-vip-blue .hero-banner {
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 40%, #3b82f6 100%);
+}
+
+body.theme-vip-blue .btn-back.active-match {
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+body.theme-vip-blue .tr-symbol {
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6) !important;
+}
+
+body.theme-vip-blue .user-profile {
+    background: rgba(239, 246, 255, 0.6);
+    border-color: rgba(59, 130, 246, 0.15);
+}
+
+body.theme-vip-blue .nav-item.active {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.12), transparent);
+    color: #1d4ed8;
+    border-left-color: #3b82f6;
+}
+
+body.theme-vip-blue .nav-item:hover {
+    background: rgba(59, 130, 246, 0.06);
+    color: #1d4ed8;
+}
+
+body.theme-vip-blue .circle-logo {
+    border-color: #3b82f6;
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
+}
+
+body.theme-vip-blue ::-webkit-scrollbar-thumb {
+    background: linear-gradient(#3b82f6, #1d4ed8);
+}
+
+/* ─────── VIP MAVİ GECE MODU: "Midnight Ocean" ─────── */
+body.theme-vip-blue.theme-vip-blue-dark {
+    --primary: #60a5fa;
+    --primary-glow: rgba(96, 165, 250, 0.35);
+    --secondary: #0c1a30;
+    --accent: #3b82f6;
+    --bg-main: #0a1628;
+    --bg-card: rgba(12, 26, 48, 0.85);
+    --bg-white: #0f2240;
+    --text-main: #dbeafe;
+    --text-muted: #93c5fd;
+    --border-color: rgba(59, 130, 246, 0.12);
+
+    background:
+        radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(96, 165, 250, 0.07) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(29, 78, 216, 0.05) 0%, transparent 60%),
+        #0a1628 !important;
+    background-attachment: fixed;
+    color: #dbeafe !important;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .glass-card,
+body.theme-vip-blue.theme-vip-blue-dark .sidebar,
+body.theme-vip-blue.theme-vip-blue-dark .tablo-row {
+    background: rgba(12, 26, 48, 0.7) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(59, 130, 246, 0.1) !important;
+    box-shadow: 0 8px 32px 0 rgba(59, 130, 246, 0.06) !important;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark h1,
+body.theme-vip-blue.theme-vip-blue-dark h2,
+body.theme-vip-blue.theme-vip-blue-dark h3 {
+    background: linear-gradient(135deg, #60a5fa, #93c5fd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .hero-banner {
+    background: linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 100%);
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .btn-back {
+    background: rgba(59, 130, 246, 0.06);
+    border-color: rgba(96, 165, 250, 0.15);
+    color: #dbeafe;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .btn-back:hover {
+    border-color: #60a5fa;
+    color: #60a5fa;
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.25);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .btn-back.active-match {
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    color: white;
+    border-color: transparent;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .input-block input {
+    background: #0f2240;
+    border-color: rgba(59, 130, 246, 0.15);
+    color: #dbeafe;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .input-block input:focus {
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .user-profile {
+    background: rgba(12, 26, 48, 0.6);
+    border-color: rgba(59, 130, 246, 0.1);
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .nav-item {
+    color: #93c5fd;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .nav-item.active {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.12), transparent);
+    color: #60a5fa;
+    border-left-color: #3b82f6;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .nav-item:hover {
+    background: rgba(59, 130, 246, 0.06);
+    color: #60a5fa;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .tr-symbol {
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6) !important;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .butterfly,
+body.theme-vip-blue.theme-vip-blue-dark .heart-particle {
+    filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.5));
+    opacity: 0.5;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .sparkle {
+    background: #60a5fa !important;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .el-box {
+    background: rgba(12, 26, 48, 0.6);
+    border-color: rgba(59, 130, 246, 0.08);
+}
+
+body.theme-vip-blue.theme-vip-blue-dark .el-box:hover {
+    border-color: #60a5fa;
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.25);
+}
+
+body.theme-vip-blue.theme-vip-blue-dark ::-webkit-scrollbar-track {
+    background: #0a1628;
+}
+
+body.theme-vip-blue.theme-vip-blue-dark ::-webkit-scrollbar-thumb {
+    background: linear-gradient(#60a5fa, #1d4ed8);
+    border-color: #0a1628;
+}
+
+/* --- VIP GECE MODU: "Midnight Rose" --- */
+body.theme-vip-pink.theme-vip-pink-dark {
+    --primary: #ff85a1;
+    --primary-glow: rgba(255, 133, 161, 0.4);
+    --secondary: #2d0a1a;
+    --accent: #ff4d6d;
+    --bg-main: #1a0a12;
+    --bg-card: rgba(45, 10, 26, 0.85);
+    --bg-white: #2d0a1a;
+    --text-main: #ffd6e0;
+    --text-muted: #c77d94;
+    --border-color: rgba(255, 77, 109, 0.15);
+
+    background:
+        radial-gradient(circle at 0% 0%, rgba(255, 77, 109, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(255, 133, 161, 0.08) 0%, transparent 50%),
+        #1a0a12 !important;
+    background-attachment: fixed;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .glass-card,
+body.theme-vip-pink.theme-vip-pink-dark .sidebar,
+body.theme-vip-pink.theme-vip-pink-dark .tablo-row {
+    background: rgba(45, 10, 26, 0.7) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 77, 109, 0.12) !important;
+    box-shadow: 0 8px 32px 0 rgba(255, 77, 109, 0.08) !important;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark h1,
+body.theme-vip-pink.theme-vip-pink-dark h2,
+body.theme-vip-pink.theme-vip-pink-dark h3 {
+    background: linear-gradient(to right, #ff85a1, #ff4d6d);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .btn-back {
+    background: rgba(255, 77, 109, 0.08);
+    border-color: rgba(255, 133, 161, 0.2);
+    color: #ffd6e0;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .btn-back:hover {
+    border-color: #ff85a1;
+    color: #ff85a1;
+    box-shadow: 0 0 20px rgba(255, 133, 161, 0.3);
+    background: rgba(255, 77, 109, 0.12);
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .btn-back.active-match {
+    background: linear-gradient(135deg, #ff4d6d, #c9184a);
+    color: white;
+    border-color: transparent;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .input-block input {
+    background: #2d0a1a;
+    border-color: rgba(255, 77, 109, 0.2);
+    color: #ffd6e0;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .input-block input:focus {
+    border-color: #ff85a1;
+    box-shadow: 0 0 0 4px rgba(255, 133, 161, 0.2);
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .hero-banner {
+    background: linear-gradient(135deg, #c9184a 0%, #800f2f 100%);
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .user-profile {
+    background: rgba(45, 10, 26, 0.6);
+    border-color: rgba(255, 77, 109, 0.15);
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .nav-item {
+    color: #c77d94;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .nav-item.active {
+    background: linear-gradient(90deg, rgba(255, 77, 109, 0.15), transparent);
+    color: #ff85a1;
+    border-left-color: #ff4d6d;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .nav-item:hover {
+    background: rgba(255, 77, 109, 0.08);
+    color: #ff85a1;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .tr-symbol {
+    background: linear-gradient(135deg, #ff4d6d, #c9184a);
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .butterfly,
+body.theme-vip-pink.theme-vip-pink-dark .heart-particle {
+    filter: drop-shadow(0 0 12px rgba(255, 77, 109, 0.6));
+    opacity: 0.4;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .sparkle {
+    background: #ff85a1;
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .el-box {
+    background: rgba(45, 10, 26, 0.6);
+    border-color: rgba(255, 77, 109, 0.1);
+}
+
+body.theme-vip-pink.theme-vip-pink-dark .el-box:hover {
+    border-color: #ff85a1;
+    box-shadow: 0 20px 40px rgba(255, 77, 109, 0.3);
+}
+
+body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-track { 
+    background: #1a0a12; 
+}
+
+body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb { 
+    background: linear-gradient(#ff85a1, #c9184a); 
+    border-color: #1a0a12;
 }
