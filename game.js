@@ -207,14 +207,8 @@ window.gameManager = {
     },
 
     initFusionMode(container) {
-        // Diversified Pool: Elements, Cations, Anions, Acids/Bases, Lab Equipment
-        this.currentPool = [
-            ...KIMYALAB_DATA.elements,
-            ...KIMYALAB_DATA.cations.map(c => ({ s: c.symbol, n: c.name })),
-            ...KIMYALAB_DATA.anions.map(a => ({ s: a.symbol, n: a.name })),
-            ...KIMYALAB_DATA.acidsBases.map(ab => ({ s: ab.symbol, n: ab.name })),
-            ...KIMYALAB_DATA.labEquip.map(le => ({ s: le.symbol, n: le.name }))
-        ];
+        // Use the specifically crafted easy pool for Fusion Mode (30 essential symbols)
+        this.currentPool = [...KIMYALAB_DATA.fusionQuestions];
 
         container.innerHTML = `
             <div class="animate-slide-up" style="text-align:center">
@@ -270,12 +264,9 @@ window.gameManager = {
     },
 
     initFillMode(container) {
-        this.currentPool = [
-            ...KIMYALAB_DATA.elements,
-            ...KIMYALAB_DATA.compounds.map(c => ({ symbol: c.symbol, name: c.name })),
-            ...KIMYALAB_DATA.acidsBases.map(ab => ({ symbol: ab.symbol, name: ab.name })),
-            ...KIMYALAB_DATA.labEquip.map(le => ({ symbol: le.symbol, name: le.name }))
-        ];
+        this.isRetryMode = false;
+        // Use the carefully curated simplified data pool
+        this.currentPool = [...KIMYALAB_DATA.fusionQuestions];
 
         container.innerHTML = `
             <div class="animate-slide-up" style="text-align:center">
@@ -345,8 +336,8 @@ window.gameManager = {
     },
 
     renderMatch() {
-        // Items for this set
-        const items = utils.shuffleArray(KIMYALAB_DATA.elements).slice(0, 5);
+        // Use simplified pool for easier answers
+        const items = utils.shuffleArray(KIMYALAB_DATA.fusionQuestions).slice(0, 5);
         const symbols = utils.shuffleArray([...items]);
         const names = utils.shuffleArray([...items]);
         
