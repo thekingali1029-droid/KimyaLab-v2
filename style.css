@@ -877,33 +877,45 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 70px;
+        height: 75px;
         flex-direction: row;
         justify-content: space-around;
         padding: 0 10px;
-        z-index: 1000;
+        z-index: 9999;
+        background: rgba(10,11,30,0.98);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
         border-right: none;
         border-top: 1px solid var(--border-color);
-        background: rgba(10, 11, 30, 0.95);
+        background: rgba(10, 11, 30, 0.98);
         gap: 0;
     }
 
     .sidebar .user-profile,
     .sidebar .nav-item span {
-        display: none;
+        /* display: none; */
+        display: block !important;
+        font-size: 0.65rem;
+        margin-top: 5px;
+        opacity: 0.8;
     }
 
     .nav-item {
-        padding: 10px;
+        padding: 5px !important;
+        flex-direction: column !important;
+        align-items: center;
         flex: 1;
         justify-content: center;
         border-left: none !important;
-        border-bottom: 3px solid transparent;
+        border-bottom: none !important;
+        color: var(--text-muted) !important;
     }
 
     .nav-item.active {
         background: none;
-        border-bottom: 3px solid var(--primary);
+        border-bottom: none !important;
+        color: var(--primary) !important;
+        transform: translateY(-5px);
     }
 
     .nav-item i {

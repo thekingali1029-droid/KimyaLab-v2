@@ -195,11 +195,31 @@ const app = {
             if (userData.title) this.state.title = userData.title;
         }
 
+        this.state.currentUser = userData.displayName;
+        this.state.currentUsername = userData.username; // NEW: Save username key
+        
+        // --- LOAD USER DATA ---
+        const userSaveKey = `kimyalab_user_${userData.username}`;
+        const savedData = JSON.parse(localStorage.getItem(userSaveKey) || '{}');
+        
+        this.state.score = savedData.score || 0;
+        this.state.totalGames = savedData.totalGames || 0;
+        this.state.maxCombo = savedData.maxCombo || 0;
+        this.state.badges = savedData.badges || [];
+        
+        // Sync global badges back to per-user if needed (one-time migration for old users)
+        if (this.state.badges.length === 0) {
+            this.state.badges = JSON.parse(localStorage.getItem('badges') || '[]');
+        }
+
         this.updateStats();
         this.switchPage('page-home');
         this.playSound('login');
         
-        // Check for basic "Deney Başladı" badge on login is not ideal, do it in game end.
+        // Show welcome back toast
+        if (this.state.score > 0) {
+            this.showRewardModal("Hoş Geldin Tekrar!", `${this.state.score} Puanınla kaldığın yerden devam ediyorsun! 💪`);
+        }
     },
 
     switchPage(pageId) {
@@ -740,24 +760,25 @@ const app = {
 
     addScore(points) {
         this.state.score += points;
-        
-        // Total score across all sessions
-        let totalScore = parseInt(localStorage.getItem('totalScore') || '0');
-        totalScore += points;
-        localStorage.setItem('totalScore', totalScore);
-
+        this.saveUserData();
         this.updateStats();
 
         // Achievement checks for current session score
         if (this.state.score >= 100) this.awardBadge('b_caylak');
         if (this.state.score >= 500) this.awardBadge('b_profesor');
         if (this.state.score >= 1000) this.awardBadge('b_legend');
-        
-        // Global progress badges
-        if (totalScore >= 50000) this.awardBadge('b_simyaci');
-        
-        const totalGames = parseInt(localStorage.getItem('totalGames') || '0');
-        if (totalGames >= 50) this.awardBadge('b_lab_faresi');
+    },
+
+    saveUserData() {
+        if (!this.state.currentUsername) return;
+        const userSaveKey = `kimyalab_user_${this.state.currentUsername}`;
+        const dataToSave = {
+            score: this.state.score,
+            totalGames: this.state.totalGames,
+            maxCombo: this.state.maxCombo,
+            badges: this.state.badges || JSON.parse(localStorage.getItem('badges') || '[]')
+        };
+        localStorage.setItem(userSaveKey, JSON.stringify(dataToSave));
     },
 
     awardBadge(badgeId) {
