@@ -843,6 +843,40 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
     background: linear-gradient(#ff85a1, #c9184a); 
     border-color: #1a0a12;
 }
+/* --- MODALS & OVERLAYS --- */
+#modal-backdrop, .modal-backdrop { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: rgba(10, 11, 30, 0.85); backdrop-filter: blur(10px); 
+    display: flex; justify-content: center; align-items: center; z-index: 2000; 
+}
+
+#game-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 11, 30, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 3000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+}
+
+#game-overlay.hidden {
+    display: none !important;
+}
+
+.game-popup {
+    width: 90%;
+    max-width: 900px;
+    margin: auto;
+    padding: 30px;
+    background: rgba(20, 20, 35, 0.9);
+}
+
 /* --- RESPONSIVE DESIGN (MOBILE) --- */
 @media screen and (max-width: 768px) {
     .split-layout {
@@ -887,13 +921,14 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
         box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
         border-right: none;
         border-top: 1px solid var(--border-color);
-        background: rgba(10, 11, 30, 0.98);
         gap: 0;
     }
 
-    .sidebar .user-profile,
+    .sidebar .user-profile {
+        display: none !important;
+    }
+    
     .sidebar .nav-item span {
-        /* display: none; */
         display: block !important;
         font-size: 0.65rem;
         margin-top: 5px;
@@ -903,7 +938,6 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
     .nav-item {
         padding: 5px !important;
         flex-direction: column !important;
-        align-items: center;
         flex: 1;
         justify-content: center;
         border-left: none !important;

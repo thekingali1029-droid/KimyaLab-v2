@@ -721,6 +721,21 @@ window.gameManager = {
             
             // Check for acid expert if they did many acid questions
             if (this.currentMode === 'fusion' && this.score >= 300) window.app.awardBadge('b_asit_uzmani');
+
+            // --- PERSISTENCE: ADD SCORE & SAVE ---
+            window.app.state.score += this.score;
+            if (this.maxCombo > window.app.state.maxCombo) window.app.state.maxCombo = this.maxCombo;
+            window.app.state.totalGames++;
+
+            const userKey = `kimyalab_user_${window.app.state.currentUsername}`;
+            localStorage.setItem(userKey, JSON.stringify({
+                score: window.app.state.score,
+                totalGames: window.app.state.totalGames,
+                maxCombo: window.app.state.maxCombo,
+                badges: window.app.state.badges
+            }));
+            
+            window.app.updateStats();
         }
 
         con.innerHTML = `

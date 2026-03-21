@@ -140,6 +140,7 @@ const app = {
 
             if (vipUser) {
                 this.state.currentUser = vipUser.displayName;
+                this.state.currentUsername = vipUser.username;
                 this.state.isVIP = true;
                 this.state.vipTheme = vipUser.theme;
                 this.state.title = vipUser.title;
@@ -159,6 +160,7 @@ const app = {
 
         if (user) {
             this.state.currentUser = user.username;
+            this.state.currentUsername = user.username;
             this.loginSuccess();
         } else {
             this.els.loginError.textContent = "Hatalı kullanıcı adı veya şifre!";
@@ -193,13 +195,12 @@ const app = {
             const userData = KIMYALAB_DATA.users.find(u => u.username === this.state.currentUser) || {};
             if (userData.avatar && this.els.userAvatar) this.els.userAvatar.src = userData.avatar;
             if (userData.title) this.state.title = userData.title;
+            this.state.currentUser = userData.displayName || userData.username;
         }
-
-        this.state.currentUser = userData.displayName;
-        this.state.currentUsername = userData.username; // NEW: Save username key
         
         // --- LOAD USER DATA ---
-        const userSaveKey = `kimyalab_user_${userData.username}`;
+        // currentUsername was set in handleLogin, guaranteed to be accurate
+        const userSaveKey = `kimyalab_user_${this.state.currentUsername}`;
         const savedData = JSON.parse(localStorage.getItem(userSaveKey) || '{}');
         
         this.state.score = savedData.score || 0;
