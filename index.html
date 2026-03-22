@@ -10,18 +10,6 @@
 </head>
 <body class="loading">
 
-    <!-- SPLASH SCREEN / LOADING -->
-    <div id="splash-screen" class="modal-backdrop active" style="z-index: 2000; background: var(--bg-main); display: flex; flex-direction: column; justify-content: center; align-items: center;">
-        <div class="circle-logo animate-glow" style="width: 150px; height: 150px; margin-bottom: 2rem; border-width: 8px;">
-            <img src="school_logo.jpg" class="circle-logo-img">
-        </div>
-        <h2 style="color:var(--primary); font-weight:800; letter-spacing:4px;">KİMYALAB v2</h2>
-        <p style="color:var(--text-muted); margin-top:1rem; font-weight:600;">Sistemler optimize ediliyor...</p>
-        <div style="width: 200px; height: 4px; background: var(--border-color); border-radius: 2px; margin-top: 2rem; overflow: hidden;">
-            <div id="splash-progress" style="width: 0%; height: 100%; background: var(--primary); transition: width 0.5s;"></div>
-        </div>
-    </div>
-
     <!-- VIP BUTTERFLIES -->
     <div id="butterfly-container" class="butterfly-container"></div>
 
@@ -292,12 +280,13 @@
     </div>
 
     <!-- REWARD / LEVEL UP MODAL -->
-    <div id="modal-backdrop" class="modal-backdrop"></div>
-    <div id="level-up-modal">
-        <div style="font-size: 5rem; margin-bottom: 1rem;">🏆</div>
-        <h2 id="reward-title" style="color:var(--primary); font-size:2.5rem; margin-bottom:1rem;">TEBRİKLER!</h2>
-        <p id="reward-desc" style="font-weight:600; color:var(--text-muted); margin-bottom:2rem;">Yeni bir başarı kazandın!</p>
-        <button class="btn-primary" onclick="app.closeRewardModal()">Harika! 🚀</button>
+    <div id="modal-backdrop" class="modal-backdrop">
+        <div id="level-up-modal">
+            <div style="font-size: 5rem; margin-bottom: 1rem;">🏆</div>
+            <h2 id="reward-title" style="color:var(--primary); font-size:2.5rem; margin-bottom:1rem;">TEBRİKLER!</h2>
+            <p id="reward-desc" style="font-weight:600; color:var(--text-muted); margin-bottom:2rem;">Yeni bir başarı kazandın!</p>
+            <button class="btn-primary" onclick="app.closeRewardModal()">Harika! 🚀</button>
+        </div>
     </div>
 
     <!-- GAME DIFFICULTY MODAL -->

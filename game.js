@@ -288,7 +288,7 @@ window.gameManager = {
         if (!item) return;
 
         const nameEl = document.getElementById('q-name');
-        if (nameEl) nameEl.textContent = item.name;
+        if (nameEl) nameEl.textContent = item.n || item.name;
         
         const correctSym = item.s || item.symbol;
         // Generic distractors fallback if category logic fails
@@ -306,7 +306,7 @@ window.gameManager = {
             b.onclick = () => {
                 if (o === correctSym) {
                     if (this.isRetryMode) {
-                        this.wrongQuestions = this.wrongQuestions.filter(x => x.name !== item.name);
+                        this.wrongQuestions = this.wrongQuestions.filter(x => (x.n || x.name) !== (item.n || item.name));
                         localStorage.setItem('wrongQuestions', JSON.stringify(this.wrongQuestions));
                         if (window.app) window.app.updateStats();
                     }
@@ -554,8 +554,8 @@ window.gameManager = {
         this.updateComboUI();
         
         if (qObj && !this.isRetryMode && !this.isTournament) {
-            const qStr = qObj.q || qObj.name;
-            if (!this.wrongQuestions.find(x => (x.q || x.name) === qStr)) {
+            const qStr = qObj.q || qObj.n || qObj.name;
+            if (!this.wrongQuestions.find(x => (x.q || x.n || x.name) === qStr)) {
                 this.wrongQuestions.push(qObj);
                 localStorage.setItem('wrongQuestions', JSON.stringify(this.wrongQuestions));
                 if (window.app) window.app.updateStats();
@@ -659,7 +659,8 @@ window.gameManager = {
                 const targetName = names[0].textContent.trim();
                 const syms = Array.from(document.querySelectorAll('#m-symbols .btn-back'));
                 const targetSymEl = syms.find(s => {
-                    const elData = KIMYALAB_DATA.elements.find(e => e.name === targetName);
+                    const allPools = [...KIMYALAB_DATA.elements, ...KIMYALAB_DATA.compounds, ...KIMYALAB_DATA.acidsBases, ...KIMYALAB_DATA.cations, ...KIMYALAB_DATA.anions];
+                    const elData = allPools.find(e => (e.n || e.name) === targetName);
                     return s.textContent.trim() === (elData?.s || elData?.symbol);
                 });
 
@@ -713,8 +714,8 @@ window.gameManager = {
             // Check for acid expert if they did many acid questions
             if (this.currentMode === 'fusion' && this.score >= 300) window.app.awardBadge('b_asit_uzmani');
 
-            // --- PERSISTENCE: ADD SCORE & SAVE ---
-            window.app.state.score += this.score;
+            // --- PERSISTENCE: SCORE is already added via addScore during play ---
+            // window.app.state.score += this.score; // REDUNDANT
             if (this.maxCombo > window.app.state.maxCombo) window.app.state.maxCombo = this.maxCombo;
             window.app.state.totalGames++;
 
@@ -727,6 +728,7 @@ window.gameManager = {
             }));
             
             window.app.updateStats();
+            window.app.saveUserData();
         }
 
         con.innerHTML = `

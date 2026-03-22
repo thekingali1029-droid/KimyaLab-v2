@@ -27,31 +27,10 @@ const app = {
         this.cacheElements();
         this.bindEvents();
         this.applyInitialTheme();
-        this.handleSplash();
         console.log("KimyaLab v2 Başlatıldı!");
     },
 
-    handleSplash() {
-        const splash = document.getElementById('splash-screen');
-        const bar = document.getElementById('splash-progress');
-        if (!splash || !bar) return;
 
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 30;
-            if (progress >= 100) {
-                progress = 100;
-                bar.style.width = '100%';
-                clearInterval(interval);
-                setTimeout(() => {
-                    splash.classList.remove('active');
-                    splash.style.opacity = '0';
-                    setTimeout(() => splash.style.display = 'none', 500);
-                }, 500);
-            }
-            bar.style.width = `${progress}%`;
-        }, 200);
-    },
 
     cacheElements() {
         this.els = {
@@ -156,11 +135,11 @@ const app = {
             
         }
 
-        const user = KIMYALAB_DATA.users.find(x => x.username === u && x.password === p);
+        const user = KIMYALAB_DATA.users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
 
         if (user) {
-            this.state.currentUser = user.username;
-            this.state.currentUsername = user.username;
+            this.state.currentUser = user.displayName || user.username;
+            this.state.currentUsername = user.username.toLowerCase();
             this.loginSuccess();
         } else {
             this.els.loginError.textContent = "Hatalı kullanıcı adı veya şifre!";
@@ -176,9 +155,11 @@ const app = {
         if (loginScr) {
             loginScr.classList.remove('active');
             loginScr.classList.add('hidden');
+            loginScr.style.display = 'none';
         }
         if (dashScr) {
             dashScr.classList.remove('hidden');
+            dashScr.classList.add('active');
         }
 
         // Royal Name Display with Tiara for VIP
@@ -192,7 +173,7 @@ const app = {
 
         // Load user-specific data (VIP ise zaten handleLogin'de ayarlandı, ezme)
         if (!this.state.isVIP) {
-            const userData = KIMYALAB_DATA.users.find(u => u.username === this.state.currentUser) || {};
+            const userData = KIMYALAB_DATA.users.find(u => u.username.toLowerCase() === this.state.currentUsername) || {};
             if (userData.avatar && this.els.userAvatar) this.els.userAvatar.src = userData.avatar;
             if (userData.title) this.state.title = userData.title;
             this.state.currentUser = userData.displayName || userData.username;
@@ -742,11 +723,12 @@ const app = {
         if (onclickAttr.includes('labEquip')) key = 'labEquip';
 
         const data = KIMYALAB_DATA[key];
-        const filtered = data.filter(item =>
-            (item.name && item.name.toLowerCase().includes(query.toLowerCase())) ||
-            (item.symbol && item.symbol.toLowerCase().includes(query.toLowerCase())) ||
-            (item.s && item.s.toLowerCase().includes(query.toLowerCase()))
-        );
+        const filtered = data.filter(item => {
+            const name = (item.name || item.n || '').toLowerCase();
+            const symbol = (item.symbol || item.s || '').toLowerCase();
+            const q = query.toLowerCase();
+            return name.includes(q) || symbol.includes(q);
+        });
 
         this.els.tabloList.innerHTML = filtered.map(item => `
             <div class="tablo-row" onmouseenter="app.playSound('hover')" onclick="app.showItemInfo(\`${item.symbol || item.s}\`, \`${key}\`)">
@@ -783,13 +765,20 @@ const app = {
     },
 
     awardBadge(badgeId) {
-        const earned = JSON.parse(localStorage.getItem('badges') || '[]');
-        if (earned.includes(badgeId)) return;
+        if (!this.state.badges) this.state.badges = [];
+        if (this.state.badges.includes(badgeId)) return;
 
         const badge = KIMYALAB_DATA.badges.find(b => b.id === badgeId);
         if (badge) {
-            earned.push(badgeId);
-            localStorage.setItem('badges', JSON.stringify(earned));
+            this.state.badges.push(badgeId);
+            // Global fallback for total completionists
+            const earnedGlobal = JSON.parse(localStorage.getItem('badges') || '[]');
+            if (!earnedGlobal.includes(badgeId)) {
+                earnedGlobal.push(badgeId);
+                localStorage.setItem('badges', JSON.stringify(earnedGlobal));
+            }
+            
+            this.saveUserData();
             this.showRewardModal("YENİ ROZET!", `${badge.name}: ${badge.desc} 🏅`);
             this.playSound('badge');
         }

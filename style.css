@@ -133,6 +133,7 @@ body.dark-theme {
     min-height: 100vh; 
     background: var(--bg-main);
 }
+/* Removed risky display:none / active toggle for app-layout to prevent black screens */
 .view-screen {
     width: 100%;
     min-height: 100vh;
@@ -462,7 +463,7 @@ body.theme-vip-pink h3 {
     top: 0; left: 0;
     width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 10; /* Lowered from 9999 to prevent overlapping modals */
     overflow: hidden;
     display: none;
 }
@@ -845,9 +846,11 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
 }
 /* --- MODALS & OVERLAYS --- */
 #modal-backdrop, .modal-backdrop { 
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(10, 11, 30, 0.85); backdrop-filter: blur(10px); 
-    display: flex; justify-content: center; align-items: center; z-index: 2000; 
+    pointer-events: none;
+}
+#modal-backdrop.active, .modal-backdrop.active {
+    pointer-events: all;
+    display: flex !important;
 }
 
 #game-overlay {
@@ -861,8 +864,9 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
     z-index: 3000;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     overflow-y: auto;
+    padding: 40px 10px;
 }
 
 #game-overlay.hidden {
@@ -1013,3 +1017,58 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
         font-size: 1rem;
     }
 }
+
+/* --- CRITICAL BUG FIXES APPENDED --- */
+#level-up-modal {
+    z-index: 9999 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 15px !important;
+    padding: 50px !important;
+    min-width: 400px !important;
+}
+
+#level-up-modal:not(.active) {
+    display: none !important;
+}
+
+.modal-backdrop {
+    z-index: 9990 !important;
+    pointer-events: none !important;
+}
+
+.modal-backdrop.active {
+    pointer-events: all !important;
+}
+
+
+/* --- OVERRIDE FOR RE-RELOCATED MODAL --- */
+#modal-backdrop {
+    display: none !important;
+}
+#modal-backdrop.active {
+    display: flex !important;
+    pointer-events: all !important;
+}
+
+#level-up-modal {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 500px !important;
+    min-width: 350px !important;
+    background: var(--bg-card) !important;
+    border: 3px solid var(--primary) !important;
+    padding: 40px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5) !important;
+    z-index: 10000 !important;
+}
+
