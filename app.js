@@ -111,7 +111,7 @@ const app = {
         if (this.state.loginMode === 'guest') {
             // VIP Hesapları
             const vipAccounts = [
-                { username: 'kaydek', password: 'ela', displayName: 'Kaydek', title: 'V.I.P Prenses 👑', avatar: 'vip_1.png', theme: 'pink' },
+                { username: 'ela', password: 'kaydek', displayName: 'Ela', title: 'V.I.P Prenses 👑', avatar: 'vip_1.png', theme: 'pink' },
                 { username: 'eye', password: 'ali', displayName: 'Ali EL Feriz', title: 'V.I.P Süper Simyacı 🧪', avatar: 'school_logo.jpg', theme: 'blue' }
             ];
 
