@@ -445,10 +445,11 @@ const KIMYALAB_DATA = {
         {
             id: 'cozeltiler',
             name: 'SIVI ÇÖZELTİLER VE ÇÖZÜNÜRLÜK',
-            desc: 'Derişim birimleri ve çözünürlüğe etki eden faktörler.',
+            desc: 'Derişim birimleri, sulu çözelti hazırlama, koligatif özellikler ve çözünürlük.',
             content: `Çözeltiler, çözücü ve çözünenden oluşan homojen karışımlardır.
-            • <b>Molarite (M):</b> M = n / V (Litre)
-            • <b>Koligatif Özellikler:</b> Tanecik sayısına bağlı değişen özellikler (ΔTk = Kk . m . i).`,
+            • <b>Derişim Birimleri:</b> Molarite (n/V), Molalite (n/kg), ppm, Mol Kesri ve Kütlece/Hacimce yüzde.
+            • <b>Koligatif Özellikler:</b> Tanecik derişimine bağlı basınç düşmesi, kaynama noktası yükselmesi (Ebülyoskopi) ve donma noktası alçalması (Kriyoskopi).
+            • <b>Çözünürlük:</b> Belirli sıcaklık ve basınçta, 100 gram çözücüde çözünebilen maksimum madde miktarıdır. Sıcaklık, basınç ve ortak iyon çözünürlüğe etki eder.`,
             questions: [
                 { q: "1 molar 500 mL çözelti hazırlamak için kaç mol madde gerekir?", options: ["0.5 mol", "1 mol", "5 mol", "10 mol"], a: "0.5 mol", difficulty: 'easy' },
                 { q: "Sıcaklık artışı genellikle hangi maddelerin sudaki çözünürlüğünü azaltır?", options: ["Tuzlar", "Şekerler", "Gazlar", "Metaller"], a: "Gazlar", difficulty: 'easy' },
@@ -458,6 +459,55 @@ const KIMYALAB_DATA = {
                 { q: "Ters Ozmoz sistemi en çok hangi alanda kullanılır?", options: ["Deniz suyundan tatlı su elde etme", "Metal parlatma", "Isı yalıtımı", "Tekstil boyama"], a: "Deniz suyundan tatlı su elde etme", difficulty: 'hard' },
                 { q: "Kütlece %20'lik 200 gram tuzlu suya 300 gram saf su eklenirse yeni yüzde kaç olur?", options: ["%8", "%10", "%12", "%15"], a: "%8", difficulty: 'hard' },
                 { q: "Polar maddeler polar çözücülerde iyi çözünür kuralına ne denir?", options: ["Benzer benzeri çözer", "Dalton Yasası", "Henry Yasası", "Raoult Yasası"], a: "Benzer benzeri çözer", difficulty: 'medium' }
+            ]
+        },
+        {
+            id: 'enerji',
+            name: 'KİMYASAL TEPKİMELERDE ENERJİ',
+            desc: 'Tepkime ısıları, entalpi, oluşum entalpisi ve Hess yasası.',
+            content: `Kimyasal tepkimeler sırasında meydana gelen enerji değişimlerini inceler.
+            • <b>Ekzotermik Tepkimeler:</b> Dışarıya ısı veren tepkimelerdir (ΔH < 0). Yanma tepkimeleri (N2 hariç) örnektir.
+            • <b>Endotermik Tepkimeler:</b> Dışarıdan ısı alan tepkimelerdir (ΔH > 0). Analiz tepkimeleri ve bağ kırılması örnektir.
+            • <b>Hess Yasası:</b> Bir tepkimenin entalpi değişimi, tepkimenin izlediği yola bağlı değildir; ara basamakların toplamına eşittir.`,
+            questions: [
+                { q: "Aşağıdakilerden hangisi daima ekzotermiktir?", options: ["Bağ oluşumu", "Bağ kırılması", "Elektroliz", "Buharlaşma"], a: "Bağ oluşumu", difficulty: 'easy' },
+                { q: "ΔH değeri negatif (-) olan tepkimelere ne ad verilir?", options: ["Endotermik", "Ekzotermik", "İzotermik", "Katalitik"], a: "Ekzotermik", difficulty: 'easy' },
+                { q: "Elementlerin standart koşullarda en kararlı hallerinin oluşum entalpisi kaçtır?", options: ["1", "0", "-1", "100"], a: "0", difficulty: 'medium' },
+                { q: "Hess Yasası neyi ifade eder?", options: ["Tepkime hızını", "Enerjinin korunumunu", "Gaz yasalarını", "Denge sabitini"], a: "Enerjinin korunumunu", difficulty: 'medium' },
+                { q: "Bir bileşiğin elementlerinden oluştuğu tepkimenin ısısına ne denir?", options: ["Oluşum entalpisi", "Yanma ısısı", "Nötürleşme ısısı", "Bağ enerjisi"], a: "Oluşum entalpisi", difficulty: 'easy' },
+                { q: "Isı kapasitesi neye bağlıdır?", options: ["Madde miktarına", "Sıcaklığa", "Basınca", "Hacme"], a: "Madde miktarına", difficulty: 'hard' }
+            ]
+        },
+        {
+            id: 'hiz',
+            name: 'KİMYASAL TEPKİMELERDE HIZ',
+            desc: 'Çarpışma teorisi, aktifleşme enerjisi ve hıza etki eden faktörler.',
+            content: `Birim zamanda harcanan veya oluşan madde miktarıdır.
+            • <b>Çarpışma Teorisi:</b> Tepkimenin gerçekleşmesi için taneciklerin uygun geometride ve yeterli enerjide (eşik enerjisi) çarpışması gerekir.
+            • <b>Hıza Etki Edenler:</b> Derişim artışı çarpışma sayısını artırır. Sıcaklık artışı hem çarpışma sayısını hem de enerjisini artırır. Katalizör ise eşik enerjisini düşürerek hızı artırır.`,
+            questions: [
+                { q: "Hangisi bir tepkimenin eşik enerjisini (Aktifleşme enerjisi) değiştirir?", options: ["Sıcaklık", "Katalizör", "Derişim", "Temas yüzeyi"], a: "Katalizör", difficulty: 'medium' },
+                { q: "Sıcaklık artışı tepkime hızını nasıl etkiler?", options: ["Daima artırır", "Daima azaltır", "Etkilemez", "Sadece endotermiklerde artırır"], a: "Daima artırır", difficulty: 'easy' },
+                { q: "Hız ifadesi (r = k.[A]) olan bir tepkimenin derecesi kaçtır?", options: ["0", "1", "2", "3"], a: "1", difficulty: 'easy' },
+                { q: "Heterojen bir tepkimede katı haldeki maddenin temas yüzeyi artırılırsa hangisi değişmez?", options: ["Hız sabiti (k)", "Hız", "Eşik enerjisi", "Birim zamandaki çarpışma sayısı"], a: "Eşik enerjisi", difficulty: 'hard' },
+                { q: "Aktifleşmiş kompleks nedir?", options: ["En düşük enerjili hal", "Kararsız ara yapı", "Ürün", "Giren madde"], a: "Kararsız ara yapı", difficulty: 'medium' }
+            ]
+        },
+        {
+            id: 'denge',
+            name: 'KİMYASAL TEPKİMELERDE DENGE',
+            desc: 'Kimyasal denge, Le Chatelier ilkesi ve sulu çözelti dengeleri (pH/pOH).',
+            content: `Kapalı bir sistemde ileri ve geri yöndeki tepkime hızlarının eşitlendiği haldir.
+            • <b>Le Chatelier İlkesi:</b> Denge halindeki bir sisteme dışarıdan bir etki yapılırsa, sistem bu etkiyi azaltacak yöne kayar.
+            • <b>Asit-Baz Dengesi:</b> pH = -log[H+]. Saf suda 25°C'de pH + pOH = 14'tür. 
+            • <b>Tampon Çözeltiler:</b> Küçük miktarlarda asit/baz eklendiğinde pH değişimine direnç gösteren çözeltilerdir.`,
+            questions: [
+                { q: "25°C'de pH değeri 3 olan bir çözeltinin pOH değeri kaçtır?", options: ["3", "7", "11", "14"], a: "11", difficulty: 'easy' },
+                { q: "Denge sabitini (Kc) değiştiren tek faktör hangisidir?", options: ["Derişim", "Hacim", "Sıcaklık", "Katalizör"], a: "Sıcaklık", difficulty: 'medium' },
+                { q: "Hangisi dengeyi ürünler yönüne kaydırır (A + B ⇌ C + Isı)?", options: ["Sıcaklığı artırmak", "Sıcaklığı azaltmak", "C eklemek", "Katalizör eklemek"], a: "Sıcaklığı azaltmak", difficulty: 'medium' },
+                { q: "Zayıf bir asit ile bu asidin eşlenik bazını içeren çözeltiye ne denir?", options: ["Doymuş çözelti", "Titrasyon", "Tampon çözelti", "İdeal çözelti"], a: "Tampon çözelti", difficulty: 'hard' },
+                { q: "Saf suyun oda sıcaklığındaki iyonlaşma sabiti (Ksu) kaçtır?", options: ["10^-7", "10^-14", "1", "14"], a: "10^-14", difficulty: 'easy' },
+                { q: "Bronsted-Lowry asit-baz tanımına göre proton (H+) veren madde nedir?", options: ["Asit", "Baz", "Tuz", "Nötr"], a: "Asit", difficulty: 'easy' }
             ]
         }
     ]
