@@ -347,10 +347,6 @@ const KIMYALAB_DATA = {
         { symbol: 'CuSO₄', name: 'Göz Taşı (Bakır (II) Sülfat)', desc: 'Tarımda fungusit (mantar öldürücü) olarak kullanılır.' },
         { symbol: 'KNO₃', name: 'Güherçile (Potasyum Nitrat)', desc: 'Barut yapımında ve gübre sektöründe kullanılan oksitleyici bir maddedir.' },
         { symbol: 'CH₃OH', name: 'Metil Alkol (Odun Alkolü)', desc: 'Çok zehirlidir, endüstride çözücü olarak kullanılır.' },
-        { symbol: 'C₂H₅OH', name: 'Etil Alkol', desc: 'Dezenfektanlarda ve içeceklerde kullanılan alkol türüdür.' },
-        { symbol: 'C₆H₁₂O₆', name: 'Glikoz (Şeker)', desc: 'Canlıların temel enerji kaynağı olan basit bir şekerdir.' },
-        { symbol: 'H₂O', name: 'Su', desc: 'Yaşamın temel sıvısı, en yaygın çözücüdür.' },
-        { symbol: 'CO₂', name: 'Karbondioksit', desc: 'Solunum sonucu dışarı atılan gazdır, kuru buz bunun katı halidir.' }
     ],
     fusionQuestions: [
         { s: 'H', n: 'Hidrojen' }, { s: 'He', n: 'Helyum' }, { s: 'Li', n: 'Lityum' }, { s: 'Be', n: 'Berilyum' },
@@ -375,16 +371,15 @@ const KIMYALAB_DATA = {
             • <b>Anorganik Kimya:</b> Genellikle karbon içermeyen (asit, baz, tuz, metal) bileşikleri inceler.
             • <b>Organik Kimya:</b> Karbon temelli bileşikleri inceler.`,
             questions: [
-                { q: "Kan, idrar gibi örneklerin içeriğini inceleyen kimya alt dalı hangisidir?", options: ["Biyokimya", "Analitik Kimya", "Fizikokimya", "Polimer Kimyası"], a: "Biyokimya" },
-                { q: "Tepkime hızlarını ve enerji değişimlerini inceleyen alan hangisidir?", options: ["Fizikokimya", "Organik Kimya", "Analitik Kimya", "Nükleer Kimya"], a: "Fizikokimya" },
-                { q: "Plastik, naylon, kauçuk gibi maddelerin üretimini hangi alan inceler?", options: ["Polimer Kimyası", "Anorganik Kimya", "Biyokimya", "Analitik Kimya"], a: "Polimer Kimyası" },
-                { q: "Maden sularının mineral içeriğini belirleyen kimya dalı hangisidir?", options: ["Analitik Kimya", "Organik Kimya", "Fizikokimya", "Biyokimya"], a: "Analitik Kimya" },
-                { q: "Asitler, bazlar ve metaller gibi karbon içermeyen bileşikleri inceler?", options: ["Anorganik Kimya", "Organik Kimya", "Fizikokimya", "Biyokimya"], a: "Anorganik Kimya" },
-                { q: "Canlı hücrelerdeki solunum, sindirim gibi olayların kimyasını inceler?", options: ["Biyokimya", "Fizikokimya", "Analitik Kimya", "Çevre Kimyası"], a: "Biyokimya" },
-                { q: "İlaçların vücuttaki etkileşimlerini inceleyen uygulama alanı?", options: ["Farmasötik Kimya", "Petrokimya", "Tekstil Kimyası", "Gıda Kimyası"], a: "Farmasötik Kimya" },
-                { q: "Ham petrolün işlenmesi ve petrol ürünlerini inceleyen çalışma alanı?", options: ["Petrokimya", "Organik Kimya", "Polimer Kimyası", "Endüstriyel Kimya"], a: "Petrokimya" },
-                { q: "Boyaların maddeler üzerindeki etkisini ve yapısını inceleyen alan?", options: ["Tekstil Kimyası", "Polimer Kimyası", "Biyokimya", "Tarım Kimyası"], a: "Tekstil Kimyası" },
-                { q: "Endüstride hammadde üretimini ve maliyet analizini yapan alan?", options: ["Endüstriyel Kimya", "Analitik Kimya", "Fizikokimya", "Anorganik Kimya"], a: "Endüstriyel Kimya" }
+                { q: "Kan, idrar gibi örneklerin içeriğini inceleyen kimya alt dalı hangisidir?", options: ["Biyokimya", "Analitik Kimya", "Fizikokimya", "Polimer Kimyası"], a: "Biyokimya", difficulty: 'easy' },
+                { q: "Maden sularının mineral içeriğini belirleyen kimya dalı hangisidir?", options: ["Analitik Kimya", "Organik Kimya", "Fizikokimya", "Biyokimya"], a: "Analitik Kimya", difficulty: 'easy' },
+                { q: "Plastik, naylon, kauçuk gibi maddelerin üretimini hangi alan inceler?", options: ["Polimer Kimyası", "Anorganik Kimya", "Biyokimya", "Analitik Kimya"], a: "Polimer Kimyası", difficulty: 'easy' },
+                { q: "Tepkime hızlarını ve enerji değişimlerini inceleyen alan hangisidir?", options: ["Fizikokimya", "Organik Kimya", "Analitik Kimya", "Nükleer Kimya"], a: "Fizikokimya", difficulty: 'medium' },
+                { q: "Asitler, bazlar ve metaller gibi karbon içermeyen bileşikleri inceler?", options: ["Anorganik Kimya", "Organik Kimya", "Fizikokimya", "Biyokimya"], a: "Anorganik Kimya", difficulty: 'medium' },
+                { q: "Farmasötik kimya hangi temel alanın bir uygulama dalıdır?", options: ["Analitik ve Biyokimya", "Fizikokimya", "Endüstriyel Kimya", "Nükleer Kimya"], a: "Analitik ve Biyokimya", difficulty: 'hard' },
+                { q: "Petrokimya tesislerinde hangi hammadde ana odak noktasıdır?", options: ["Ham Petrol", "Doğal Gaz", "Kömür", "Biyokütle"], a: "Ham Petrol", difficulty: 'medium' },
+                { q: "Boyaların maddeler üzerindeki etkisini ve yapısını inceleyen alan?", options: ["Tekstil Kimyası", "Polimer Kimyası", "Biyokimya", "Tarım Kimyası"], a: "Tekstil Kimyası", difficulty: 'medium' },
+                { q: "Endüstride hammadde üretimini ve maliyet analizini yapan alan?", options: ["Endüstriyel Kimya", "Analitik Kimya", "Fizikokimya", "Anorganik Kimya"], a: "Endüstriyel Kimya", difficulty: 'hard' }
             ]
         },
         {
@@ -396,19 +391,16 @@ const KIMYALAB_DATA = {
             • <b>Yakıcı (Oksitleyici):</b> Başka maddelerin yanmasını sağlayan, O harfi üzerinde alev sembolü. Hidrojen peroksit gibi.
             • <b>Korozif (Aşındırıcı):</b> Ciltte veya metalde aşınma yapan maddeler. Kuvvetli asit ve bazlar.
             • <b>Toksik (Zehirli):</b> Vücuda girdiğinde ciddi zararlar veren (kurukafa sembolü).
-            • <b>Radyoaktif:</b> Radyasyon yayan ve canlı dokuya zarar veren maddeler.
             • <b>Çevreye Zararlı:</b> Doğaya atıldığında zararlı olan, balık ve ağaç sembolü.`,
             questions: [
-                { q: "O harfi üzerinde alev sembolü neyi ifade eder?", options: ["Yanıcı", "Yakıcı", "Zehirli", "Radyoaktif"], a: "Yakıcı" },
-                { q: "Asit kaplarının üzerinde hangi sembolün bulunması beklenir?", options: ["Korozif", "Yanıcı", "Radyoaktif", "Patlayıcı"], a: "Korozif" },
-                { q: "Kurukafa sembolü ne anlama gelir?", options: ["Toksik (Zehirli)", "Yakıcı", "Tahriş Edici", "Ekolojik Risk"], a: "Toksik (Zehirli)" },
-                { q: "Alev sembolü neyi belirtir?", options: ["Yanıcı madde", "Isıtma cihazı", "Patlayıcı gaz", "Radyoaktif kaynak"], a: "Yanıcı madde" },
-                { q: "Ölü balık ve kurumuş ağaç sembolü neyi ifade eder?", options: ["Çevreye Zararlı", "Biyolojik Tehlike", "Su kirliliği", "Atık madde"], a: "Çevreye Zararlı" },
-                { q: "Ünlem işareti (!) sembolü neyi belirtir?", options: ["Tahriş Edici", "Toksik", "Radyoaktif", "Yanıcı"], a: "Tahriş Edici" },
-                { q: "Patlamaya hazır bir maddeyi hangi sembol temsil eder?", options: ["Patlayıcı", "Korozif", "Yakıcı", "Zehirli"], a: "Patlayıcı" },
-                { q: "Laboratuvarda gözleri korumak için ne takılmalıdır?", options: ["Güvenlik Gözlüğü", "Optik Gözlük", "Güneş Gözlüğü", "Maske"], a: "Güvenlik Gözlüğü" },
-                { q: "Asitle çalışırken ele dökülme riskine karşı en iyi önlem?", options: ["Eldiven takmak", "Elleri yıkamak", "Ceket giymek", "Hızlı çalışmak"], a: "Eldiven takmak" },
-                { q: "Kimyasallar asla ne ile koklanmamalıdır?", options: ["Doğrudan burunla", "Yelpazeleyerek", "Hiçbiri", "Uzaktan"], a: "Doğrudan burunla" }
+                { q: "O harfi üzerinde alev sembolü neyi ifade eder?", options: ["Yanıcı", "Yakıcı", "Zehirli", "Radyoaktif"], a: "Yakıcı", difficulty: 'easy' },
+                { q: "Asit kaplarının üzerinde hangi sembolün bulunması beklenir?", options: ["Korozif", "Yanıcı", "Radyoaktif", "Patlayıcı"], a: "Korozif", difficulty: 'easy' },
+                { q: "Kurukafa sembolü ne anlama gelir?", options: ["Toksik (Zehirli)", "Yakıcı", "Tahriş Edici", "Ekolojik Risk"], a: "Toksik (Zehirli)", difficulty: 'easy' },
+                { q: "Ünlem işareti (!) sembolü neyi belirtir?", options: ["Tahriş Edici", "Toksik", "Radyoaktif", "Yanıcı"], a: "Tahriş Edici", difficulty: 'medium' },
+                { q: "Ölü balık ve kurumuş ağaç sembolü neyi ifade eder?", options: ["Çevreye Zararlı", "Biyolojik Tehlike", "Su kirliliği", "Atık madde"], a: "Çevreye Zararlı", difficulty: 'medium' },
+                { q: "HF (Hidroflorik asit) gibi maddeler neden özel kaplarda saklanmalıdır?", options: ["Camı aşındırdığı için", "Yanıcı olduğu için", "Pahalı olduğu için", "Kokusu olduğu için"], a: "Camı aşındırdığı için", difficulty: 'hard' },
+                { q: "Laboratuvarda bir kimyasalın güvenlik bilgi formuna ne ad verilir?", options: ["MSDS", "HPLC", "ASTM", "TSE"], a: "MSDS", difficulty: 'hard' },
+                { q: "Radyoaktif maddelerle çalışılırken hangi kurşun önlük giyilmesinin temel sebebi nedir?", options: ["Radyasyonu emmek", "Sıcaklıktan korumak", "Ağırlık yapmak", "Şık durmak"], a: "Radyasyonu emmek", difficulty: 'medium' }
             ]
         },
         {
@@ -416,21 +408,20 @@ const KIMYALAB_DATA = {
             name: 'MODERN ATOM TEORİSİ',
             desc: 'Kuantum modeli, orbitaller ve periyodik sistem.',
             content: `Modern atom teorisi (Kuantum Modeli), elektronun yerinin tam olarak belirlenemeyeceğini, sadece bulunma olasılığının yüksek olduğu bölgeler (orbitaller) olduğunu savunur.
-            • <b>Kuantum Sayıları:</b> Baş kuantum sayısı (n), Açısal momentum kuantum sayısı (l), Manyetik kuantum sayısı (ml), Spin kuantum sayısı (ms).
-            • <b>Orbitaller:</b> s (l=0), p (l=1), d (l=2), f (l=3).
-            • <b>Elektron Dizilimi:</b> Aufbau prensibi (en düşük enerjili orbitalden başlar), Pauli dışlama ilkesi (bir orbitalde maks zıt spinli 2e- olur), Hund kuralı (eş enerjili orbitallere elektronlar önce teker teker yerleşir).
-            • <b>Yükseltgenme Basamakları:</b> Bir atomun bileşiklerinde aldığı yüktür.`,
+            • <b>Baş kuantum sayısı (n):</b> Enerji düzeyini belirtir.
+            • <b>Açısal momentum kuantum sayısı (l):</b> Orbitalin şeklini belirtir (s:0, p:1, d:2, f:3).
+            • <b>Elektron Dizilimi İstisnaları:</b> 24Cr ([Ar] 4s1 3d5) ve 29Cu ([Ar] 4s1 3d10) küresel simetri nedeni ile istisnadır.`,
             questions: [
-                { q: "Elektronların bulunma olasılığının yüksek olduğu bölgelere ne denir?", options: ["Yörünge", "Orbital", "Çekirdek", "Katman"], a: "Orbital" },
-                { q: "l=1 kuantum sayısı hangi orbital türünü temsil eder?", options: ["s", "p", "d", "f"], a: "p" },
-                { q: "Aynı temel enerji düzeyinde hangi orbitalin enerjisi en düşüktür?", options: ["s", "p", "d", "f"], a: "s" },
-                { q: "Potasyum (19K) atomunun elektron dizilimi hangi orbitalle biter?", options: ["3d", "4s", "3p", "4p"], a: "4s" },
-                { q: "H2SO4 bileşiğinde Kükürt (S) atomunun yükseltgenme basamağı nedir?", options: ["+2", "+4", "+6", "-2"], a: "+6" },
-                { q: "Pauli dışlama ilkesine göre bir orbitalde en fazla kaç elektron bulunabilir?", options: ["1", "2", "6", "10"], a: "2" },
-                { q: "d orbitali en fazla kaç elektron alabilir?", options: ["2", "6", "10", "14"], a: "10" },
-                { q: "Baş kuantum sayısı (n) neyi belirtir?", options: ["Elektronun spinini", "Enerji düzeyini", "Orbital şeklini", "Yönelimi"], a: "Enerji düzeyini" },
-                { q: "26Fe atomunun elektron dizilimi aşağıdakilerden hangisi ile biter?", options: ["3d6", "4s2", "4p6", "3d10"], a: "3d6" },
-                { q: "F orbitali (l=3) için manyetik kuantum sayısı (ml) kaç farklı değer alabilir?", options: ["3", "5", "7", "14"], a: "7" }
+                { q: "Elektronların bulunma olasılığının yüksek olduğu bölgelere ne denir?", options: ["Yörünge", "Orbital", "Çekirdek", "Katman"], a: "Orbital", difficulty: 'easy' },
+                { q: "l=1 kuantum sayısı hangi orbital türünü temsil eder?", options: ["s", "p", "d", "f"], a: "p", difficulty: 'easy' },
+                { q: "24Cr atomunun elektron dizilimi aşağıdakilerden hangisidir?", options: ["[Ar] 4s2 3d4", "[Ar] 4s1 3d5", "[Ar] 4s0 3d6", "[Ne] 3s2 3p6"], a: "[Ar] 4s1 3d5", difficulty: 'hard' },
+                { q: "Pauli dışlama ilkesine göre bir orbitalde en fazla kaç elektron bulunabilir?", options: ["1", "2", "6", "10"], a: "2", difficulty: 'easy' },
+                { q: "d orbitali en fazla kaç elektron alabilir?", options: ["2", "6", "10", "14"], a: "10", difficulty: 'medium' },
+                { q: "H2SO4 bileşiğinde Kükürt (S) atomunun yükseltgenme basamağı nedir?", options: ["+2", "+4", "+6", "-2"], a: "+6", difficulty: 'medium' },
+                { q: "29Cu atomunun elektron diziliminde l=0 olan kaç elektron vardır?", options: ["6", "7", "8", "9"], a: "7", difficulty: 'hard' },
+                { q: "4d orbitali için baş kuantum sayısı (n) ve orbital şekli (l) nedir?", options: ["n=4, l=2", "n=4, l=1", "n=3, l=2", "n=5, l=0"], a: "n=4, l=2", difficulty: 'medium' },
+                { q: "Bir orbitalde n=3 ve l=1 ise bu orbital hangisidir?", options: ["3s", "3p", "3d", "2p"], a: "3p", difficulty: 'easy' },
+                { q: "KMnO4 bileşiğinde Mn elementinin yükseltgenme basamağı?", options: ["+5", "+6", "+7", "+2"], a: "+7", difficulty: 'hard' }
             ]
         },
         {
@@ -438,20 +429,17 @@ const KIMYALAB_DATA = {
             name: 'GAZLAR',
             desc: 'Gaz yasaları, ideal gas denklemi ve kinetik teori.',
             content: `Gazların davranışlarını açıklayan temel yasalar ve kavramlar:
-            • <b>İdeal Gaz Denklemi:</b> P.V = n.R.T (P: Basınç-atm, V: Hacim-Litre, n: Mol, R: 0,082, T: Sıcaklık-Kelvin).
-            • <b>Gaz Yasaları:</b> Boyle (P-V ters), Charles (V-T doğru), Gay-Lussac (P-T doğru), Avogadro (V-n doğru).
-            • <b>Kinetik Teori:</b> Gaz moleküllerinin hızı sıcaklığın karekökü ile doğru, mol kütlesinin karekökü ile ters orantılıdır.`,
+            • <b>İdeal Gaz Denklemi:</b> P.V = n.R.T
+            • <b>Kinetik Teori:</b> Gazların hızı sıcaklığın kareköküyle doğru, mol kütlesinin kareköküyle ters orantılıdır (V1/V2 = √(M2/M1) * √(T1/T2)).`,
             questions: [
-                { q: "İdeal gaz denkleminde sıcaklık birimi mutlaka ne olmalıdır?", options: ["Celsius", "Fahrenheit", "Kelvin", "Reaumur"], a: "Kelvin" },
-                { q: "Sabit sıcaklıkta bir gazın basıncı 2 katına çıkarsa hacmi nasıl değişir?", options: ["Yarıya iner", "2 katına çıkar", "Değişmez", "4 katına çıkar"], a: "Yarıya iner" },
-                { q: "Hangisi gazların idealliğe en yakın olduğu durumdur?", options: ["Yüksek P, Düşük T", "Düşük P, Yüksek T", "Yüksek P, Yüksek T", "Düşük P, Düşük T"], a: "Düşük P, Yüksek T" },
-                { q: "CH4 ve SO2 gazlarından hangisi aynı sıcaklıkta daha hızlı yayılır?", options: ["CH4", "SO2", "Hızları eşit", "Basınca bağlı"], a: "CH4" },
-                { q: "0°C kaç Kelvin'e eşittir?", options: ["0 K", "100 K", "273 K", "373 K"], a: "273 K" },
-                { q: "1 atm basınç kaç mm Hg (Torr) yapar?", options: ["76", "100", "760", "1.013"], a: "760" },
-                { q: "Dış basınç azaldıkça bir gazın hacmi (sabit n ve T) nasıl değişir?", options: ["Artar", "Azalır", "Değişmez", "Yok olur"], a: "Artar" },
-                { q: "Gaz molekülleri arasındaki çarpışmalar nasıldır?", options: ["Esnektir", "Esnek değildir", "Hareketsizdir", "Yavaşlatıcıdır"], a: "Esnektir" },
-                { q: "Gaz karışımında her bir gazın tek başına yaptığı basınca ne denir?", options: ["Toplam basınç", "Kısmi basınç", "Atmosfer basıncı", "Kinetik basınç"], a: "Kısmi basınç" },
-                { q: "İdeal gaz sabitinin (R) yaklaşık değeri nedir?", options: ["0.082", "8.314", "22.4", "1.00"], a: "0.082" }
+                { q: "İdeal gas denkleminde sıcaklık birimi mutlaka ne olmalıdır?", options: ["Celsius", "Fahrenheit", "Kelvin", "Reaumur"], a: "Kelvin", difficulty: 'easy' },
+                { q: "Sabit sıcaklıkta bir gazın basıncı 2 katına çıkarsa hacmi nasıl değişir?", options: ["Yarıya iner", "2 katına çıkar", "Değişmez", "4 katına çıkar"], a: "Yarıya iner", difficulty: 'easy' },
+                { q: "Hangisi gazların idealliğe en yakın olduğu durumdur?", options: ["Yüksek P, Düşük T", "Düşük P, Yüksek T", "Yüksek P, Yüksek T", "Düşük P, Düşük T"], a: "Düşük P, Yüksek T", difficulty: 'medium' },
+                { q: "CH4 (MA:16) ve SO2 (MA:64) gazlarından hangisi aynı sıcaklıkta daha hızlı yayılır?", options: ["CH4 2 kat daha hızlıdır", "SO2 2 kat daha hızlıdır", "Hızları eşittir", "CH4 4 kat daha hızlıdır"], a: "CH4 2 kat daha hızlıdır", difficulty: 'hard' },
+                { q: "0°C ve 1 atm basınç altında 1 mol ideal gas kaç litre hacim kaplar?", options: ["11.2", "22.4", "24.5", "44.8"], a: "22.4", difficulty: 'medium' },
+                { q: "Gerçek bir gazın ideallikten sapmasının temel sebebi nedir?", options: ["Moleküller arası çekim", "Molekül ağırlığı", "Kabın şekli", "Sıcaklık artışı"], a: "Moleküller arası çekim", difficulty: 'hard' },
+                { q: "Dalton Kısmi Basınçlar Yasasına göre toplam basınç neye eşittir?", options: ["Kısmi basınçlar toplamına", "Kısmi basınçlar ortalamasına", "Sıcaklığa", "Hacme"], a: "Kısmi basınçlar toplamına", difficulty: 'easy' },
+                { q: "PV/RT oranı 1 olan gaza ne denir?", options: ["İdeal gas", "Gerçek gas", "Asal gas", "Sıvılaştırılmış gas"], a: "İdeal gas", difficulty: 'medium' }
             ]
         },
         {
@@ -459,21 +447,17 @@ const KIMYALAB_DATA = {
             name: 'SIVI ÇÖZELTİLER VE ÇÖZÜNÜRLÜK',
             desc: 'Derişim birimleri ve çözünürlüğe etki eden faktörler.',
             content: `Çözeltiler, çözücü ve çözünenden oluşan homojen karışımlardır.
-            • <b>Molarite (M):</b> 1 litre çözeltide çözünen maddenin mol sayısıdır (M = n/V).
-            • <b>Çözünürlük:</b> Belirli sıcaklık ve basınçta 100 gram çözücüde çözünebilen maksimum madde miktarıdır.
-            • <b>Benzer Benzeri Çözür:</b> Polar maddeler polar çözücülerde, apolar maddeler apolar çözücülerde iyi çözünür.
-            • <b>Koligatif Özellikler:</b> Kaynama noktası yükselmesi, donma noktası alçalması.`,
+            • <b>Molarite (M):</b> M = n / V (Litre)
+            • <b>Koligatif Özellikler:</b> Tanecik sayısına bağlı değişen özellikler (ΔTk = Kk . m . i).`,
             questions: [
-                { q: "1 molar 500 mL çözelti hazırlamak için kaç mol madde gerekir?", options: ["0.5 mol", "1 mol", "5 mol", "10 mol"], a: "0.5 mol" },
-                { q: "Sıcaklık artışı genellikle hangi maddelerin sudaki çözünürlüğünü azaltır?", options: ["Tuzlar", "Şekerler", "Gazlar", "Metaller"], a: "Gazlar" },
-                { q: "Aşağıdakilerden hangisi bir derişim birimi değildir?", options: ["Molarite", "Molalite", "ppm", "Litre"], a: "Litre" },
-                { q: "Doymuş bir çözeltiye aynı sıcaklıkta çözücü eklenirse ne olur?", options: ["Doymamış olur", "Daha derişik olur", "Değişmez", "Katı çöker"], a: "Doymamış olur" },
-                { q: "Su içinde çözünmüş tuzun kaynama noktasını nasıl etkiler?", options: ["Yükseltir", "Düşürür", "Etkilemez", "Önce düşürür"], a: "Yükseltir" },
-                { q: "Milyonda bir birime karşılık gelen derişim hangisidir?", options: ["ppm", "Molarite", "Normalite", "Kütlece %"], a: "ppm" },
-                { q: "Polar bir madde olan su, aşağıdakilerden hangisini iyi çözer?", options: ["NaCl (Tuz)", "C6H6 (Benzen)", "CCl4", "N2 Gas"], a: "NaCl (Tuz)" },
-                { q: "Çözünürlük sıcaklıkla artıyorsa bu tepkime nasıldır?", options: ["Endotermik", "Ekzotermik", "İzotermik", "Nötr"], a: "Endotermik" },
-                { q: "1000 gram çözücüde çözünen maddenin mol sayısına ne denir?", options: ["Molalite", "Molarite", "Kütlece %", "Mol kesri"], a: "Molalite" },
-                { q: "Hangisi koligatif özellik değildir?", options: ["Donma noktası alçalması", "Osmotik basınç", "Renk değişimi", "Buhar basıncı düşmesi"], a: "Renk değişimi" }
+                { q: "1 molar 500 mL çözelti hazırlamak için kaç mol madde gerekir?", options: ["0.5 mol", "1 mol", "5 mol", "10 mol"], a: "0.5 mol", difficulty: 'easy' },
+                { q: "Sıcaklık artışı genellikle hangi maddelerin sudaki çözünürlüğünü azaltır?", options: ["Tuzlar", "Şekerler", "Gazlar", "Metaller"], a: "Gazlar", difficulty: 'easy' },
+                { q: "Aşağıdakilerden hangisi bir derişim birimi değildir?", options: ["Molarite", "Molalite", "ppm", "Litre"], a: "Litre", difficulty: 'easy' },
+                { q: "100 gram suda 18 gram glikoz (C6H12O6:180) çözülürse çözelti kaç molal olur?", options: ["1 molal", "0.1 molal", "0.5 molal", "2 molal"], a: "1 molal", difficulty: 'hard' },
+                { q: "Donma noktası alçalması hangisine bağlıdır?", options: ["Tanecik derişimine", "Kabın hacmine", "Maddenin rengine", "Çözeltinin kütlesine"], a: "Tanecik derişimine", difficulty: 'medium' },
+                { q: "Ters Ozmoz sistemi en çok hangi alanda kullanılır?", options: ["Deniz suyundan tatlı su elde etme", "Metal parlatma", "Isı yalıtımı", "Tekstil boyama"], a: "Deniz suyundan tatlı su elde etme", difficulty: 'hard' },
+                { q: "Kütlece %20'lik 200 gram tuzlu suya 300 gram saf su eklenirse yeni yüzde kaç olur?", options: ["%8", "%10", "%12", "%15"], a: "%8", difficulty: 'hard' },
+                { q: "Polar maddeler polar çözücülerde iyi çözünür kuralına ne denir?", options: ["Benzer benzeri çözer", "Dalton Yasası", "Henry Yasası", "Raoult Yasası"], a: "Benzer benzeri çözer", difficulty: 'medium' }
             ]
         }
     ]

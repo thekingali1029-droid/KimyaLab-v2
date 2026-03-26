@@ -15,7 +15,9 @@ const app = {
         isVIP: false,
         vipTheme: null,
         totalGames: parseInt(localStorage.getItem('totalGames') || '0'),
-        grade11Stats: { correct: 0, total: 0 }
+        grade11_stats: JSON.parse(localStorage.getItem('grade11_stats') || '{}'),
+        currentDifficulty: 'all',
+        currentTopicId: null
     },
 
     els: {},
@@ -28,6 +30,7 @@ const app = {
         this.cacheElements();
         this.bindEvents();
         this.applyInitialTheme();
+        this.updateStats();
         console.log("KimyaLab v2 Başlatıldı!");
     },
 
@@ -467,6 +470,7 @@ const app = {
     },
 
     showGrade11Detail(topicId) {
+        this.state.currentTopicId = topicId;
         const topic = KIMYALAB_DATA.grade11.find(t => t.id === topicId);
         if (!topic) return;
 
@@ -474,25 +478,12 @@ const app = {
         const title = document.getElementById('g11-title');
         const desc = document.getElementById('g11-desc');
         const content = document.getElementById('g11-content');
-        const questions = document.getElementById('g11-questions');
-
+        
         title.textContent = topic.name;
         desc.textContent = topic.desc;
         content.innerHTML = topic.content.replace(/\n/g, '<br>');
         
-        this.state.grade11Stats = { correct: 0, total: topic.questions.length };
-        this.updateG11StatsUI();
-
-        questions.innerHTML = topic.questions.map((q, i) => `
-            <div class="glass-card" style="margin-bottom:15px; background:var(--bg-white)">
-                <p style="font-weight:700; margin-bottom:1rem">Soru ${i+1}: ${q.q}</p>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    ${q.options.map(opt => `
-                        <button class="btn-back" style="font-size:0.8rem; padding:10px" onclick="app.checkG11Answer(this, '${opt}', '${q.a}')">${opt}</button>
-                    `).join('')}
-                </div>
-            </div>
-        `).join('');
+        this.setG11Difficulty('all', true);
 
         detail.classList.remove('hidden');
         detail.scrollIntoView({ behavior: 'smooth' });
@@ -500,20 +491,71 @@ const app = {
         this.speak(`${topic.name}. ${topic.desc}`);
     },
 
+    setG11Difficulty(diff, skipSound = false) {
+        this.state.currentDifficulty = diff;
+        const topicId = this.state.currentTopicId;
+        const topic = KIMYALAB_DATA.grade11.find(t => t.id === topicId);
+        if (!topic) return;
+
+        // Update UI buttons
+        document.querySelectorAll('.btn-diff').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.diff === diff);
+        });
+
+        // Filter questions
+        let filteredQuestions = topic.questions;
+        if (diff !== 'all') {
+            filteredQuestions = topic.questions.filter(q => q.difficulty === diff);
+        }
+
+        const questionsArea = document.getElementById('g11-questions');
+        questionsArea.innerHTML = filteredQuestions.map((q, i) => `
+            <div class="glass-card animate-slide-up" style="margin-bottom:15px; background:var(--bg-white)">
+                <div style="display:flex; justify-content:space-between; margin-bottom:1rem">
+                    <p style="font-weight:700;">Soru ${i+1}: ${q.q}</p>
+                    <span class="badge-${q.difficulty || 'easy'}">${(q.difficulty || 'easy').toUpperCase()}</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    ${q.options.map(opt => `
+                        <button class="btn-back" style="font-size:0.8rem; padding:10px" onclick="app.checkG11Answer(this, '${opt}', '${q.a}')">${opt}</button>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('') || '<p style="text-align:center; padding:2rem; color:var(--text-muted)">Bu zorluk seviyesinde henüz soru eklenmedi.</p>';
+
+        this.updateG11StatsUI();
+        if(!skipSound) this.playSound('click');
+    },
+
     checkG11Answer(btn, selected, correct) {
         if (btn.classList.contains('answered')) return;
-        btn.classList.add('answered');
+        
+        const topicId = this.state.currentTopicId;
+        if (!this.state.grade11_stats[topicId]) {
+            this.state.grade11_stats[topicId] = { correct: 0, answered: [] };
+        }
+
+        const questionText = btn.closest('.glass-card').querySelector('p').innerText;
+        if (this.state.grade11_stats[topicId].answered.includes(questionText)) {
+            // Soru zaten cevaplanmış ama buton state'i tutarsızsa (yeniden render vb)
+            btn.classList.add('answered');
+            return;
+        }
 
         if (selected === correct) {
             btn.style.background = 'var(--success)';
             btn.style.color = 'white';
             this.playSound('correct');
-            this.state.grade11Stats.correct++;
+            this.state.grade11_stats[topicId].correct++;
+            this.state.grade11_stats[topicId].answered.push(questionText);
+            
             this.addScore(10);
+            localStorage.setItem('grade11_stats', JSON.stringify(this.state.grade11_stats));
+            
             confetti({
                 particleCount: 50,
                 spread: 30,
-                origin: { y: 0.6 }
+                origin: { y: 0.8 }
             });
         } else {
             btn.style.background = 'var(--danger)';
@@ -524,8 +566,8 @@ const app = {
         }
 
         // Disable other options in this question
-        const parent = btn.closest('div');
-        parent.querySelectorAll('button').forEach(b => {
+        const optionsGrid = btn.parentElement;
+        optionsGrid.querySelectorAll('button').forEach(b => {
             b.classList.add('answered');
             if (b.innerText === correct) {
                 b.style.background = 'var(--success)';
@@ -537,29 +579,24 @@ const app = {
     },
 
     updateG11StatsUI() {
-        const header = document.getElementById('g11-header');
-        let statsEl = document.getElementById('g11-current-stats');
+        const topicId = this.state.currentTopicId;
+        const topic = KIMYALAB_DATA.grade11.find(t => t.id === topicId);
+        const stats = this.state.grade11_stats[topicId] || { correct: 0, answered: [] };
         
-        if (!statsEl) {
-            statsEl = document.createElement('div');
-            statsEl.id = 'g11-current-stats';
-            statsEl.className = 'glass-card';
-            statsEl.style.cssText = 'padding:10px 20px; font-weight:800; color:var(--primary); font-size:1.1rem; border-color:var(--primary)';
-            header.parentElement.insertBefore(statsEl, header.nextSibling);
-        }
+        const totalScoreEl = document.getElementById('g11-total-score');
+        const topicStatsEl = document.getElementById('g11-current-topic-stats');
 
-        statsEl.innerHTML = `
-            <div style="display:flex; gap:20px; align-items:center;">
-                <span>🎯 Doğru: ${this.state.grade11Stats.correct}</span>
-                <span>📊 Toplam: ${this.state.grade11Stats.total}</span>
-                <span style="margin-left:auto; color:var(--success)">Başarı: %${Math.round((this.state.grade11Stats.correct / this.state.grade11Stats.total) * 100) || 0}</span>
-            </div>
-        `;
+        if (!totalScoreEl || !topicStatsEl) return;
 
-        if (this.state.grade11Stats.correct === this.state.grade11Stats.total && this.state.grade11Stats.total > 0) {
-            setTimeout(() => {
-                this.showRewardModal("HARİKA!", "Tüm soruları doğru bildin! Gerçek bir kimya dehasısın. ✨");
-            }, 500);
+        const totalQuestions = topic ? topic.questions.length : 0;
+        const successRate = totalQuestions > 0 ? Math.round((stats.correct / totalQuestions) * 100) : 0;
+        
+        totalScoreEl.innerHTML = `🔥 Konu Başarısı: %${successRate}`;
+        topicStatsEl.innerHTML = `<span>🎯 Doğru: ${stats.correct} / ${totalQuestions}</span>`;
+
+        if (totalQuestions > 0 && stats.correct === totalQuestions) {
+            // Reward already shown check or just show again
+            // this.showRewardModal("TEBRİKLER!", `${topic.name} konusundaki tüm soruları çözdün! 🏆`);
         }
     },
 
