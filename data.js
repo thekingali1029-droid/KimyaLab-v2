@@ -379,7 +379,18 @@ const KIMYALAB_DATA = {
                 { q: "Farmasötik kimya hangi temel alanın bir uygulama dalıdır?", options: ["Analitik ve Biyokimya", "Fizikokimya", "Endüstriyel Kimya", "Nükleer Kimya"], a: "Analitik ve Biyokimya", difficulty: 'hard' },
                 { q: "Petrokimya tesislerinde hangi hammadde ana odak noktasıdır?", options: ["Ham Petrol", "Doğal Gaz", "Kömür", "Biyokütle"], a: "Ham Petrol", difficulty: 'medium' },
                 { q: "Boyaların maddeler üzerindeki etkisini ve yapısını inceleyen alan?", options: ["Tekstil Kimyası", "Polimer Kimyası", "Biyokimya", "Tarım Kimyası"], a: "Tekstil Kimyası", difficulty: 'medium' },
-                { q: "Endüstride hammadde üretimini ve maliyet analizini yapan alan?", options: ["Endüstriyel Kimya", "Analitik Kimya", "Fizikokimya", "Anorganik Kimya"], a: "Endüstriyel Kimya", difficulty: 'hard' }
+                { q: "Endüstride hammadde üretimini ve maliyet analizini yapan alan?", options: ["Endüstriyel Kimya", "Analitik Kimya", "Fizikokimya", "Anorganik Kimya"], a: "Endüstriyel Kimya", difficulty: 'hard' },
+                { q: "Adli tıpta suç kanıtlarının (saç, tükürük vb.) analizi hangi alana girer?", options: ["Adli Kimya", "Fizikokimya", "Anorganik Kimya", "Organik Kimya"], a: "Adli Kimya", difficulty: 'easy' },
+                { q: "Gıdaların raf ömrünü ve katkı maddelerini inceleyen alan?", options: ["Gıda Kimyası", "Biyokimya", "Nükleer Kimya", "Analitik Kimya"], a: "Gıda Kimyası", difficulty: 'easy' },
+                { q: "Metabolizma süreçlerini moleküler düzeyde inceleyen bilim dalı?", options: ["Biyokimya", "Fizikokimya", "Jeokimya", "Polimer Kimyası"], a: "Biyokimya", difficulty: 'medium' },
+                { q: "Ozon tabakasındaki değişimleri inceleyen kimya dalı hangisidir?", options: ["Çevre Kimyası", "Organik Kimya", "Fizikokimya", "Adli Kimya"], a: "Çevre Kimyası", difficulty: 'medium' },
+                { q: "İlaçların sentezi ve vücuda etkisini araştıran uygulama alanı?", options: ["Farmasötik Kimya", "Nükleer Kimya", "Endüstriyel Kimya", "Polimer Kimyası"], a: "Farmasötik Kimya", difficulty: 'hard' },
+                { q: "Güneş panelleri için yeni yarı iletken maddelerin geliştirilmesi?", options: ["Malzeme Kimyası", "Analitik Kimya", "Biyokimya", "Gıda Kimyası"], a: "Malzeme Kimyası", difficulty: 'hard' },
+                { q: "Toprak analizi yaparak gübre ihtiyacını belirleyen alan?", options: ["Agrokimya", "Polimer Kimyası", "Fizikokimya", "Organik Kimya"], a: "Agrokimya", difficulty: 'easy' },
+                { q: "Parfümlerin koku bileşenlerini tasarlayan kimya alanı?", options: ["Kozmetik Kimyası", "Anorganik Kimya", "Analitik Kimya", "Nükleer Kimya"], a: "Kozmetik Kimyası", difficulty: 'medium' },
+                { q: "Çamaşır suyu ve tuz ruhu gibi temizlik maddelerini inceleyen alan?", options: ["Deterjan Kimyası", "Biyokimya", "Organik Kimya", "Fizikokimya"], a: "Deterjan Kimyası", difficulty: 'easy' },
+                { q: "Bir numunede 'ne olduğu' (nitel) ve 'ne kadar olduğu' (nicel) analizi?", options: ["Analitik Kimya", "Fizikokimya", "Anorganik Kimya", "Polimer Kimyası"], a: "Analitik Kimya", difficulty: 'medium' },
+                { q: "Pillerin ve şarj edilebilir bataryaların kimyasını inceleyen dal?", options: ["Elektrokimya", "Gıda Kimyası", "Biyokimya", "Jeokimya"], a: "Elektrokimya", difficulty: 'hard' }
             ]
         },
         {
@@ -400,7 +411,19 @@ const KIMYALAB_DATA = {
                 { q: "Ölü balık ve kurumuş ağaç sembolü neyi ifade eder?", options: ["Çevreye Zararlı", "Biyolojik Tehlike", "Su kirliliği", "Atık madde"], a: "Çevreye Zararlı", difficulty: 'medium' },
                 { q: "HF (Hidroflorik asit) gibi maddeler neden özel kaplarda saklanmalıdır?", options: ["Camı aşındırdığı için", "Yanıcı olduğu için", "Pahalı olduğu için", "Kokusu olduğu için"], a: "Camı aşındırdığı için", difficulty: 'hard' },
                 { q: "Laboratuvarda bir kimyasalın güvenlik bilgi formuna ne ad verilir?", options: ["MSDS", "HPLC", "ASTM", "TSE"], a: "MSDS", difficulty: 'hard' },
-                { q: "Radyoaktif maddelerle çalışılırken hangi kurşun önlük giyilmesinin temel sebebi nedir?", options: ["Radyasyonu emmek", "Sıcaklıktan korumak", "Ağırlık yapmak", "Şık durmak"], a: "Radyasyonu emmek", difficulty: 'medium' }
+                { q: "Radyoaktif maddelerle çalışılırken hangi kurşun önlük giyilmesinin temel sebebi nedir?", options: ["Radyasyonu emmek", "Sıcaklıktan korumak", "Ağırlık yapmak", "Şık durmak"], a: "Radyasyonu emmek", difficulty: 'medium' },
+                { q: "LPG ve doğalgaz tankları üzerinde hangi sembol mutlaka bulunur?", options: ["Yanıcı", "Oksitleyici", "Korozif", "Toksik"], a: "Yanıcı", difficulty: 'easy' },
+                { q: "Bir kimyasalın kanserojen olduğunu belirten sembolde ne tasvir edilir?", options: ["Göğüste yıldız şekli", "Kurukafa", "Ünlem", "Alev"], a: "Göğüste yıldız şekli", difficulty: 'medium' },
+                { q: "Patlayıcı maddeler için kullanılan sembol hangisidir?", options: ["Dağılan parçalar", "Alev", "Ölü ağaç", "Çarpı işareti"], a: "Dağılan parçalar", difficulty: 'easy' },
+                { q: "Basınçlı kaplar üzerindeki sembol hangisidir?", options: ["Gaz tüpü", "Alev", "Ünlem", "Pervane"], a: "Gaz tüpü", difficulty: 'easy' },
+                { q: "Biyolojik tehlike sembolü (Biohazard) nerede görülür?", options: ["Tıbbi atıklarda", "Asit şişelerinde", "Tuz paketlerinde", "Ocaklarda"], a: "Tıbbi atıklarda", difficulty: 'medium' },
+                { q: "Gözlük ve eldiven kullanımını zorunlu kılan kural hangisidir?", options: ["Kişisel Koruyucu Donanım", "Laboratuvar Hijyeni", "Analiz Metodu", "Genel Temizlik"], a: "Kişisel Koruyucu Donanım", difficulty: 'easy' },
+                { q: "Cam balon ve erlenmayer arasındaki temel fark nedir?", options: ["Taban şekli", "Hacmi", "Rengi", "Malzemesi"], a: "Taban şekli", difficulty: 'medium' },
+                { q: "Titrasyon işlemlerinde kullanılan musluklu cam alet hangisidir?", options: ["Büret", "Pipet", "Mezur", "Beher"], a: "Büret", difficulty: 'medium' },
+                { q: "Hassas sıvı aktarımlarında kullanılan alet hangisidir?", options: ["Pipet", "Huni", "Ayırma Hunisi", "Cam Çubuk"], a: "Pipet", difficulty: 'easy' },
+                { q: "Zeytinyağı ve suyu (iki karışmayan sıvı) ayırmak için ne kullanılır?", options: ["Ayırma hunisi", "Süzgeç kağıdı", "Cam balon", "Havan"], a: "Ayırma hunisi", difficulty: 'hard' },
+                { q: "Katı maddeleri toz haline getirmek için ne kullanılır?", options: ["Havan", "Desikatör", "Kroze", "Saat camı"], a: "Havan", difficulty: 'medium' },
+                { q: "Maddelerin nemini almak veya nemsiz ortamda saklamak için kullanılır?", options: ["Desikatör", "Etüv", "Bek alevi", "İspirto ocağı"], a: "Desikatör", difficulty: 'hard' }
             ]
         },
         {
@@ -412,7 +435,7 @@ const KIMYALAB_DATA = {
             • <b>Açısal momentum kuantum sayısı (l):</b> Orbitalin şeklini belirtir (s:0, p:1, d:2, f:3).
             • <b>Elektron Dizilimi İstisnaları:</b> 24Cr ([Ar] 4s1 3d5) ve 29Cu ([Ar] 4s1 3d10) küresel simetri nedeni ile istisnadır.`,
             questions: [
-                { q: "Elektronların bulunma olasılığının yüksek olduğu bölgelere ne denir?", options: ["Yörünge", "Orbital", "Çekirdek", "Katman"], a: "Orbital", difficulty: 'easy' },
+                { q: "Elektronlerin bulunma olasılığının yüksek olduğu bölgelere ne denir?", options: ["Yörünge", "Orbital", "Çekirdek", "Katman"], a: "Orbital", difficulty: 'easy' },
                 { q: "l=1 kuantum sayısı hangi orbital türünü temsil eder?", options: ["s", "p", "d", "f"], a: "p", difficulty: 'easy' },
                 { q: "24Cr atomunun elektron dizilimi aşağıdakilerden hangisidir?", options: ["[Ar] 4s2 3d4", "[Ar] 4s1 3d5", "[Ar] 4s0 3d6", "[Ne] 3s2 3p6"], a: "[Ar] 4s1 3d5", difficulty: 'hard' },
                 { q: "Pauli dışlama ilkesine göre bir orbitalde en fazla kaç elektron bulunabilir?", options: ["1", "2", "6", "10"], a: "2", difficulty: 'easy' },
@@ -421,7 +444,17 @@ const KIMYALAB_DATA = {
                 { q: "29Cu atomunun elektron diziliminde l=0 olan kaç elektron vardır?", options: ["6", "7", "8", "9"], a: "7", difficulty: 'hard' },
                 { q: "4d orbitali için baş kuantum sayısı (n) ve orbital şekli (l) nedir?", options: ["n=4, l=2", "n=4, l=1", "n=3, l=2", "n=5, l=0"], a: "n=4, l=2", difficulty: 'medium' },
                 { q: "Bir orbitalde n=3 ve l=1 ise bu orbital hangisidir?", options: ["3s", "3p", "3d", "2p"], a: "3p", difficulty: 'easy' },
-                { q: "KMnO4 bileşiğinde Mn elementinin yükseltgenme basamağı?", options: ["+5", "+6", "+7", "+2"], a: "+7", difficulty: 'hard' }
+                { q: "KMnO4 bileşiğinde Mn elementinin yükseltgenme basamağı?", options: ["+5", "+6", "+7", "+2"], a: "+7", difficulty: 'hard' },
+                { q: "Heisenberg Belirsizlik İlkesi neyi savunur?", options: ["Konum ve hız aynı anda bilinemez", "Orbitalleri", "Proton sayısını", "Atom kütlesini"], a: "Konum ve hız aynı anda bilinemez", difficulty: 'medium' },
+                { q: "Manyetik kuantum sayısı (ml) l=2 için hangi değerleri alabilir?", options: ["0, 1", "-1, 0, 1", "-2'den +2'ye kadar", "Sadece 0"], a: "-2'den +2'ye kadar", difficulty: 'medium' },
+                { q: "Spin kuantum sayısı (ms) hangi değerleri alabilir?", options: ["0, 1", "+1/2, -1/2", "1, 2, 3", "-l, +l"], a: "+1/2, -1/2", difficulty: 'easy' },
+                { q: "Hund Kuralı aşağıdakilerden hangisi ile ilgilidir?", options: ["Orbitallere önce teker teker yerleşme", "Baş kuantum sayısı", "Işık hızı", "Atom çapı"], a: "Orbitallere önce teker teker yerleşme", difficulty: 'medium' },
+                { q: "4s orbitalinin enerjisi 3d orbitalinden neden daha düşüktür?", options: ["n+l değeri daha düşük olduğu için", "Daha büyük olduğu için", "Daha çok elektron aldığı için", "Çekirdeğe uzak olduğu için"], a: "n+l değeri daha düşük olduğu için", difficulty: 'hard' },
+                { q: "Periyodik sistemde aynı grupta yukarıdan aşağıya inildikçe çap nasıl değişir?", options: ["Artar", "Azalır", "Değişmez", "Önce artar sonra azalır"], a: "Artar", difficulty: 'easy' },
+                { q: "Elektronegatifliği en yüksek olan element hangisidir?", options: ["F (Flor)", "O (Oksijen)", "Fr (Fransiyum)", "Cs (Sezyum)"], a: "F (Flor)", difficulty: 'easy' },
+                { q: "Gaz halindeki bir atomdan elektron koparmak için gereken enerjiye ne denir?", options: ["İyonlaşma enerjisi", "Elektron ilgisi", "Elektronegatiflik", "Bağ enerjisi"], a: "İyonlaşma enerjisi", difficulty: 'medium' },
+                { q: "Periyodik tabloda 3. periyot 5A grubunda bulunan atomun proton sayısı?", options: ["13", "15", "17", "11"], a: "15", difficulty: 'hard' },
+                { q: "Geçiş metalleri (B grupları) hangi orbitallerle biter?", options: ["s veya p", "d", "f", "Sadece s"], a: "d", difficulty: 'medium' }
             ]
         },
         {
@@ -432,14 +465,17 @@ const KIMYALAB_DATA = {
             • <b>İdeal Gaz Denklemi:</b> P.V = n.R.T
             • <b>Kinetik Teori:</b> Gazların hızı sıcaklığın kareköküyle doğru, mol kütlesinin kareköküyle ters orantılıdır (V1/V2 = √(M2/M1) * √(T1/T2)).`,
             questions: [
-                { q: "İdeal gas denkleminde sıcaklık birimi mutlaka ne olmalıdır?", options: ["Celsius", "Fahrenheit", "Kelvin", "Reaumur"], a: "Kelvin", difficulty: 'easy' },
-                { q: "Sabit sıcaklıkta bir gazın basıncı 2 katına çıkarsa hacmi nasıl değişir?", options: ["Yarıya iner", "2 katına çıkar", "Değişmez", "4 katına çıkar"], a: "Yarıya iner", difficulty: 'easy' },
-                { q: "Hangisi gazların idealliğe en yakın olduğu durumdur?", options: ["Yüksek P, Düşük T", "Düşük P, Yüksek T", "Yüksek P, Yüksek T", "Düşük P, Düşük T"], a: "Düşük P, Yüksek T", difficulty: 'medium' },
-                { q: "CH4 (MA:16) ve SO2 (MA:64) gazlarından hangisi aynı sıcaklıkta daha hızlı yayılır?", options: ["CH4 2 kat daha hızlıdır", "SO2 2 kat daha hızlıdır", "Hızları eşittir", "CH4 4 kat daha hızlıdır"], a: "CH4 2 kat daha hızlıdır", difficulty: 'hard' },
-                { q: "0°C ve 1 atm basınç altında 1 mol ideal gas kaç litre hacim kaplar?", options: ["11.2", "22.4", "24.5", "44.8"], a: "22.4", difficulty: 'medium' },
-                { q: "Gerçek bir gazın ideallikten sapmasının temel sebebi nedir?", options: ["Moleküller arası çekim", "Molekül ağırlığı", "Kabın şekli", "Sıcaklık artışı"], a: "Moleküller arası çekim", difficulty: 'hard' },
-                { q: "Dalton Kısmi Basınçlar Yasasına göre toplam basınç neye eşittir?", options: ["Kısmi basınçlar toplamına", "Kısmi basınçlar ortalamasına", "Sıcaklığa", "Hacme"], a: "Kısmi basınçlar toplamına", difficulty: 'easy' },
-                { q: "PV/RT oranı 1 olan gaza ne denir?", options: ["İdeal gas", "Gerçek gas", "Asal gas", "Sıvılaştırılmış gas"], a: "İdeal gas", difficulty: 'medium' }
+                                { q: "Avogadro Yasasına göre aynı koşullarda eşit hacimli gazların nesi eşittir?", options: ["Kütleleri", "Molekül sayıları", "Yoğunlukları", "Hızları"], a: "Molekül sayıları", difficulty: 'medium' },
+                { q: "Gazların yayılma hızı (difüzyon) sıcaklıkla nasıl değişir?", options: ["Kareköküyle doğru orantılı", "Doğru orantılı", "Ters orantılı", "Etkilemez"], a: "Kareköküyle doğru orantılı", difficulty: 'hard' },
+                { q: "Mutlak sıfır noktası kaç Kelvin'dir?", options: ["0 K", "273 K", "-273 K", "100 K"], a: "0 K", difficulty: 'easy' },
+                { q: "Gay-Lussac Yasası hangi değişkenleri sabit hacimde inceler?", options: ["Basınç-Sıcaklık", "Hacim-Miktar", "Basınç-Hacim", "Miktar-Sıcaklık"], a: "Basınç-Sıcaklık", difficulty: 'medium' },
+                { q: "Basınç birimi olan 1 atm kaç cmHg değerine eşittir?", options: ["76", "100", "760", "1.013"], a: "76", difficulty: 'easy' },
+                { q: "Gerçek gazların sıvılaşabildiği en yüksek sıcaklığa ne denir?", options: ["Kritik sıcaklık", "Yüzleşme sıcaklığı", "Kaynama noktası", "Donma noktası"], a: "Kritik sıcaklık", difficulty: 'hard' },
+                { q: "Joule-Thomson olayı nedir?", options: ["Gazların genişlerken soğuması", "Gazların yanması", "Gazların karışması", "Gazların iyonlaşması"], a: "Gazların genişlerken soğuması", difficulty: 'hard' },
+                { q: "Sabit hacimli bir kapta sıcaklık 2 katına (Kelvin) çıkarsa basınç nasıl değişir?", options: ["2 katına çıkar", "Yarıya iner", "4 katına çıkar", "Değişmez"], a: "2 katına çıkar", difficulty: 'medium' },
+                { q: "H2 gazının (MA:2) hızı O2 gazının (MA:32) hızının kaç katıdır?", options: ["4", "16", "2", "8"], a: "4", difficulty: 'hard' },
+                { q: "Kısmi basınç hesabı yapılırken hangisinden yararlanılır?", options: ["Mol kesri", "Mol kütlesi", "Hacim", "Sıcaklık"], a: "Mol kesri", difficulty: 'medium' },
+                { q: "Hava bir gaz karışımıdır. Havadaki en bol gaz hangisidir?", options: ["Azot (N2)", "Oksijen (O2)", "Argon", "CO2"], a: "Azot (N2)", difficulty: 'easy' }
             ]
         },
         {
@@ -458,7 +494,19 @@ const KIMYALAB_DATA = {
                 { q: "Donma noktası alçalması hangisine bağlıdır?", options: ["Tanecik derişimine", "Kabın hacmine", "Maddenin rengine", "Çözeltinin kütlesine"], a: "Tanecik derişimine", difficulty: 'medium' },
                 { q: "Ters Ozmoz sistemi en çok hangi alanda kullanılır?", options: ["Deniz suyundan tatlı su elde etme", "Metal parlatma", "Isı yalıtımı", "Tekstil boyama"], a: "Deniz suyundan tatlı su elde etme", difficulty: 'hard' },
                 { q: "Kütlece %20'lik 200 gram tuzlu suya 300 gram saf su eklenirse yeni yüzde kaç olur?", options: ["%8", "%10", "%12", "%15"], a: "%8", difficulty: 'hard' },
-                { q: "Polar maddeler polar çözücülerde iyi çözünür kuralına ne denir?", options: ["Benzer benzeri çözer", "Dalton Yasası", "Henry Yasası", "Raoult Yasası"], a: "Benzer benzeri çözer", difficulty: 'medium' }
+                { q: "Polar maddeler polar çözücülerde iyi çözünür kuralına ne denir?", options: ["Benzer benzeri çözer", "Dalton Yasası", "Henry Yasası", "Raoult Yasası"], a: "Benzer benzeri çözer", difficulty: 'medium' },
+                { q: "Hangi karışım türünde tanecik boyutu 1 nm'den küçüktür?", options: ["Çözelti", "Kolloit", "Süspansiyon", "Emülsiyon"], a: "Çözelti", difficulty: 'medium' },
+                { q: "Kandaki hemoglobin miktarını belirtmek için genellikle hangi birim kullanılır?", options: ["ppm", "Molarite", "Molalite", "Hacimce %"], a: "ppm", difficulty: 'medium' },
+                { q: "500 gram suda 40 gram NaOH (MA:40) çözülürse molalite ne olur?", options: ["2 m", "1 m", "0.5 m", "4 m"], a: "2 m", difficulty: 'hard' },
+                { q: "ppm biriminin açılımı nedir?", options: ["Parts per million", "Percentage per mass", "Potential per molar", "Parts per meter"], a: "Parts per million", difficulty: 'easy' },
+                { q: "Deniz seviyesinde tuzlu suyun kaynamaya başlama sıcaklığı nasıldır?", options: ["100°C'den büyüktür", "100°C'dir", "100°C'den küçüktür", "0°C'dir"], a: "100°C'den büyüktür", difficulty: 'easy' },
+                { q: "Buzlu yollara tuz dökülmesinin sebebi nedir?", options: ["Donma noktasını düşürmek", "Kaynama noktası yükseltmek", "Buzu eriterek ısıtmak", "Yolu parlatmak"], a: "Donma noktasını düşürmek", difficulty: 'easy' },
+                { q: "Yarı geçirgen zar aracılığıyla çözücünün az yoğundan çok yoğuna geçişine ne denir?", options: ["Osmoz", "Difüzyon", "Elektroliz", "Hidroliz"], a: "Osmoz", difficulty: 'medium' },
+                { q: "Doymuş bir çözeltiye aynı sıcaklıkta bir miktar daha çözücü eklenirse ne olur?", options: ["Doymamış hale gelir", "Aşırı doymuş olur", "Çözünürlük artar", "Çözünürlük azalır"], a: "Doymamış hale gelir", difficulty: 'medium' },
+                { q: "Gazların sudaki çözünürlüğü basınç artışıyla nasıl değişir?", options: ["Artar", "Azalır", "Değişmez", "Önce artar sonra azalır"], a: "Artar", difficulty: 'easy' },
+                { q: "Mol kesri (X) toplamı bir karışımda kaça eşittir?", options: ["1", "0", "100", "Bilinemez"], a: "1", difficulty: 'medium' },
+                { q: "Alkollü su (kolonya) hangi tip çözeltiye örnektir?", options: ["Sıvı-Sıvı", "Katı-Sıvı", "Gaz-Sıvı", "Katı-Katı"], a: "Sıvı-Sıvı", difficulty: 'easy' },
+                { q: "Hidrasyon nedir?", options: ["Çözünenin su molekülleriyle sarılması", "Suyun buharlaşması", "Maddenin yanması", "Tuzun kristalleşmesi"], a: "Çözünenin su molekülleriyle sarılması", difficulty: 'hard' }
             ]
         },
         {
@@ -475,7 +523,21 @@ const KIMYALAB_DATA = {
                 { q: "Elementlerin standart koşullarda en kararlı hallerinin oluşum entalpisi kaçtır?", options: ["1", "0", "-1", "100"], a: "0", difficulty: 'medium' },
                 { q: "Hess Yasası neyi ifade eder?", options: ["Tepkime hızını", "Enerjinin korunumunu", "Gaz yasalarını", "Denge sabitini"], a: "Enerjinin korunumunu", difficulty: 'medium' },
                 { q: "Bir bileşiğin elementlerinden oluştuğu tepkimenin ısısına ne denir?", options: ["Oluşum entalpisi", "Yanma ısısı", "Nötürleşme ısısı", "Bağ enerjisi"], a: "Oluşum entalpisi", difficulty: 'easy' },
-                { q: "Isı kapasitesi neye bağlıdır?", options: ["Madde miktarına", "Sıcaklığa", "Basınca", "Hacme"], a: "Madde miktarına", difficulty: 'hard' }
+                { q: "Isı kapasitesi neye bağlıdır?", options: ["Madde miktarına", "Sıcaklığa", "Basınca", "Hacme"], a: "Madde miktarına", difficulty: 'hard' },
+                { q: "Fotosentez tepkimesi enerji bakımından nasıldır?", options: ["Endotermik", "Ekzotermik", "Yalıtılmış", "Nötr"], a: "Endotermik", difficulty: 'medium' },
+                { q: "Azot gazının (N2) yanması diğer yanmalardan farklı olarak nasıldır?", options: ["Endotermik", "Ekzotermik", "Patlayıcı", "Yavaş"], a: "Endotermik", difficulty: 'medium' },
+                { q: "Kırağılaşma (Gaz → Katı) olayı enerji bakımından nasıldır?", options: ["Ekzotermik", "Endotermik", "Hücresel", "Fiziksel değil"], a: "Ekzotermik", difficulty: 'easy' },
+                { q: "Ürünlerin enerjisi girenlerden düşükse tepkime nasıldır?", options: ["Ekzotermik", "Endotermik", "Dengede", "Belirsiz"], a: "Ekzotermik", difficulty: 'medium' },
+                { q: "Standart şartlar (entalpi için) hangi değerleri ifade eder?", options: ["25°C, 1 atm", "0°C, 1 atm", "25°C, 0 atm", "100°C, 1 atm"], a: "25°C, 1 atm", difficulty: 'easy' },
+                { q: "Entalpi değişimi (ΔH) neye eşittir?", options: ["H_ürün - H_giren", "H_giren - H_ürün", "H_ürün + H_giren", "H_ürün / H_giren"], a: "H_ürün - H_giren", difficulty: 'medium' },
+                { q: "Bir tepkime ters çevrilirse ΔH değeri nasıl değişir?", options: ["İşareti değişir", "Değişmez", "Sıfır olur", "İki katına çıkar"], a: "İşareti değişir", difficulty: 'medium' },
+                { q: "Bağ enerjisi arttıkça bağın sağlamlığı nasıl değişir?", options: ["Artar", "Azalır", "Değişmez", "Kısalır"], a: "Artar", difficulty: 'easy' },
+                { q: "Kalorimetre kabı neyi ölçmek için kullanılır?", options: ["Tepkime ısısını", "Basıncı", "Hacmi", "Işık hızını"], a: "Tepkime ısısını", difficulty: 'easy' },
+                { q: "Kömürün yanması sırasında açığa çıkan enerjiye ne denir?", options: ["Yanma entalpisi", "Oluşum entalpisi", "Erime ısısı", "İyonlaşma enerjisi"], a: "Yanma entalpisi", difficulty: 'easy' },
+                { q: "H2(g) + 1/2 O2(g) → H2O(s) tepkimesinin ΔH'ı neyi verir?", options: ["H2O'nun oluşum entalpisi", "H2'nin yanma ısısı", "Her ikisi de", "Hiçbiri"], a: "Her ikisi de", difficulty: 'hard' },
+                { q: "Nötrleşme tepkimeleri (Asit + Baz) genellikle nasıldır?", options: ["Ekzotermik", "Endotermik", "Yavaş", "Enerjisiz"], a: "Ekzotermik", difficulty: 'medium' },
+                { q: "Atomların gaz halinde birleşerek bağ oluşturması nasıldır?", options: ["Ekzotermik", "Endotermik", "Kararsız", "İzole"], a: "Ekzotermik", difficulty: 'hard' },
+                { q: "Buharlaşma entalpisi hangi hal değişimi içindir?", options: ["Sıvı → Gaz", "Katı → Sıvı", "Gaz → Sıvı", "Sıvı → Katı"], a: "Sıvı → Gaz", difficulty: 'easy' }
             ]
         },
         {
@@ -490,7 +552,22 @@ const KIMYALAB_DATA = {
                 { q: "Sıcaklık artışı tepkime hızını nasıl etkiler?", options: ["Daima artırır", "Daima azaltır", "Etkilemez", "Sadece endotermiklerde artırır"], a: "Daima artırır", difficulty: 'easy' },
                 { q: "Hız ifadesi (r = k.[A]) olan bir tepkimenin derecesi kaçtır?", options: ["0", "1", "2", "3"], a: "1", difficulty: 'easy' },
                 { q: "Heterojen bir tepkimede katı haldeki maddenin temas yüzeyi artırılırsa hangisi değişmez?", options: ["Hız sabiti (k)", "Hız", "Eşik enerjisi", "Birim zamandaki çarpışma sayısı"], a: "Eşik enerjisi", difficulty: 'hard' },
-                { q: "Aktifleşmiş kompleks nedir?", options: ["En düşük enerjili hal", "Kararsız ara yapı", "Ürün", "Giren madde"], a: "Kararsız ara yapı", difficulty: 'medium' }
+                { q: "Aktifleşmiş kompleks nedir?", options: ["En düşük enerjili hal", "Kararsız ara yapı", "Ürün", "Giren madde"], a: "Kararsız ara yapı", difficulty: 'medium' },
+                { q: "İnhibitör nedir?", options: ["Hızı azaltan katalizör", "Hızı artıran madde", "Ürün", "Basınç ölçer"], a: "Hızı azaltan katalizör", difficulty: 'medium' },
+                { q: "Ortalama hız nasıl hesaplanır?", options: ["Derişim değişimi / Zaman", "Hacim / Sıcaklık", "Mol / Basınç", "Basınç / Zaman"], a: "Derişim değişimi / Zaman", difficulty: 'easy' },
+                { q: "Hangisi hız sabiti 'k' değerini etkiler?", options: ["Sıcaklık", "Katalizör", "Temas yüzeyi", "Hepsi"], a: "Hepsi", difficulty: 'medium' },
+                { q: "Tepkime mekanizması neyi gösterir?", options: ["Tepkimenin ara basamaklarını", "Hızını", "Verimini", "Sıcaklığını"], a: "Tepkimenin ara basamaklarını", difficulty: 'hard' },
+                { q: "Mekanizmalı tepkimelerde hızı hangi basamak belirler?", options: ["En yavaş basamak", "En hızlı basamak", "İlk basamak", "Son basamak"], a: "En yavaş basamak", difficulty: 'hard' },
+                { q: "Molekülerite nedir?", options: ["Net tepkimedeki katsayılar toplamı", "Hız ifadesindeki üsler", "Atom sayısı", "Hacim"], a: "Net tepkimedeki katsayılar toplamı", difficulty: 'hard' },
+                { q: "Hız sabiti k'nın birimi neye bağlıdır?", options: ["Tepkimenin derecesine", "Sıcaklığa", "Hacme", "Kaba"], a: "Tepkimenin derecesine", difficulty: 'medium' },
+                { q: "Katalizör ΔH değerini nasıl etkiler?", options: ["Etkilemez", "Artırır", "Azaltır", "Sıfırlar"], a: "Etkilemez", difficulty: 'medium' },
+                { q: "Buzdolabına konan besinlerin geç bozulması ne ile ilgilidir?", options: ["Düşük sıcaklık-düşük hız", "Yüksek basınç", "Işık azlığı", "Nem"], a: "Düşük sıcaklık-düşük hız", difficulty: 'easy' },
+                { q: "Hız ifadesine hangileri yazılmaz?", options: ["Saf katılar ve sıvılar", "Gazlar", "Sulu çözeltiler", "İyonlar"], a: "Saf katılar ve sıvılar", difficulty: 'medium' },
+                { q: "Homojen katalizör nedir?", options: ["Tepkimeyle aynı fazda olan", "Farklı fazda olan", "Katı olan", "Sıvı olan"], a: "Tepkimeyle aynı fazda olan", difficulty: 'medium' },
+                { q: "Aktifleşme enerjisinin birimi genellikle nedir?", options: ["kJ/mol", "L/mol", "atm", "Kelvin"], a: "kJ/mol", difficulty: 'easy' },
+                { q: "Potansiyel enerji diyagramında tepe noktası neyi temsil eder?", options: ["Aktifleşmiş kompleks", "Girenler", "Ürünler", "Katalizör"], a: "Aktifleşmiş kompleks", difficulty: 'easy' },
+                { q: "Hız ifadesi r = k.[A]^2.[B] olan tepkime A'ya göre kaçıncı derecedendir?", options: ["2", "1", "3", "0"], a: "2", difficulty: 'easy' },
+                { q: "Toz şekerin küp şekerden hızlı çözünmesi ne ile açıklanır?", options: ["Temas yüzeyi", "Sıcaklık", "Katalizör", "Derişim"], a: "Temas yüzeyi", difficulty: 'easy' }
             ]
         },
         {
@@ -507,11 +584,26 @@ const KIMYALAB_DATA = {
                 { q: "Hangisi dengeyi ürünler yönüne kaydırır (A + B ⇌ C + Isı)?", options: ["Sıcaklığı artırmak", "Sıcaklığı azaltmak", "C eklemek", "Katalizör eklemek"], a: "Sıcaklığı azaltmak", difficulty: 'medium' },
                 { q: "Zayıf bir asit ile bu asidin eşlenik bazını içeren çözeltiye ne denir?", options: ["Doymuş çözelti", "Titrasyon", "Tampon çözelti", "İdeal çözelti"], a: "Tampon çözelti", difficulty: 'hard' },
                 { q: "Saf suyun oda sıcaklığındaki iyonlaşma sabiti (Ksu) kaçtır?", options: ["10^-7", "10^-14", "1", "14"], a: "10^-14", difficulty: 'easy' },
-                { q: "Bronsted-Lowry asit-baz tanımına göre proton (H+) veren madde nedir?", options: ["Asit", "Baz", "Tuz", "Nötr"], a: "Asit", difficulty: 'easy' }
+                { q: "Bronsted-Lowry asit-baz tanımına göre proton (H+) veren madde nedir?", options: ["Asit", "Baz", "Tuz", "Nötr"], a: "Asit", difficulty: 'easy' },
+                { q: "Maksimum düzensizlik ve minimum enerji eğilimi uzlaştığında ne oluşur?", options: ["Denge", "Patlama", "Çözünme", "Donma"], a: "Denge", difficulty: 'medium' },
+                { q: "Hangi maddeler denge bağıntısına (Kc) yazılmaz?", options: ["Saf katılar ve sıvılar", "Gazlar", "Sulu çözeltiler", "İyonlar"], a: "Saf katılar ve sıvılar", difficulty: 'easy' },
+                { q: "Kp ve Kc arasındaki ilişki bağıntısı nedir?", options: ["Kp = Kc.(RT)^Δn", "Kp = Kc / RT", "Kp = Kc + RT", "Kc = Kp.RT"], a: "Kp = Kc.(RT)^Δn", difficulty: 'hard' },
+                { q: "Denge tepkimesine katalizör eklenirse ne olur?", options: ["Denge hızlanır ama yeri değişmez", "Denge sağa kayar", "Kc büyür", "Kc küçülür"], a: "Denge hızlanır ama yeri değişmez", difficulty: 'medium' },
+                { q: "Hacim azaltılırsa gaz fazındaki denge hangi yöne kayar?", options: ["Mol sayısının az olduğu yöne", "Molün çok olduğu yöne", "Değişmez", "Ürünlere"], a: "Mol sayısının az olduğu yöne", difficulty: 'hard' },
+                { q: "Amfoter madde nedir?", options: ["Hem asit hem baz gibi davranan", "Sadece asit olan", "Sadece baz olan", "Nötr olan"], a: "Hem asit hem baz gibi davranan", difficulty: 'medium' },
+                { q: "Kuvvetli bir asit ile zayıf bir bazın tepkimesinden oluşan tuz nasıldır?", options: ["Asidik", "Bazik", "Nötr", "İyonik değil"], a: "Asidik", difficulty: 'medium' },
+                { q: "Titrasyonda renk değişiminin olduğu noktaya ne denir?", options: ["Eşdeğerlik noktası", "Başlangıç", "Doygunluk", " donma noktası"], a: "Eşdeğerlik noktası", difficulty: 'easy' },
+                { q: "KÇÇ (Çözünürlük Çarpımı) hangi maddeler için kullanılır?", options: ["Az çözünen tuzlar", "Çok çözünen tuzlar", "Gazlar", "Sıvılar"], a: "Az çözünen tuzlar", difficulty: 'medium' },
+                { q: "Ortak iyon etkisi çözünürlüğü nasıl etkiler?", options: ["Azaltır", "Artırır", "Etkilemez", "Sıfırlar"], a: "Azaltır", difficulty: 'hard' },
+                { q: "Oto-iyonizasyon nedir?", options: ["Suyun kendi kendine iyonlaşması", "Maddenin yanması", "Tuzun erimesi", "Gazın sıvılaşması"], a: "Suyun kendi kendine iyonlaşması", difficulty: 'medium' },
+                { q: "pH değeri 7'den küçük olan çözeltiler nasıldır?", options: ["Asidik", "Bazik", "Nötr", "Tuzlu"], a: "Asidik", difficulty: 'easy' },
+                { q: "Konjuge (eşlenik) asit-baz çifti arasında kaç H farlı vardır?", options: ["1", "2", "3", "0"], a: "1", difficulty: 'hard' },
+                { q: "Dengede ileri hız sabiti (ki) ve geri hız sabiti (kg) oranı neyi verir?", options: ["Kc", "Kp", "k", "ΔH"], a: "Kc", difficulty: 'medium' }
             ]
         }
     ]
 };
+
 
 const utils = {
     getRandomItem: (arr) => arr[Math.floor(Math.random() * arr.length)],
