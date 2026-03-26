@@ -14,7 +14,8 @@ const app = {
         loginMode: 'normal',
         isVIP: false,
         vipTheme: null,
-        totalGames: parseInt(localStorage.getItem('totalGames') || '0')
+        totalGames: parseInt(localStorage.getItem('totalGames') || '0'),
+        grade11Stats: { correct: 0, total: 0 }
     },
 
     els: {},
@@ -479,6 +480,9 @@ const app = {
         desc.textContent = topic.desc;
         content.innerHTML = topic.content.replace(/\n/g, '<br>');
         
+        this.state.grade11Stats = { correct: 0, total: topic.questions.length };
+        this.updateG11StatsUI();
+
         questions.innerHTML = topic.questions.map((q, i) => `
             <div class="glass-card" style="margin-bottom:15px; background:var(--bg-white)">
                 <p style="font-weight:700; margin-bottom:1rem">Soru ${i+1}: ${q.q}</p>
@@ -497,10 +501,14 @@ const app = {
     },
 
     checkG11Answer(btn, selected, correct) {
+        if (btn.classList.contains('answered')) return;
+        btn.classList.add('answered');
+
         if (selected === correct) {
             btn.style.background = 'var(--success)';
             btn.style.color = 'white';
             this.playSound('correct');
+            this.state.grade11Stats.correct++;
             this.addScore(10);
             confetti({
                 particleCount: 50,
@@ -513,6 +521,45 @@ const app = {
             this.playSound('wrong');
             btn.classList.add('animate-shake');
             setTimeout(() => btn.classList.remove('animate-shake'), 300);
+        }
+
+        // Disable other options in this question
+        const parent = btn.closest('div');
+        parent.querySelectorAll('button').forEach(b => {
+            b.classList.add('answered');
+            if (b.innerText === correct) {
+                b.style.background = 'var(--success)';
+                b.style.color = 'white';
+            }
+        });
+
+        this.updateG11StatsUI();
+    },
+
+    updateG11StatsUI() {
+        const header = document.getElementById('g11-header');
+        let statsEl = document.getElementById('g11-current-stats');
+        
+        if (!statsEl) {
+            statsEl = document.createElement('div');
+            statsEl.id = 'g11-current-stats';
+            statsEl.className = 'glass-card';
+            statsEl.style.cssText = 'padding:10px 20px; font-weight:800; color:var(--primary); font-size:1.1rem; border-color:var(--primary)';
+            header.parentElement.insertBefore(statsEl, header.nextSibling);
+        }
+
+        statsEl.innerHTML = `
+            <div style="display:flex; gap:20px; align-items:center;">
+                <span>🎯 Doğru: ${this.state.grade11Stats.correct}</span>
+                <span>📊 Toplam: ${this.state.grade11Stats.total}</span>
+                <span style="margin-left:auto; color:var(--success)">Başarı: %${Math.round((this.state.grade11Stats.correct / this.state.grade11Stats.total) * 100) || 0}</span>
+            </div>
+        `;
+
+        if (this.state.grade11Stats.correct === this.state.grade11Stats.total && this.state.grade11Stats.total > 0) {
+            setTimeout(() => {
+                this.showRewardModal("HARİKA!", "Tüm soruları doğru bildin! Gerçek bir kimya dehasısın. ✨");
+            }, 500);
         }
     },
 
