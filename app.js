@@ -225,6 +225,7 @@ const app = {
 
         if (pageId === 'page-periodic-lab') this.renderPeriodicTable();
         if (pageId === 'page-tablolar') this.renderTablolar('cations');
+        if (pageId === 'page-grade11') this.renderGrade11();
         if (pageId === 'page-stats') this.renderStats();
         if (pageId === 'page-badges') this.renderBadges();
     },
@@ -449,6 +450,75 @@ const app = {
         // Scroll to details on mobile
         details.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         this.speak(`${item.name}. ${item.desc || ''}`);
+    },
+
+    renderGrade11() {
+        const grid = document.querySelector('.grade11-grid');
+        if (!grid) return;
+
+        grid.innerHTML = KIMYALAB_DATA.grade11.map(topic => `
+            <div class="game-card animate-slide-up" style="background:var(--accent); min-height:140px; justify-content:center; align-items:flex-start; padding:20px;" onclick="app.showGrade11Detail('${topic.id}')">
+                <i class="fa-solid fa-book-bookmark"></i>
+                <h3 style="font-size:1.2rem; margin-bottom:5px;">${topic.name}</h3>
+                <p style="font-size:0.8rem; opacity:0.8;">${topic.desc}</p>
+            </div>
+        `).join('');
+    },
+
+    showGrade11Detail(topicId) {
+        const topic = KIMYALAB_DATA.grade11.find(t => t.id === topicId);
+        if (!topic) return;
+
+        const detail = document.getElementById('grade11-detail');
+        const title = document.getElementById('g11-title');
+        const desc = document.getElementById('g11-desc');
+        const content = document.getElementById('g11-content');
+        const questions = document.getElementById('g11-questions');
+
+        title.textContent = topic.name;
+        desc.textContent = topic.desc;
+        content.innerHTML = topic.content.replace(/\n/g, '<br>');
+        
+        questions.innerHTML = topic.questions.map((q, i) => `
+            <div class="glass-card" style="margin-bottom:15px; background:var(--bg-white)">
+                <p style="font-weight:700; margin-bottom:1rem">Soru ${i+1}: ${q.q}</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    ${q.options.map(opt => `
+                        <button class="btn-back" style="font-size:0.8rem; padding:10px" onclick="app.checkG11Answer(this, '${opt}', '${q.a}')">${opt}</button>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+
+        detail.classList.remove('hidden');
+        detail.scrollIntoView({ behavior: 'smooth' });
+        this.playSound('click');
+        this.speak(`${topic.name}. ${topic.desc}`);
+    },
+
+    checkG11Answer(btn, selected, correct) {
+        if (selected === correct) {
+            btn.style.background = 'var(--success)';
+            btn.style.color = 'white';
+            this.playSound('correct');
+            this.addScore(10);
+            confetti({
+                particleCount: 50,
+                spread: 30,
+                origin: { y: 0.6 }
+            });
+        } else {
+            btn.style.background = 'var(--danger)';
+            btn.style.color = 'white';
+            this.playSound('wrong');
+            btn.classList.add('animate-shake');
+            setTimeout(() => btn.classList.remove('animate-shake'), 300);
+        }
+    },
+
+    closeGrade11Detail() {
+        document.getElementById('grade11-detail').classList.add('hidden');
+        this.playSound('click');
     },
 
     speak(text) {

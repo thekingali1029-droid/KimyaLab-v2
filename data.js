@@ -361,6 +361,86 @@ const KIMYALAB_DATA = {
         { s: 'Fe', n: 'Demir' }, { s: 'Cu', n: 'Bakır' }, { s: 'Au', n: 'Altın' }, { s: 'Ag', n: 'Gümüş' },
         { s: 'Zn', n: 'Çinko' }, { s: 'Hg', n: 'Cıva' }, { s: 'Pb', n: 'Kurşun' }, { s: 'Sn', n: 'Kalay' },
         { s: 'NaCl', n: 'Tuz' }, { s: 'H₂O', n: 'Su' }, { s: 'CO₂', n: 'Karbondioksit' }
+    ],
+    grade11: [
+        {
+            id: 'org_sema',
+            name: 'ORGANİZASYON ŞEMASI',
+            desc: 'Kimya disiplinleri ve çalışma alanlarını kapsayan organizasyon yapısı.',
+            content: `Kimya bilimi, maddenin yapısını, özelliklerini ve değişimlerini inceleyen geniş bir alandır. Başlıca alt dalları:
+            • <b>Analitik Kimya:</b> Maddenin bileşenlerini nitel ve nicel olarak inceler.
+            • <b>Biyokimya:</b> Canlı organizmaların yapısındaki kimyasal süreçleri inceler.
+            • <b>Fizikokimya:</b> Kimyasal sistemlerdeki enerji ve iş değişimlerini fiziksel ilkelerle açıklar.
+            • <b>Polimer Kimyası:</b> Çok sayıda küçük molekülün birleşerek oluşturduğu dev molekülleri inceler.
+            • <b>Anorganik Kimya:</b> Genellikle karbon içermeyen (asit, baz, tuz, metal) bileşikleri inceler.
+            • <b>Organik Kimya:</b> Karbon temelli bileşikleri inceler.`,
+            questions: [
+                { q: "Kan, idrar gibi örneklerin içeriğini inceleyen kimya alt dalı hangisidir?", options: ["Biyokimya", "Analitik Kimya", "Fizikokimya", "Polimer Kimyası"], a: "Biyokimya" },
+                { q: "Tepkime hızlarını ve enerji değişimlerini inceleyen alan hangisidir?", options: ["Fizikokimya", "Organik Kimya", "Analitik Kimya", "Nükleer Kimya"], a: "Fizikokimya" }
+            ]
+        },
+        {
+            id: 'lab_guvenlik',
+            name: 'LABORATUVAR GÜVENLİK SEMBOLLERİ',
+            desc: 'Kimyasalların üzerindeki tehlike işaretleri ve anlamları.',
+            content: `Laboratuvarda güvenli çalışma için piktogramları tanımak hayati önem taşır:
+            • <b>Yanıcı (Alev):</b> Kolay tutuşan maddeler.
+            • <b>Yakıcı (Oksitleyici):</b> Başka maddelerin yanmasını sağlayan, O harfi üzerinde alev sembolü.
+            • <b>Korozif (Aşındırıcı):</b> Ciltte veya metalde aşınma yapan maddeler.
+            • <b>Toksik (Zehirli):</b> Vücuda girdiğinde ciddi zararlar veren (kurukafa sembolü).
+            • <b>Radyoaktif:</b> Radyasyon yayan ve canlı dokuya zarar veren maddeler.`,
+            questions: [
+                { q: "O harfi üzerinde alev sembolü neyi ifade eder?", options: ["Yanıcı", "Yakıcı", "Zehirli", "Radyoaktif"], a: "Yakıcı" },
+                { q: "Asit kaplarının üzerinde hangi sembolün bulunması beklenir?", options: ["Korozif", "Yanıcı", "Radyoaktif", "Patlayıcı"], a: "Korozif" }
+            ]
+        },
+        {
+            id: 'modern_atom',
+            name: 'MODERN ATOM TEORİSİ',
+            desc: 'Kuantum modeli, orbitaller ve periyodik sistem.',
+            content: `Modern atom teorisi (Kuantum Modeli), elektronun yerinin tam olarak belirlenemeyeceğini, sadece bulunma olasılığının yüksek olduğu bölgeler (orbitaller) olduğunu savunur.
+            • <b>Kuantum Sayıları:</b> Baş kuantum sayısı (n), Açısal momentum kuantum sayısı (l), Manyetik kuantum sayısı (ml), Spin kuantum sayısı (ms).
+            • <b>Orbitaller:</b> s (l=0), p (l=1), d (l=2), f (l=3).
+            • <b>Elektron Dizilimi:</b> Aufbau prensibi (en düşük enerjili orbitalden başlar), Pauli dışlama ilkesi (bir orbitalde maks zıt spinli 2e- olur), Hund kuralı (eş enerjili orbitallere elektronlar önce teker teker yerleşir).
+            • <b>Yükseltgenme Basamakları:</b> Bir atomun bileşiklerinde aldığı yüktür. (Örn: H: +1, O: -2 genelde).`,
+            questions: [
+                { q: "Elektronların bulunma olasılığının yüksek olduğu bölgelere ne denir?", options: ["Yörünge", "Orbital", "Çekirdek", "Katman"], a: "Orbital" },
+                { q: "l=1 kuantum sayısı hangi orbital türünü temsil eder?", options: ["s", "p", "d", "f"], a: "p" },
+                { q: "Aynı temel enerji düzeyinde hangi orbitalin enerjisi en düşüktür?", options: ["s", "p", "d", "f"], a: "s" },
+                { q: "Potasyum (19K) atomunun elektron dizilimi hangi orbitalle biter?", options: ["3d", "4s", "3p", "4p"], a: "4s" },
+                { q: "H2SO4 bileşiğinde Kükürt (S) atomunun yükseltgenme basamağı nedir?", options: ["+2", "+4", "+6", "-2"], a: "+6" }
+            ]
+        },
+        {
+            id: 'gazlar',
+            name: 'GAZLAR',
+            desc: 'Gaz yasaları, ideal gaz denklemi ve kinetik teori.',
+            content: `Gazların davranışlarını açıklayan temel yasalar ve kavramlar:
+            • <b>İdeal Gaz Denklemi:</b> P.V = n.R.T (P: Basınç-atm, V: Hacim-Litre, n: Mol, R: 0,082, T: Sıcaklık-Kelvin).
+            • <b>Gaz Yasaları:</b> Boyle (P-V ters), Charles (V-T doğru), Gay-Lussac (P-T doğru), Avogadro (V-n doğru).
+            • <b>Kinetik Teori:</b> Gaz moleküllerinin hızı sıcaklığın karekökü ile doğru, mol kütlesinin karekökü ile ters orantılıdır.
+            • <b>Gerçek Gazlar:</b> Yüksek basınç ve düşük sıcaklıkta gazlar ideallikten sapar.`,
+            questions: [
+                { q: "İdeal gaz denkleminde sıcaklık birimi mutlaka ne olmalıdır?", options: ["Celsius", "Fahrenheit", "Kelvin", "Reaumur"], a: "Kelvin" },
+                { q: "Sabit sıcaklıkta bir gazın basıncı 2 katına çıkarsa hacmi nasıl değişir?", options: ["Yarıya iner", "2 katına çıkar", "Değişmez", "4 katına çıkar"], a: "Yarıya iner" },
+                { q: "Hangisi gazların idealliğe en yakın olduğu durumdur?", options: ["Yüksek P, Düşük T", "Düşük P, Yüksek T", "Yüksek P, Yüksek T", "Düşük P, Düşük T"], a: "Düşük P, Yüksek T" },
+                { q: "CH4 ve SO2 gazlarından hangisi aynı sıcaklıkta daha hızlı yayılır?", options: ["CH4", "SO2", "Hızları eşit", "Basınca bağlı"], a: "CH4" }
+            ]
+        },
+        {
+            id: 'cozeltiler',
+            name: 'SIVI ÇÖZELTİLER VE ÇÖZÜNÜRLÜK',
+            desc: 'Derişim birimleri ve çözünürlüğe etki eden faktörler.',
+            content: `Çözeltiler, çözücü ve çözünenden oluşan homojen karışımlardır.
+            • <b>Molarite (M):</b> 1 litre çözeltide çözünen maddenin mol sayısıdır (M = n/V).
+            • <b>Çözünürlük:</b> Belirli sıcaklık ve basınçta 100 gram çözücüde çözünebilen maksimum madde miktarıdır.
+            • <b>Benzer Benzeri Çözür:</b> Polar maddeler polar çözücülerde, apolar maddeler apolar çözücülerde iyi çözünür.
+            • <b>Koligatif Özellikler:</b> Çözünen tanecik derişimine bağlı (kaynama noktası yükselmesi, donma noktası alçalması gibi) özelliklerdir.`,
+            questions: [
+                { q: "1 molar 500 mL çözelti hazırlamak için kaç mol madde gerekir?", options: ["0.5 mol", "1 mol", "5 mol", "10 mol"], a: "0.5 mol" },
+                { q: "Sıcaklık artışı genellikle hangi maddelerin sudaki çözünürlüğünü azaltır?", options: ["Tuzlar", "Şekerler", "Gazlar", "Metaller"], a: "Gazlar" }
+            ]
+        }
     ]
 };
 
