@@ -533,11 +533,34 @@ const app = {
         content.innerHTML = topic.content.replace(/\n/g, '<br>');
         
         this.setG11Difficulty('all', true);
+        this.setG11Mode('study');
 
         detail.classList.remove('hidden');
         detail.scrollIntoView({ behavior: 'smooth' });
         this.playSound('click');
         this.speak(`${topic.name}. ${topic.desc}`);
+    },
+
+    setG11Mode(mode) {
+        const tabStudy = document.getElementById('tab-g11-study');
+        const tabQuiz = document.getElementById('tab-g11-quiz');
+        const areaStudy = document.getElementById('g11-study-area');
+        const areaQuiz = document.getElementById('g11-quiz-container');
+
+        if (!tabStudy || !tabQuiz) return;
+
+        if (mode === 'study') {
+            tabStudy.classList.add('active-match');
+            tabQuiz.classList.remove('active-match');
+            areaStudy.style.display = 'block';
+            areaQuiz.style.display = 'none';
+        } else {
+            tabStudy.classList.remove('active-match');
+            tabQuiz.classList.add('active-match');
+            areaStudy.style.display = 'none';
+            areaQuiz.style.display = 'block';
+        }
+        this.playSound('click');
     },
 
     setG11Difficulty(diff, skipSound = false) {
@@ -556,6 +579,9 @@ const app = {
         if (diff !== 'all') {
             filteredQuestions = topic.questions.filter(q => q.difficulty === diff);
         }
+
+        const questionsArea = document.getElementById('g11-questions');
+        if (!questionsArea) return;
 
         questionsArea.innerHTML = filteredQuestions.map((q, i) => `
             <div class="glass-card animate-slide-up g11-question-card" style="margin-bottom:20px; background:var(--bg-white)">

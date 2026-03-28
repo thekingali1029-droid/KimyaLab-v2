@@ -221,7 +221,7 @@
                 </div>
                 
                 <div id="grade11-detail" class="glass-card animate-slide-up hidden" style="margin-top:20px; border:1px solid var(--primary); background:rgba(37, 99, 235, 0.02)">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:2rem">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem">
                         <div id="g11-header">
                             <h3 id="g11-title" style="color:var(--primary); font-size:1.8rem; margin-bottom:0.5rem">Başlık</h3>
                             <p id="g11-desc" style="color:var(--text-muted); font-weight:600">Açıklama</p>
@@ -229,29 +229,41 @@
                         <button class="btn-back" onclick="app.closeGrade11Detail()"><i class="fa-solid fa-times"></i></button>
                     </div>
                     
-                    <div id="g11-content" style="line-height:1.8; font-size:1.05rem; margin-bottom:2rem; color:var(--text-main)">
-                        <!-- Content here -->
+                    <!-- Ders Çalışma Ara Yüzü (Konu vs Test) -->
+                    <div style="display:flex; gap:10px; margin-bottom: 2rem;">
+                        <button class="btn-back active-match" id="tab-g11-study" onclick="app.setG11Mode('study')" style="flex:1; font-weight:800; border-radius:10px;"><i class="fa-solid fa-book-open"></i> Konu Çalış</button>
+                        <button class="btn-back" id="tab-g11-quiz" onclick="app.setG11Mode('quiz')" style="flex:1; font-weight:800; border-radius:10px;"><i class="fa-solid fa-pen-nib"></i> Alıştırma Çöz</button>
                     </div>
 
-                    <div id="g11-stat-bar" class="glass-card" style="margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center; background:var(--bg-white); border:1px solid var(--border-color)">
-                        <div style="display:flex; gap:15px; align-items:center">
-                            <span id="g11-total-score" style="font-weight:800; color:var(--primary); font-size:1.1rem">🔥 Toplam Başarı: %0</span>
-                        </div>
-                        <div class="difficulty-group" style="display:flex; gap:5px; background:var(--bg-main); padding:4px; border-radius:12px;">
-                            <button class="btn-diff active" data-diff="all" onclick="app.setG11Difficulty('all')">Tümü</button>
-                            <button class="btn-diff" data-diff="easy" onclick="app.setG11Difficulty('easy')">Kolay</button>
-                            <button class="btn-diff" data-diff="medium" onclick="app.setG11Difficulty('medium')">Orta</button>
-                            <button class="btn-diff" data-diff="hard" onclick="app.setG11Difficulty('hard')">Zor</button>
+                    <!-- Konu İçeriği Bölümü -->
+                    <div id="g11-study-area">
+                        <div id="g11-content" class="glass-card" style="line-height:1.8; font-size:1.05rem; margin-bottom:1rem; color:var(--text-main); background:var(--bg-white)">
+                            <!-- Content here -->
                         </div>
                     </div>
 
-                    <div id="g11-quiz-area" class="glass-card" style="background:var(--bg-main); border-style:dashed">
-                        <h4 style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center">
-                            <span><i class="fa-solid fa-vial-circle-check"></i> Örnek Sorular</span>
-                            <span id="g11-current-topic-stats" style="font-size:0.9rem; color:var(--text-muted)"></span>
-                        </h4>
-                        <div id="g11-questions">
-                            <!-- Questions here -->
+                    <!-- Test Bölümü -->
+                    <div id="g11-quiz-container" style="display:none;">
+                        <div id="g11-stat-bar" class="glass-card" style="margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center; background:var(--bg-white); border:1px solid var(--border-color)">
+                            <div style="display:flex; gap:15px; align-items:center">
+                                <span id="g11-total-score" style="font-weight:800; color:var(--primary); font-size:1.1rem">🔥 Toplam Başarı: %0</span>
+                            </div>
+                            <div class="difficulty-group" style="display:flex; gap:5px; background:var(--bg-main); padding:4px; border-radius:12px;">
+                                <button class="btn-diff active" data-diff="all" onclick="app.setG11Difficulty('all')">Tümü</button>
+                                <button class="btn-diff" data-diff="easy" onclick="app.setG11Difficulty('easy')">Kolay</button>
+                                <button class="btn-diff" data-diff="medium" onclick="app.setG11Difficulty('medium')">Orta</button>
+                                <button class="btn-diff" data-diff="hard" onclick="app.setG11Difficulty('hard')">Zor</button>
+                            </div>
+                        </div>
+
+                        <div id="g11-quiz-area" class="glass-card" style="background:var(--bg-main); border-style:dashed">
+                            <h4 style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center">
+                                <span><i class="fa-solid fa-vial-circle-check"></i> Kavrama Testi</span>
+                                <span id="g11-current-topic-stats" style="font-size:0.9rem; color:var(--text-muted)"></span>
+                            </h4>
+                            <div id="g11-questions">
+                                <!-- Questions here -->
+                            </div>
                         </div>
                     </div>
                 </div>
