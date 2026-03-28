@@ -23,10 +23,10 @@
             <h1 class="main-title">Yeşilvadi<br>Anadolu Lisesi</h1>
             <p class="subtitle">Kimya Laboratuvarı v2</p>
 
-            <div style="display:flex; gap:10px; margin-bottom:20px;">
-                <button type="button" class="btn-back active-match" id="tab-normal" onclick="app.setLoginMode('normal')" style="flex:1; font-weight:800; border-radius:10px;">Öğrenci Girişi</button>
-                <button type="button" class="btn-back" id="tab-register" onclick="app.setLoginMode('register')" style="flex:1; font-weight:800; border-radius:10px;">Kayıt Ol</button>
-                <button type="button" class="btn-back" id="tab-guest" onclick="app.setLoginMode('guest')" style="flex:1; font-weight:800; border-radius:10px;">V.I.P Giriş 💎</button>
+            <div class="login-tabs">
+                <button type="button" class="btn-back active-match" id="tab-normal" onclick="app.setLoginMode('normal')">Öğrenci Girişi</button>
+                <button type="button" class="btn-back" id="tab-register" onclick="app.setLoginMode('register')">Kayıt Ol</button>
+                <button type="button" class="btn-back" id="tab-guest" onclick="app.setLoginMode('guest')">V.I.P Giriş 💎</button>
             </div>
 
             <form id="login-form">
@@ -59,7 +59,7 @@
             <div class="welcome-card glass-card">
                 <h2 style="color:var(--primary); font-size:2rem; margin-bottom:1rem;">Hoş Geldin! ✨</h2>
                 <p style="color:var(--text-muted); font-weight:600; margin-bottom:2rem;">Bilim dünyasına adım atmaya hazır mısın?</p>
-                <div class="stats-row" style="display:flex; justify-content:space-around; width:100%; border-top:1px solid var(--border-color); padding-top:2rem;">
+                <div class="stats-row" style="display:flex; justify-content:space-around; width:100%; border-top:1px solid var(--border-color); padding-top:2rem; flex-wrap:wrap; gap:10px;">
                     <div style="text-align:center"><i class="fa-solid fa-flask" style="color:var(--primary); font-size:1.5rem"></i><br><b>118</b><br>Element</div>
                     <div style="text-align:center"><i class="fa-solid fa-gamepad" style="color:var(--primary); font-size:1.5rem"></i><br><b>4</b><br>Mod</div>
                     <div style="text-align:center"><i class="fa-solid fa-trophy" style="color:var(--primary); font-size:1.5rem"></i><br><b>8</b><br>Rozet</div>
@@ -118,7 +118,7 @@
                     <p style="opacity:0.8">Bugün atomların gizemini çözmeye ve bilim efsanesi olmaya hazır mısın?</p>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:20px; margin-bottom:2rem">
+                <div class="home-top-grid">
                     <div class="glass-card animate-slide-up">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem">
                             <h3 style="margin:0"><i class="fa-solid fa-bullseye" style="color:var(--primary)"></i> GÜNLÜK HEDEF</h3>
@@ -137,7 +137,7 @@
                     </div>
                 </div>
 
-                <div class="stats-grid" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:15px;">
+                <div class="stats-grid">
                     <div class="glass-card animate-slide-up" style="padding:1.5rem">
                         <i class="fa-solid fa-flask" style="color:var(--card-teal); font-size:1.2rem; margin-bottom:10px"></i>
                         <p style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase">Deney Sayısı</p>
@@ -224,12 +224,12 @@
             <!-- PAGE 4: GRADE 11 -->
             <div id="page-grade11" class="spa-page hidden">
                 <h2 style="margin-bottom:2rem">11. Sınıf Kimya Odası 🎓</h2>
-                <div class="grade11-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:20px; margin-bottom:2rem;">
+                <div class="grade11-grid">
                     <!-- Topic cards will be injected here -->
                 </div>
                 
                 <div id="grade11-detail" class="glass-card animate-slide-up hidden" style="margin-top:20px; border:1px solid var(--primary); background:rgba(37, 99, 235, 0.02)">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem">
+                    <div class="g11-header-container">
                         <div id="g11-header">
                             <h3 id="g11-title" style="color:var(--primary); font-size:1.8rem; margin-bottom:0.5rem">Başlık</h3>
                             <p id="g11-desc" style="color:var(--text-muted); font-weight:600">Açıklama</p>
@@ -238,7 +238,7 @@
                     </div>
                     
                     <!-- Ders Çalışma Ara Yüzü (Konu vs Test) -->
-                    <div style="display:flex; gap:10px; margin-bottom: 2rem;">
+                    <div style="display:flex; gap:10px; margin-bottom: 2rem; flex-wrap:wrap;">
                         <button class="btn-back active-match" id="tab-g11-study" onclick="app.setG11Mode('study')" style="flex:1; font-weight:800; border-radius:10px;"><i class="fa-solid fa-book-open"></i> Konu Çalış</button>
                         <button class="btn-back" id="tab-g11-quiz" onclick="app.setG11Mode('quiz')" style="flex:1; font-weight:800; border-radius:10px;"><i class="fa-solid fa-pen-nib"></i> Alıştırma Çöz</button>
                     </div>
@@ -252,7 +252,7 @@
 
                     <!-- Test Bölümü -->
                     <div id="g11-quiz-container" style="display:none;">
-                        <div id="g11-stat-bar" class="glass-card" style="margin-bottom:2rem; display:flex; justify-content:space-between; align-items:center; background:var(--bg-white); border:1px solid var(--border-color)">
+                        <div id="g11-stat-bar" class="glass-card g11-stat-bar">
                             <div style="display:flex; gap:15px; align-items:center">
                                 <span id="g11-total-score" style="font-weight:800; color:var(--primary); font-size:1.1rem">🔥 Toplam Başarı: %0</span>
                             </div>
@@ -293,7 +293,7 @@
             <!-- PAGE 5: STATS -->
             <div id="page-stats" class="spa-page hidden">
                 <h2 style="margin-bottom:2rem">Kişisel Başarılarım 📈</h2>
-                <div class="stats-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+                <div class="stats-grid stats-auto">
                     <div class="glass-card animate-slide-up">
                         <i class="fa-solid fa-star" style="color:var(--primary); font-size:1.5rem; margin-bottom:1rem"></i>
                         <h4 style="color:var(--text-muted); font-size:0.8rem; text-transform:uppercase">Güncel Puan</h4>
@@ -333,9 +333,9 @@
     <!-- OVERLAYS -->
     <div id="game-overlay" class="hidden">
         <div class="game-popup glass-card">
-            <div style="display:flex; justify-content:space-between; margin-bottom:2rem; align-items:center">
+            <div style="display:flex; justify-content:space-between; margin-bottom:2rem; align-items:center; flex-wrap:wrap; gap:10px;">
                 <button class="btn-back" onclick="app.showDashboard()"><i class="fa-solid fa-xmark"></i> Çıkış</button>
-                <div style="display:flex; align-items:center; gap:15px">
+                <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
                     <div id="game-hints" class="hidden" onclick="gameManager.useHint()" style="cursor:pointer; background:var(--primary); color:black; padding:5px 15px; border-radius:20px; font-weight:800; font-size:0.8rem; box-shadow:0 0 10px var(--primary-glow)">💡 İpucu: <span>3</span></div>
                     <div id="game-lives" style="font-size:1.5rem; color:var(--accent); display:flex; gap:5px;"></div>
                     <div id="game-combo" class="hidden" style="background:var(--accent); color:white; padding:5px 15px; border-radius:20px; font-weight:800; font-size:0.8rem;">COMBO x1</div>
@@ -373,7 +373,7 @@
     <div id="profile-modal" class="modal-backdrop" style="display:flex; justify-content:center; align-items:center;">
         <div class="glass-card animate-slide-up" style="max-width:600px; width:90%; position:relative;">
             <button class="btn-back" onclick="app.closeProfileModal()" style="position:absolute; right:20px; top:20px; padding:5px 10px;"><i class="fa-solid fa-times"></i></button>
-            <div style="display:flex; gap:30px; align-items:flex-start;">
+            <div class="profile-modal-layout">
                 <div style="text-align:center;">
                     <div class="circle-logo animate-glow" style="width:120px; height:120px; border-width:5px;">
                         <img id="modal-user-avatar" src="school_logo.jpg" class="circle-logo-img">
@@ -386,7 +386,7 @@
                     <div id="avatar-list" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:20px;"></div>
                     
                     <h4 style="margin-bottom:10px;"><i class="fa-solid fa-trophy"></i> İstatistiklerim</h4>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div class="profile-stats-grid">
                         <div class="glass-card" style="padding:10px; font-size:0.8rem;"><b>Toplam Puan:</b> <span id="stat-total-score">0</span></div>
                         <div class="glass-card" style="padding:10px; font-size:0.8rem;"><b>En Yüksek Kombo:</b> <span id="stat-max-combo">0</span></div>
                     </div>
@@ -407,7 +407,7 @@
             
             <div style="margin-bottom:20px;">
                 <label style="display:block; margin-bottom:10px; color:var(--text-muted)">Takım Sayısı Seç:</label>
-                <div style="display:flex; gap:10px;">
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
                     <button class="btn-back team-count-btn" onclick="app.setTournamentTeams(1)" style="flex:1">1</button>
                     <button class="btn-back team-count-btn" onclick="app.setTournamentTeams(2)" style="flex:1">2</button>
                     <button class="btn-back team-count-btn active" onclick="app.setTournamentTeams(3)" style="flex:1">3</button>
@@ -415,7 +415,7 @@
                 </div>
             </div>
 
-            <div id="tournament-names-container" style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:30px;">
+            <div id="tournament-names-container" class="profile-stats-grid" style="margin-bottom:30px;">
                 <!-- Dynamic Inputs -->
             </div>
 

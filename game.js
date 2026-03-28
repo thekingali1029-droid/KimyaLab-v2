@@ -214,7 +214,7 @@ window.gameManager = {
             <div class="animate-slide-up" style="text-align:center">
                 <h3 style="color:var(--primary); margin-bottom:1rem;">Profesyonel Element Füzyonu ⚛️</h3>
                 <div id="q-sym" class="glass-card animate-glow" style="font-size:5rem; font-weight:800; margin:20px 0; padding:30px; border:2px solid var(--primary); text-shadow: 0 0 20px var(--primary-glow)">--</div>
-                <div id="opts" style="display:grid; grid-template-columns:1fr 1fr; gap:15px"></div>
+                <div id="opts" class="profile-stats-grid"></div>
                 <div style="margin-top:20px; color:var(--text-muted); font-size:0.9rem">Katyonlar, Anyonlar, Asitler ve Malzemeler dahil edildi!</div>
             </div>
         `;
@@ -272,7 +272,7 @@ window.gameManager = {
             <div class="animate-slide-up" style="text-align:center">
                 <h3 style="color:var(--primary); margin-bottom:1rem;">Profesyonel İsim Tahmini 🧩</h3>
                 <div id="q-name" class="glass-card" style="font-size:1.8rem; font-weight:800; margin:20px 0; padding:20px; border:2px solid var(--primary); box-shadow: 0 0 20px rgba(37, 99, 235, 0.2)">--</div>
-                <div id="opts-fill" style="display:grid; grid-template-columns:1fr 1fr; gap:15px"></div>
+                <div id="opts-fill" class="profile-stats-grid"></div>
                 <div style="margin-top:20px; color:var(--text-muted); font-size:0.9rem">Bileşikler ve Karışımlar eklendi.</div>
             </div>
         `;
@@ -433,7 +433,7 @@ window.gameManager = {
             <div class="glass-card" style="padding:30px; margin-bottom:20px; border:2px solid var(--primary); box-shadow: 0 0 15px rgba(251, 192, 45, 0.1)">
                 <h3 style="line-height:1.4; font-size: 1.5rem;">${q.q}</h3>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px">
+            <div class="profile-stats-grid">
                 ${q.options.map(o => `
                     <button class="btn-back animate-slide-up" onclick="gameManager.checkQuiz('${o.replace(/'/g, "\\'")}', '${q.a.replace(/'/g, "\\'")}', this)">
                         ${o}
