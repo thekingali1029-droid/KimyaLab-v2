@@ -92,27 +92,49 @@ const app = {
         const guestTab = document.getElementById('tab-guest');
         const passBlock = document.getElementById('pass-block');
         const userInput = document.getElementById('username-input');
+        const passInput = document.getElementById('password-input');
         const submitBtn = document.getElementById('login-submit-btn');
+        const forgotLink = document.getElementById('forgot-pass-link');
 
         normalTab.classList.remove('active-match');
         if(registerTab) registerTab.classList.remove('active-match');
         guestTab.classList.remove('active-match');
+        if(forgotLink) forgotLink.style.display = 'inline-block';
+        
+        // Reset message style
+        if (this.els.loginError) {
+            this.els.loginError.style.display = 'none';
+            this.els.loginError.style.color = '#e53e3e';
+            this.els.loginError.style.background = '#fff5f5';
+            this.els.loginError.style.borderColor = '#feb2b2';
+        }
 
         if (mode === 'normal') {
             normalTab.classList.add('active-match');
             passBlock.style.display = 'flex';
             userInput.placeholder = "Kullanıcı adı";
+            if(passInput) passInput.placeholder = "Şifre";
             if(submitBtn) submitBtn.innerHTML = "Laboratuvara Gir 🚀";
         } else if (mode === 'register') {
             if(registerTab) registerTab.classList.add('active-match');
             passBlock.style.display = 'flex';
             userInput.placeholder = "Yeni Kullanıcı Adı";
+            if(passInput) passInput.placeholder = "Yeni Şifre Belirle";
             if(submitBtn) submitBtn.innerHTML = "Hesap Oluştur ➕";
+            if(forgotLink) forgotLink.style.display = 'none';
+        } else if (mode === 'forgot') {
+            passBlock.style.display = 'flex';
+            userInput.placeholder = "Kayıtlı Kullanıcı Adınız";
+            if(passInput) passInput.placeholder = "YENİ Şifreniz (Değiştirmek için)";
+            if(submitBtn) submitBtn.innerHTML = "Şifreyi Değiştir 🔄";
+            if(forgotLink) forgotLink.style.display = 'none';
         } else {
             guestTab.classList.add('active-match');
             passBlock.style.display = 'flex'; // VIP needs password too
             userInput.placeholder = "V.I.P Erişim Adı";
+            if(passInput) passInput.placeholder = "Şifre";
             if(submitBtn) submitBtn.innerHTML = "V.I.P Giriş 💎";
+            if(forgotLink) forgotLink.style.display = 'none';
         }
         this.playSound('click');
     },
@@ -124,6 +146,41 @@ const app = {
         if (!u) return;
 
         let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
+
+        if (this.state.loginMode === 'forgot') {
+            if (!p) {
+                this.els.loginError.textContent = "Yeni şifre boş olamaz!";
+                this.els.loginError.style.display = 'block';
+                return;
+            }
+
+            const existingInCustomIndex = customUsers.findIndex(x => x.username.toLowerCase() === u.toLowerCase());
+            const existingInDb = KIMYALAB_DATA.users.find(x => x.username.toLowerCase() === u.toLowerCase());
+
+            if (existingInCustomIndex !== -1) {
+                // Şifreyi Güncelle
+                customUsers[existingInCustomIndex].password = p;
+                localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
+                this.els.loginError.textContent = "Şifreniz başarıyla güncellendi! 'Öğrenci Girişi' modundan yeni şifrenizle girebilirsiniz.";
+                this.els.loginError.style.color = '#15803d'; // Green
+                this.els.loginError.style.background = '#dcfce7';
+                this.els.loginError.style.borderColor = '#86efac';
+                this.els.loginError.style.display = 'block';
+                this.els.passInput.value = ''; // clears pass
+                
+                // Show updated message then switch to normal mode shortly after, or user can click
+                setTimeout(() => this.setLoginMode('normal'), 3000);
+            } else if (existingInDb) {
+                this.els.loginError.textContent = "Sisteme kayıtlı kurucu hesapların şifresi değiştirilemez!";
+                this.els.loginError.style.display = 'block';
+                this.playSound('wrong');
+            } else {
+                this.els.loginError.textContent = "Böyle bir kullanıcı adı bulunamadı!";
+                this.els.loginError.style.display = 'block';
+                this.playSound('wrong');
+            }
+            return;
+        }
 
         if (this.state.loginMode === 'register') {
             if (!p) {
