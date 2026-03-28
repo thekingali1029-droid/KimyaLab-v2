@@ -90,7 +90,6 @@ const app = {
         const normalTab = document.getElementById('tab-normal');
         const registerTab = document.getElementById('tab-register');
         const guestTab = document.getElementById('tab-guest');
-        const transferTab = document.getElementById('tab-transfer');
         const passBlock = document.getElementById('pass-block');
         const userInput = document.getElementById('username-input');
         const passInput = document.getElementById('password-input');
@@ -102,7 +101,6 @@ const app = {
         normalTab.classList.remove('active-match');
         if(registerTab) registerTab.classList.remove('active-match');
         guestTab.classList.remove('active-match');
-        if(transferTab) transferTab.classList.remove('active-match');
         if(forgotLink) forgotLink.style.display = 'inline-block';
         if(emailBlock) emailBlock.style.display = 'none';
         if(emailInput) emailInput.required = false;
@@ -138,14 +136,6 @@ const app = {
             if(passInput) passInput.placeholder = "YENİ Şifreniz (Değiştirmek için)";
             if(submitBtn) submitBtn.innerHTML = "Şifreyi Değiştir 🔄";
             if(forgotLink) forgotLink.style.display = 'none';
-        } else if (mode === 'transfer') {
-            if(transferTab) transferTab.classList.add('active-match');
-            passBlock.style.display = 'none';
-            if(emailBlock) emailBlock.style.display = 'none';
-            if(emailInput) emailInput.required = false;
-            userInput.placeholder = "Aktarım Kodunu (Uzun Metin) Buraya Yapıştır";
-            if(submitBtn) submitBtn.innerHTML = "Aktar ve Giriş Yap 📥";
-            if(forgotLink) forgotLink.style.display = 'none';
         } else {
             guestTab.classList.add('active-match');
             passBlock.style.display = 'flex'; // VIP needs password too
@@ -166,37 +156,6 @@ const app = {
         if (!u) return;
 
         let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
-
-        if (this.state.loginMode === 'transfer') {
-            try {
-                const parsed = JSON.parse(atob(u));
-                if (parsed.user && parsed.user.username) {
-                    // Check if already exists, overwrite if yes
-                    const exIdx = customUsers.findIndex(x => x.username.toLowerCase() === parsed.user.username.toLowerCase());
-                    if(exIdx !== -1) {
-                        customUsers[exIdx] = parsed.user;
-                    } else {
-                        customUsers.push(parsed.user);
-                    }
-                    localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
-                    
-                    if(parsed.saveData) {
-                        localStorage.setItem(`kimyalab_user_${parsed.user.username.toLowerCase()}`, JSON.stringify(parsed.saveData));
-                    }
-                    
-                    this.state.currentUser = parsed.user.username;
-                    this.state.currentUsername = parsed.user.username.toLowerCase();
-                    this.loginSuccess();
-                } else {
-                    throw new Error("Geçersiz Kod");
-                }
-            } catch (err) {
-                this.els.loginError.textContent = "Geçersiz Aktarım Kodu! Kodu tam kopyaladığınızdan emin olun.";
-                this.els.loginError.style.display = 'block';
-                this.playSound('wrong');
-            }
-            return;
-        }
 
         if (this.state.loginMode === 'forgot') {
             if (!p) {
@@ -383,42 +342,6 @@ const app = {
         if (this.state.score > 0) {
             this.showRewardModal("Hoş Geldin Tekrar!", `${this.state.score} Puanınla kaldığın yerden devam ediyorsun! 💪`);
         }
-    },
-
-    generateTransferCode() {
-        if (this.state.isVIP) {
-            alert("V.I.P hesaplar aktarılamaz, çünkü her yerden doğrudan giriş yapılabilir.");
-            return;
-        }
-        let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
-        const userData = customUsers.find(u => u.username.toLowerCase() === this.state.currentUsername);
-        if (!userData) {
-            alert("Hata: Kullanıcı bilgisi bulunamadı!");
-            return;
-        }
-        
-        const userSaveKey = `kimyalab_user_${this.state.currentUsername}`;
-        const savedData = JSON.parse(localStorage.getItem(userSaveKey) || '{}');
-        
-        // Ensure fresh score is saved before export
-        savedData.score = this.state.score;
-        savedData.totalGames = this.state.totalGames;
-        savedData.maxCombo = this.state.maxCombo;
-        savedData.badges = this.state.badges;
-        
-        const payload = {
-            user: userData,
-            saveData: savedData
-        };
-        
-        const codeString = btoa(JSON.stringify(payload));
-        
-        navigator.clipboard.writeText(codeString).then(() => {
-            this.showRewardModal("Kod Kopyalandı!", "Aktarım kodunuz kopyalandı! Yeni bir cihazda 'Hesap Aktar 🔄' kısmına yapıştırarak kaldığınız yerden devam edebilirsiniz.");
-            this.playSound('correct');
-        }).catch(err => {
-            prompt("Zorunlu Kopya (Otomatik kopyalanamadı):", codeString);
-        });
     },
 
     switchPage(pageId) {

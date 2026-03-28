@@ -27,7 +27,6 @@
                 <button type="button" class="btn-back active-match" id="tab-normal" onclick="app.setLoginMode('normal')">Öğrenci Girişi</button>
                 <button type="button" class="btn-back" id="tab-register" onclick="app.setLoginMode('register')">Kayıt Ol</button>
                 <button type="button" class="btn-back" id="tab-guest" onclick="app.setLoginMode('guest')">V.I.P Giriş 💎</button>
-                <button type="button" class="btn-back" id="tab-transfer" onclick="app.setLoginMode('transfer')">Hesap Aktar 🔄</button>
             </div>
 
             <form id="login-form">
@@ -396,10 +395,6 @@
             <div style="margin-top:20px; border-top:1px solid var(--border-color); padding-top:20px;">
                 <h4 style="margin-bottom:15px;"><i class="fa-solid fa-medal"></i> Son Başarılar</h4>
                 <div id="modal-badge-list" style="display:flex; gap:10px; overflow-x:auto; padding-bottom:10px;"></div>
-                
-                <div style="margin-top:20px; text-align:center;">
-                    <button class="btn-primary" onclick="app.generateTransferCode()" style="font-size:0.8rem; padding:10px;"><i class="fa-solid fa-copy"></i> Hesabımı Başka Cihaza Taşı (Kodu Kopyala)</button>
-                </div>
             </div>
         </div>
     </div>
