@@ -499,60 +499,55 @@ window.gameManager = {
     },
 
     handleCorrect(btn, nextFn) {
+        // Disable ALL buttons in container immediately to prevent "sızma"
+        document.querySelectorAll('#game-container button, #game-container .btn-back').forEach(b => {
+            b.style.pointerEvents = 'none';
+        });
+
         this.combo++;
         if (this.combo > this.maxCombo) this.maxCombo = this.combo;
         const pts = (this.isTournament ? 50 : 10) + (this.combo * 5);
         this.score += pts;
-        
+
         if (this.isTournament) {
             this.tournamentTeams[this.currentTeamIdx].score += pts;
             this.updateTournamentUI();
         }
-        
+
         btn.classList.add('animate-correct');
         btn.style.background = 'var(--secondary)';
         btn.style.color = 'white';
-        btn.style.pointerEvents = 'none';
 
         if (window.app) {
             if (!this.isTournament) window.app.addScore(pts);
             window.app.playSound('correct');
+            if (this.combo % 5 === 0 && this.combo > 0) window.app.playSound('levelup');
         }
-        
+
         this.updateComboUI();
-        if (this.combo > this.maxCombo) {
-            this.maxCombo = this.combo;
-            if (window.app) {
-                // Special sound for combo milestones
-                if (this.combo % 5 === 0) window.app.playSound('levelup');
-            }
-        }
-        setTimeout(() => {
-            if (this.currentMode === 'classic') {
-                // Classic mode might need earlier UI clearing if we don't wait for nextFn
-            }
-            nextFn();
-        }, 400);
+        setTimeout(() => nextFn(), 400);
     },
 
     handleWrong(btn, qObj = null) {
+        // Disable ALL buttons immediately to prevent "sızma"
+        document.querySelectorAll('#game-container button, #game-container .btn-back').forEach(b => {
+            b.style.pointerEvents = 'none';
+        });
+
         this.combo = 0;
         this.lives--;
-        
+
         if (this.isTournament) {
             this.tournamentTeams[this.currentTeamIdx].lives = this.lives;
             if (this.lives <= 0) {
                 this.tournamentTeams[this.currentTeamIdx].active = false;
-                this.updateTournamentUI();
-                // We'll advance turn in the 500ms block below
-            } else {
-                this.updateTournamentUI();
             }
+            this.updateTournamentUI();
         }
-        
+
         this.updateLivesUI();
         this.updateComboUI();
-        
+
         if (qObj && !this.isRetryMode && !this.isTournament) {
             const qStr = qObj.q || qObj.n || qObj.name;
             if (!this.wrongQuestions.find(x => (x.q || x.n || x.name) === qStr)) {
@@ -561,29 +556,33 @@ window.gameManager = {
                 if (window.app) window.app.updateStats();
             }
         }
-        
+
         btn.classList.add('animate-shake');
         btn.style.borderColor = 'var(--danger)';
         btn.style.color = 'var(--danger)';
-        
+
         if (window.app) window.app.playSound('wrong');
-        
-        if (this.lives <= 0) {
-            setTimeout(() => {
-                if (this.isTournament) {
-                    // Important: only increment if we haven't already moved or if it's naturally next
-                    this.currentTeamIdx++; 
-                    this.nextTournamentTurn();
-                } else this.endGame("Hakkın Bitti! 💀");
-            }, 600);
-            return;
-        }
 
         setTimeout(() => {
-            btn.classList.remove('animate-shake');
-            btn.style.borderColor = '';
-            btn.style.color = '';
-        }, 500);
+            // Re-enable buttons after shake (only if game continues)
+            if (this.lives > 0 && !this.isTournament) {
+                document.querySelectorAll('#game-container button, #game-container .btn-back').forEach(b => {
+                    b.style.pointerEvents = '';
+                });
+                btn.classList.remove('animate-shake');
+                btn.style.borderColor = '';
+                btn.style.color = '';
+            }
+
+            if (this.lives <= 0) {
+                if (this.isTournament) {
+                    this.currentTeamIdx++;
+                    this.nextTournamentTurn();
+                } else {
+                    this.endGame("Hakkın Bitti! 💀");
+                }
+            }
+        }, 600);
     },
 
     updateLivesUI() {
