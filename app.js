@@ -20,7 +20,8 @@ const app = {
         currentTopicId: null
     },
 
-    cloudURL: 'https://kvdb.io/BsJysWtdV6Xrpvxcg3UN5X/',
+    // Firebase Realtime Database REST API (Global & Ultra-reliable)
+    cloudURL: 'https://kimyalab-v2-default-rtdb.europe-west1.firebasedatabase.app/',
 
     els: {},
 
@@ -192,8 +193,10 @@ const app = {
                 if (!p) throw new Error("Şifre boş olamaz!");
                 if (!e) throw new Error("E-posta boş olamaz!");
                 
-                let checkRes = await fetch(this.cloudURL + "user_" + u.toLowerCase());
-                if (checkRes.ok) throw new Error("Bu kullanıcı adı veya e-posta çoktan alınmış!");
+                const userKey = u.toLowerCase();
+                let checkRes = await fetch(this.cloudURL + "users/" + userKey + ".json");
+                let existing = await checkRes.json();
+                if (existing) throw new Error("Bu kullanıcı adı veya e-posta çoktan alınmış!");
 
                 const seed = Math.random().toString(36).substring(7);
                 const newUser = {
@@ -202,31 +205,33 @@ const app = {
                 };
                 const saveData = { score: 0, totalGames: 0, maxCombo: 0, badges: [] };
 
-                await fetch(this.cloudURL + "user_" + u.toLowerCase(), {
-                    method: 'POST', body: JSON.stringify({ profile: newUser, data: saveData })
+                // Firebase PUT creates the user object
+                await fetch(this.cloudURL + "users/" + userKey + ".json", {
+                    method: 'PUT', body: JSON.stringify({ profile: newUser, data: saveData })
                 });
 
-                // Local Cache
+                // Update Local Cache
                 let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
-                if(!customUsers.find(x => x.username.toLowerCase() === u.toLowerCase())) customUsers.push(newUser);
+                customUsers.push(newUser);
                 localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
 
                 this.state.currentUser = u;
-                this.state.currentUsername = u.toLowerCase();
+                this.state.currentUsername = userKey;
                 this.loginSuccess();
 
             } else if (this.state.loginMode === 'forgot') {
                 if (!p || !e) throw new Error("Lütfen e-posta ve yeni şifrenizi girin!");
                 
-                let res = await fetch(this.cloudURL + "user_" + u.toLowerCase());
-                if (!res.ok) throw new Error("Böyle bir bulut hesabı bulunamadı!");
+                const userKey = u.toLowerCase();
+                let res = await fetch(this.cloudURL + "users/" + userKey + ".json");
                 let cloudData = await res.json();
+                if (!cloudData) throw new Error("Böyle bir bulut hesabı bulunamadı!");
                 
                 if (cloudData.profile.email !== e.toLowerCase()) throw new Error("E-posta adresiniz uyuşmuyor!");
                 
-                cloudData.profile.password = p;
-                await fetch(this.cloudURL + "user_" + u.toLowerCase(), {
-                    method: 'POST', body: JSON.stringify(cloudData)
+                // Update only password
+                await fetch(this.cloudURL + "users/" + userKey + "/profile/password.json", {
+                    method: 'PUT', body: JSON.stringify(p)
                 });
                 
                 this.els.loginError.textContent = "Şifreniz başarıyla değişti! Giriş yapabilirsiniz.";
@@ -238,24 +243,32 @@ const app = {
 
             } else {
                 // NORMAL LOGIN
-                let res = await fetch(this.cloudURL + "user_" + u.toLowerCase());
-                if (!res.ok) throw new Error("Hatalı kullanıcı adı!");
+                const userKey = u.toLowerCase();
+                let res = await fetch(this.cloudURL + "users/" + userKey + ".json");
+                if (!res.ok) throw new Error("Bulut bağlantı hatası!");
                 
                 let cloudData = await res.json();
+                if (!cloudData) throw new Error("Hatalı kullanıcı adı!");
                 if (cloudData.profile.password !== p) throw new Error("Hatalı şifre!");
                 
-                // Cache Profile
+                // 1. Update Profile Cache
                 let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
-                let ex = customUsers.find(x => x.username.toLowerCase() === u.toLowerCase());
-                if (ex) Object.assign(ex, cloudData.profile);
+                let exIndex = customUsers.findIndex(x => x.username.toLowerCase() === userKey);
+                if (exIndex !== -1) customUsers[exIndex] = cloudData.profile;
                 else customUsers.push(cloudData.profile);
                 localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
                 
-                // Cache Game Data
-                localStorage.setItem(`kimyalab_user_${u.toLowerCase()}`, JSON.stringify(cloudData.data));
+                // 2. IMMEDIATE STATE UPDATE from cloud
+                this.state.currentUsername = userKey;
+                this.state.score = cloudData.data?.score || 0;
+                this.state.totalGames = cloudData.data?.totalGames || 0;
+                this.state.maxCombo = cloudData.data?.maxCombo || 0;
+                this.state.badges = cloudData.data?.badges || [];
+                
+                // 3. Update Local Game Cache
+                localStorage.setItem(`kimyalab_user_${userKey}`, JSON.stringify(cloudData.data || {}));
                 
                 this.state.currentUser = cloudData.profile.displayName || cloudData.profile.username;
-                this.state.currentUsername = cloudData.profile.username.toLowerCase();
                 this.loginSuccess();
             }
         } catch (err) {
@@ -294,26 +307,21 @@ const app = {
         // Load user-specific data (VIP ise zaten handleLogin'de ayarlandı, ezme)
         if (!this.state.isVIP) {
             let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
-            const userData = KIMYALAB_DATA.users.find(u => u.username.toLowerCase() === this.state.currentUsername) 
-                        || customUsers.find(u => u.username.toLowerCase() === this.state.currentUsername) || {};
+            const userData = customUsers.find(u => u.username.toLowerCase() === this.state.currentUsername) || {};
             if (userData.avatar && this.els.userAvatar) this.els.userAvatar.src = userData.avatar;
             if (userData.title) this.state.title = userData.title;
-            this.state.currentUser = userData.displayName || userData.username;
         }
         
-        // --- LOAD USER DATA ---
-        // currentUsername was set in handleLogin, guaranteed to be accurate
+        // --- DATA SYNCED ALREADY in handleLogin, but fallback reading from local cache ---
         const userSaveKey = `kimyalab_user_${this.state.currentUsername}`;
         const savedData = JSON.parse(localStorage.getItem(userSaveKey) || '{}');
         
-        this.state.score = savedData.score || 0;
-        this.state.totalGames = savedData.totalGames || 0;
-        this.state.maxCombo = savedData.maxCombo || 0;
-        this.state.badges = savedData.badges || [];
-        
-        // Sync global badges back to per-user if needed (one-time migration for old users)
-        if (this.state.badges.length === 0) {
-            this.state.badges = JSON.parse(localStorage.getItem('badges') || '[]');
+        // Only set from local if state is currently empty/zero (prevents double set)
+        if (this.state.score === 0 && savedData.score > 0) {
+            this.state.score = savedData.score || 0;
+            this.state.totalGames = savedData.totalGames || 0;
+            this.state.maxCombo = savedData.maxCombo || 0;
+            this.state.badges = savedData.badges || [];
         }
 
         this.updateStats();
@@ -1093,24 +1101,46 @@ const app = {
 
     saveUserData() {
         if (!this.state.currentUsername || this.state.isVIP) return;
-        const userSaveKey = `kimyalab_user_${this.state.currentUsername}`;
+        
+        const userSaveKey = `kimyalab_user_${this.state.currentUsername.toLowerCase()}`;
         const dataToSave = {
             score: this.state.score,
             totalGames: this.state.totalGames,
             maxCombo: this.state.maxCombo,
-            badges: this.state.badges || JSON.parse(localStorage.getItem('badges') || '[]')
+            badges: this.state.badges
         };
+        
+        // 1. LOCAL SAVE FIRST
         localStorage.setItem(userSaveKey, JSON.stringify(dataToSave));
 
-        // Sync to cloud in background
+        // 2. BACKGROUND CLOUD SYNC
         if (this.cloudURL) {
             let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
-            let prof = customUsers.find(x => x.username.toLowerCase() === this.state.currentUsername);
-            if(prof) {
-                fetch(this.cloudURL + "user_" + this.state.currentUsername, {
-                    method: 'POST',
-                    body: JSON.stringify({ profile: prof, data: dataToSave })
-                }).catch(e=>console.warn("Cloud sync ignore", e));
+            let prof = customUsers.find(x => x.username.toLowerCase() === this.state.currentUsername.toLowerCase());
+            
+            if (prof) {
+                // UI feedback (subtle)
+                const cloudIndicator = document.getElementById('cloud-sync-status');
+                if (cloudIndicator) {
+                    cloudIndicator.innerHTML = '<i class="fa-solid fa-cloud-arrow-up fa-bounce"></i> Firebase Senkron...';
+                    cloudIndicator.style.opacity = '1';
+                }
+
+                // Use PATCH for background sync to avoid overwriting profile
+                fetch(this.cloudURL + "users/" + this.state.currentUsername.toLowerCase() + "/data.json", {
+                    method: 'PUT',
+                    body: JSON.stringify(dataToSave)
+                }).then(() => {
+                    if (cloudIndicator) {
+                        cloudIndicator.innerHTML = '<i class="fa-solid fa-cloud-check" style="color:var(--success)"></i> Firebase Güncel';
+                        setTimeout(() => cloudIndicator.style.opacity = '0', 2000);
+                    }
+                }).catch(e => {
+                    console.warn("Firebase sync ignore", e);
+                    if (cloudIndicator) {
+                        cloudIndicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Firebase Hatası!';
+                    }
+                });
             }
         }
     },
