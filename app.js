@@ -20,6 +20,8 @@ const app = {
         currentTopicId: null
     },
 
+    cloudURL: 'https://kvdb.io/BsJysWtdV6Xrpvxcg3UN5X/',
+
     els: {},
 
     init() {
@@ -147,7 +149,7 @@ const app = {
         this.playSound('click');
     },
 
-    handleLogin() {
+    async handleLogin() {
         const u = this.els.userInput.value.trim();
         const p = this.els.passInput.value.trim();
         const emailInputEl = document.getElementById('email-input');
@@ -155,104 +157,12 @@ const app = {
 
         if (!u) return;
 
-        let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
-
-        if (this.state.loginMode === 'forgot') {
-            if (!p) {
-                this.els.loginError.textContent = "Yeni şifre boş olamaz!";
-                this.els.loginError.style.display = 'block';
-                return;
-            }
-            if (!e) {
-                this.els.loginError.textContent = "Lütfen kayıtlı e-postanızı girin!";
-                this.els.loginError.style.display = 'block';
-                return;
-            }
-
-            const existingInCustomIndex = customUsers.findIndex(x => x.username.toLowerCase() === u.toLowerCase());
-            const existingInDb = KIMYALAB_DATA.users.find(x => x.username.toLowerCase() === u.toLowerCase());
-
-            if (existingInCustomIndex !== -1) {
-                const matchedUser = customUsers[existingInCustomIndex];
-                if(matchedUser.email && matchedUser.email.toLowerCase() !== e.toLowerCase()) {
-                    this.els.loginError.textContent = "Kullanıcı adı ve e-posta eşleşmedi!";
-                    this.els.loginError.style.display = 'block';
-                    this.playSound('wrong');
-                    return;
-                }
-
-                // Şifreyi Güncelle
-                customUsers[existingInCustomIndex].password = p;
-                localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
-                this.els.loginError.textContent = "Şifreniz başarıyla güncellendi! 'Öğrenci Girişi' modundan yeni şifrenizle girebilirsiniz.";
-                this.els.loginError.style.color = '#15803d'; // Green
-                this.els.loginError.style.background = '#dcfce7';
-                this.els.loginError.style.borderColor = '#86efac';
-                this.els.loginError.style.display = 'block';
-                this.els.passInput.value = ''; // clears pass
-                if(emailInputEl) emailInputEl.value = '';
-                
-                // Show updated message then switch to normal mode shortly after, or user can click
-                setTimeout(() => this.setLoginMode('normal'), 3000);
-            } else if (existingInDb) {
-                this.els.loginError.textContent = "Sisteme kayıtlı kurucu hesapların şifresi değiştirilemez!";
-                this.els.loginError.style.display = 'block';
-                this.playSound('wrong');
-            } else {
-                this.els.loginError.textContent = "Böyle bir kullanıcı adı bulunamadı!";
-                this.els.loginError.style.display = 'block';
-                this.playSound('wrong');
-            }
-            return;
-        }
-
-        if (this.state.loginMode === 'register') {
-            if (!p) {
-                this.els.loginError.textContent = "Şifre boş olamaz!";
-                this.els.loginError.style.display = 'block';
-                return;
-            }
-            if (!e) {
-                this.els.loginError.textContent = "E-posta boş olamaz!";
-                this.els.loginError.style.display = 'block';
-                return;
-            }
-            
-            const existingInDb = KIMYALAB_DATA.users.find(x => x.username.toLowerCase() === u.toLowerCase());
-            const existingInCustom = customUsers.find(x => x.username.toLowerCase() === u.toLowerCase() || (x.email && x.email.toLowerCase() === e.toLowerCase()));
-            
-            if (existingInDb || existingInCustom) {
-                this.els.loginError.textContent = "Bu kullanıcı adı veya e-posta çoktan alınmış!";
-                this.els.loginError.style.display = 'block';
-                this.playSound('wrong');
-                return;
-            }
-            
-            const seed = Math.random().toString(36).substring(7);
-            const newUser = {
-                username: u,
-                email: e.toLowerCase(),
-                password: p,
-                title: 'Çaylak',
-                avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`
-            };
-            
-            customUsers.push(newUser);
-            localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
-            
-            this.state.currentUser = u;
-            this.state.currentUsername = u.toLowerCase();
-            this.loginSuccess();
-            return;
-        }
-
         if (this.state.loginMode === 'guest') {
-            // VIP Hesapları
+            // VIP Hesapları (Local Sadece)
             const vipAccounts = [
                 { username: 'ela', password: 'kaydek', displayName: 'Ela', title: 'V.I.P Prenses 👑', avatar: 'vip_1.png', theme: 'pink' },
                 { username: 'eye', password: 'ali', displayName: 'Ali EL Feriz', title: 'V.I.P Süper Simyacı 🧪', avatar: 'school_logo.jpg', theme: 'blue' }
             ];
-
             const vipUser = vipAccounts.find(v => v.username === u.toLowerCase() && v.password === p);
 
             if (vipUser) {
@@ -270,19 +180,91 @@ const app = {
                 this.playSound('wrong');
             }
             return;
-            
         }
 
-        const user = KIMYALAB_DATA.users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p) || customUsers.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
+        const submitBtn = document.getElementById('login-submit-btn');
+        const oldText = submitBtn.innerHTML;
+        submitBtn.innerHTML = "<i class=\"fa-solid fa-spinner fa-spin\"></i> Buluta Bağlanıyor...";
+        submitBtn.disabled = true;
 
-        if (user) {
-            this.state.currentUser = user.displayName || user.username;
-            this.state.currentUsername = user.username.toLowerCase();
-            this.loginSuccess();
-        } else {
-            this.els.loginError.textContent = "Hatalı kullanıcı adı veya şifre!";
+        try {
+            if (this.state.loginMode === 'register') {
+                if (!p) throw new Error("Şifre boş olamaz!");
+                if (!e) throw new Error("E-posta boş olamaz!");
+                
+                let checkRes = await fetch(this.cloudURL + "user_" + u.toLowerCase());
+                if (checkRes.ok) throw new Error("Bu kullanıcı adı veya e-posta çoktan alınmış!");
+
+                const seed = Math.random().toString(36).substring(7);
+                const newUser = {
+                    username: u, email: e.toLowerCase(), password: p, title: 'Çaylak',
+                    avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`
+                };
+                const saveData = { score: 0, totalGames: 0, maxCombo: 0, badges: [] };
+
+                await fetch(this.cloudURL + "user_" + u.toLowerCase(), {
+                    method: 'POST', body: JSON.stringify({ profile: newUser, data: saveData })
+                });
+
+                // Local Cache
+                let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
+                if(!customUsers.find(x => x.username.toLowerCase() === u.toLowerCase())) customUsers.push(newUser);
+                localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
+
+                this.state.currentUser = u;
+                this.state.currentUsername = u.toLowerCase();
+                this.loginSuccess();
+
+            } else if (this.state.loginMode === 'forgot') {
+                if (!p || !e) throw new Error("Lütfen e-posta ve yeni şifrenizi girin!");
+                
+                let res = await fetch(this.cloudURL + "user_" + u.toLowerCase());
+                if (!res.ok) throw new Error("Böyle bir bulut hesabı bulunamadı!");
+                let cloudData = await res.json();
+                
+                if (cloudData.profile.email !== e.toLowerCase()) throw new Error("E-posta adresiniz uyuşmuyor!");
+                
+                cloudData.profile.password = p;
+                await fetch(this.cloudURL + "user_" + u.toLowerCase(), {
+                    method: 'POST', body: JSON.stringify(cloudData)
+                });
+                
+                this.els.loginError.textContent = "Şifreniz başarıyla değişti! Giriş yapabilirsiniz.";
+                this.els.loginError.style.color = '#15803d';
+                this.els.loginError.style.background = '#dcfce7';
+                this.els.loginError.style.borderColor = '#86efac';
+                this.els.loginError.style.display = 'block';
+                setTimeout(() => this.setLoginMode('normal'), 3000);
+
+            } else {
+                // NORMAL LOGIN
+                let res = await fetch(this.cloudURL + "user_" + u.toLowerCase());
+                if (!res.ok) throw new Error("Hatalı kullanıcı adı!");
+                
+                let cloudData = await res.json();
+                if (cloudData.profile.password !== p) throw new Error("Hatalı şifre!");
+                
+                // Cache Profile
+                let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
+                let ex = customUsers.find(x => x.username.toLowerCase() === u.toLowerCase());
+                if (ex) Object.assign(ex, cloudData.profile);
+                else customUsers.push(cloudData.profile);
+                localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
+                
+                // Cache Game Data
+                localStorage.setItem(`kimyalab_user_${u.toLowerCase()}`, JSON.stringify(cloudData.data));
+                
+                this.state.currentUser = cloudData.profile.displayName || cloudData.profile.username;
+                this.state.currentUsername = cloudData.profile.username.toLowerCase();
+                this.loginSuccess();
+            }
+        } catch (err) {
+            this.els.loginError.textContent = err.message;
             this.els.loginError.style.display = 'block';
             this.playSound('wrong');
+        } finally {
+            submitBtn.innerHTML = oldText;
+            submitBtn.disabled = false;
         }
     },
 
@@ -1110,7 +1092,7 @@ const app = {
     },
 
     saveUserData() {
-        if (!this.state.currentUsername) return;
+        if (!this.state.currentUsername || this.state.isVIP) return;
         const userSaveKey = `kimyalab_user_${this.state.currentUsername}`;
         const dataToSave = {
             score: this.state.score,
@@ -1119,6 +1101,18 @@ const app = {
             badges: this.state.badges || JSON.parse(localStorage.getItem('badges') || '[]')
         };
         localStorage.setItem(userSaveKey, JSON.stringify(dataToSave));
+
+        // Sync to cloud in background
+        if (this.cloudURL) {
+            let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
+            let prof = customUsers.find(x => x.username.toLowerCase() === this.state.currentUsername);
+            if(prof) {
+                fetch(this.cloudURL + "user_" + this.state.currentUsername, {
+                    method: 'POST',
+                    body: JSON.stringify({ profile: prof, data: dataToSave })
+                }).catch(e=>console.warn("Cloud sync ignore", e));
+            }
+        }
     },
 
     awardBadge(badgeId) {
