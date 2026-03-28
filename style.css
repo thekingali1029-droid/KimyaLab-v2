@@ -1001,8 +1001,22 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
         gap: 0;
     }
 
-    .sidebar .user-profile {
+    .sidebar .user-profile, .sidebar .nav-title, .sidebar-footer {
         display: none !important;
+    }
+    
+    .main-nav {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        overflow-x: auto;
+        gap: 5px;
+        padding-bottom: 5px;
+    }
+    .main-nav::-webkit-scrollbar {
+        display: none;
     }
     
     .sidebar .nav-item span {
@@ -1020,6 +1034,8 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
         border-left: none !important;
         border-bottom: none !important;
         color: var(--text-muted) !important;
+        min-width: 65px;
+        text-align: center;
     }
 
     .nav-item.active {
