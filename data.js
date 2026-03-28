@@ -1,16 +1,5 @@
 const KIMYALAB_DATA = {
-    users: [
-        { username: 'ali', password: '123', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ali' },
-        { username: 'ayse', password: '456', title: 'Atom Avcısı', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ayse' },
-        { username: 'mehmet', password: '789', title: 'Karışım Ustası', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Mehmet' },
-        { username: 'fatma', password: '101', title: 'Elektron Efendisi', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Fatma' },
-        { username: 'can', password: '202', title: 'Süper Simyacı', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Can' },
-        { username: 'elif', password: '303', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Elif' },
-        { username: 'ozan', password: '404', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ozan' },
-        { username: 'sude', password: '505', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sude' },
-        { username: 'berk', password: '606', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Berk' },
-        { username: 'ipek', password: '707', title: 'Çaylak', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ipek' }
-    ],
+    users: [],
 
     // FULL PERİODİC TABLE (1-118)
     elements: [
