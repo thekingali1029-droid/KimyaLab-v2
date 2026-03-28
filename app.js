@@ -95,11 +95,15 @@ const app = {
         const passInput = document.getElementById('password-input');
         const submitBtn = document.getElementById('login-submit-btn');
         const forgotLink = document.getElementById('forgot-pass-link');
+        const emailBlock = document.getElementById('email-block');
+        const emailInput = document.getElementById('email-input');
 
         normalTab.classList.remove('active-match');
         if(registerTab) registerTab.classList.remove('active-match');
         guestTab.classList.remove('active-match');
         if(forgotLink) forgotLink.style.display = 'inline-block';
+        if(emailBlock) emailBlock.style.display = 'none';
+        if(emailInput) emailInput.required = false;
         
         // Reset message style
         if (this.els.loginError) {
@@ -118,12 +122,16 @@ const app = {
         } else if (mode === 'register') {
             if(registerTab) registerTab.classList.add('active-match');
             passBlock.style.display = 'flex';
+            if(emailBlock) emailBlock.style.display = 'flex';
+            if(emailInput) emailInput.required = true;
             userInput.placeholder = "Yeni Kullanıcı Adı";
             if(passInput) passInput.placeholder = "Yeni Şifre Belirle";
             if(submitBtn) submitBtn.innerHTML = "Hesap Oluştur ➕";
             if(forgotLink) forgotLink.style.display = 'none';
         } else if (mode === 'forgot') {
             passBlock.style.display = 'flex';
+            if(emailBlock) emailBlock.style.display = 'flex';
+            if(emailInput) emailInput.required = true;
             userInput.placeholder = "Kayıtlı Kullanıcı Adınız";
             if(passInput) passInput.placeholder = "YENİ Şifreniz (Değiştirmek için)";
             if(submitBtn) submitBtn.innerHTML = "Şifreyi Değiştir 🔄";
@@ -142,6 +150,8 @@ const app = {
     handleLogin() {
         const u = this.els.userInput.value.trim();
         const p = this.els.passInput.value.trim();
+        const emailInputEl = document.getElementById('email-input');
+        const e = emailInputEl ? emailInputEl.value.trim() : '';
 
         if (!u) return;
 
@@ -153,11 +163,24 @@ const app = {
                 this.els.loginError.style.display = 'block';
                 return;
             }
+            if (!e) {
+                this.els.loginError.textContent = "Lütfen kayıtlı e-postanızı girin!";
+                this.els.loginError.style.display = 'block';
+                return;
+            }
 
             const existingInCustomIndex = customUsers.findIndex(x => x.username.toLowerCase() === u.toLowerCase());
             const existingInDb = KIMYALAB_DATA.users.find(x => x.username.toLowerCase() === u.toLowerCase());
 
             if (existingInCustomIndex !== -1) {
+                const matchedUser = customUsers[existingInCustomIndex];
+                if(matchedUser.email && matchedUser.email.toLowerCase() !== e.toLowerCase()) {
+                    this.els.loginError.textContent = "Kullanıcı adı ve e-posta eşleşmedi!";
+                    this.els.loginError.style.display = 'block';
+                    this.playSound('wrong');
+                    return;
+                }
+
                 // Şifreyi Güncelle
                 customUsers[existingInCustomIndex].password = p;
                 localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
@@ -167,6 +190,7 @@ const app = {
                 this.els.loginError.style.borderColor = '#86efac';
                 this.els.loginError.style.display = 'block';
                 this.els.passInput.value = ''; // clears pass
+                if(emailInputEl) emailInputEl.value = '';
                 
                 // Show updated message then switch to normal mode shortly after, or user can click
                 setTimeout(() => this.setLoginMode('normal'), 3000);
@@ -188,12 +212,17 @@ const app = {
                 this.els.loginError.style.display = 'block';
                 return;
             }
+            if (!e) {
+                this.els.loginError.textContent = "E-posta boş olamaz!";
+                this.els.loginError.style.display = 'block';
+                return;
+            }
             
             const existingInDb = KIMYALAB_DATA.users.find(x => x.username.toLowerCase() === u.toLowerCase());
-            const existingInCustom = customUsers.find(x => x.username.toLowerCase() === u.toLowerCase());
+            const existingInCustom = customUsers.find(x => x.username.toLowerCase() === u.toLowerCase() || (x.email && x.email.toLowerCase() === e.toLowerCase()));
             
             if (existingInDb || existingInCustom) {
-                this.els.loginError.textContent = "Bu kullanıcı adı zaten alınmış!";
+                this.els.loginError.textContent = "Bu kullanıcı adı veya e-posta çoktan alınmış!";
                 this.els.loginError.style.display = 'block';
                 this.playSound('wrong');
                 return;
@@ -202,6 +231,7 @@ const app = {
             const seed = Math.random().toString(36).substring(7);
             const newUser = {
                 username: u,
+                email: e.toLowerCase(),
                 password: p,
                 title: 'Çaylak',
                 avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`
