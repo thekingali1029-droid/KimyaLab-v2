@@ -1108,3 +1108,53 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
 }
 
 
+
+.btn-hint {
+    background: rgba(251, 192, 45, 0.1);
+    border: 1px dashed #f59e0b;
+    color: #b45309;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-hint:hover {
+    background: #fef3c7;
+    transform: translateY(-2px);
+}
+
+.hint-text {
+    margin-top: 10px;
+    padding: 10px;
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    font-size: 0.85rem;
+    color: #92400e;
+    border-radius: 4px;
+    display: none;
+}
+
+.explanation-box {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(37, 99, 235, 0.05);
+    border-radius: 12px;
+    border: 1px solid var(--primary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.explanation-title {
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}

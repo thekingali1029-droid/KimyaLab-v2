@@ -88,20 +88,31 @@ const app = {
     setLoginMode(mode) {
         this.state.loginMode = mode;
         const normalTab = document.getElementById('tab-normal');
+        const registerTab = document.getElementById('tab-register');
         const guestTab = document.getElementById('tab-guest');
         const passBlock = document.getElementById('pass-block');
         const userInput = document.getElementById('username-input');
+        const submitBtn = document.getElementById('login-submit-btn');
+
+        normalTab.classList.remove('active-match');
+        if(registerTab) registerTab.classList.remove('active-match');
+        guestTab.classList.remove('active-match');
 
         if (mode === 'normal') {
             normalTab.classList.add('active-match');
-            guestTab.classList.remove('active-match');
             passBlock.style.display = 'flex';
             userInput.placeholder = "Kullanıcı adı";
+            if(submitBtn) submitBtn.innerHTML = "Laboratuvara Gir 🚀";
+        } else if (mode === 'register') {
+            if(registerTab) registerTab.classList.add('active-match');
+            passBlock.style.display = 'flex';
+            userInput.placeholder = "Yeni Kullanıcı Adı";
+            if(submitBtn) submitBtn.innerHTML = "Hesap Oluştur ➕";
         } else {
             guestTab.classList.add('active-match');
-            normalTab.classList.remove('active-match');
             passBlock.style.display = 'flex'; // VIP needs password too
             userInput.placeholder = "V.I.P Erişim Adı";
+            if(submitBtn) submitBtn.innerHTML = "V.I.P Giriş 💎";
         }
         this.playSound('click');
     },
@@ -111,6 +122,42 @@ const app = {
         const p = this.els.passInput.value.trim();
 
         if (!u) return;
+
+        let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
+
+        if (this.state.loginMode === 'register') {
+            if (!p) {
+                this.els.loginError.textContent = "Şifre boş olamaz!";
+                this.els.loginError.style.display = 'block';
+                return;
+            }
+            
+            const existingInDb = KIMYALAB_DATA.users.find(x => x.username.toLowerCase() === u.toLowerCase());
+            const existingInCustom = customUsers.find(x => x.username.toLowerCase() === u.toLowerCase());
+            
+            if (existingInDb || existingInCustom) {
+                this.els.loginError.textContent = "Bu kullanıcı adı zaten alınmış!";
+                this.els.loginError.style.display = 'block';
+                this.playSound('wrong');
+                return;
+            }
+            
+            const seed = Math.random().toString(36).substring(7);
+            const newUser = {
+                username: u,
+                password: p,
+                title: 'Çaylak',
+                avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`
+            };
+            
+            customUsers.push(newUser);
+            localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
+            
+            this.state.currentUser = u;
+            this.state.currentUsername = u.toLowerCase();
+            this.loginSuccess();
+            return;
+        }
 
         if (this.state.loginMode === 'guest') {
             // VIP Hesapları
@@ -139,7 +186,7 @@ const app = {
             
         }
 
-        const user = KIMYALAB_DATA.users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
+        const user = KIMYALAB_DATA.users.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p) || customUsers.find(x => x.username.toLowerCase() === u.toLowerCase() && x.password === p);
 
         if (user) {
             this.state.currentUser = user.displayName || user.username;
@@ -177,7 +224,9 @@ const app = {
 
         // Load user-specific data (VIP ise zaten handleLogin'de ayarlandı, ezme)
         if (!this.state.isVIP) {
-            const userData = KIMYALAB_DATA.users.find(u => u.username.toLowerCase() === this.state.currentUsername) || {};
+            let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
+            const userData = KIMYALAB_DATA.users.find(u => u.username.toLowerCase() === this.state.currentUsername) 
+                        || customUsers.find(u => u.username.toLowerCase() === this.state.currentUsername) || {};
             if (userData.avatar && this.els.userAvatar) this.els.userAvatar.src = userData.avatar;
             if (userData.title) this.state.title = userData.title;
             this.state.currentUser = userData.displayName || userData.username;
@@ -508,17 +557,33 @@ const app = {
             filteredQuestions = topic.questions.filter(q => q.difficulty === diff);
         }
 
-        const questionsArea = document.getElementById('g11-questions');
         questionsArea.innerHTML = filteredQuestions.map((q, i) => `
-            <div class="glass-card animate-slide-up" style="margin-bottom:15px; background:var(--bg-white)">
-                <div style="display:flex; justify-content:space-between; margin-bottom:1rem">
-                    <p style="font-weight:700;">Soru ${i+1}: ${q.q}</p>
-                    <span class="badge-${q.difficulty || 'easy'}">${(q.difficulty || 'easy').toUpperCase()}</span>
+            <div class="glass-card animate-slide-up g11-question-card" style="margin-bottom:20px; background:var(--bg-white)">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem">
+                    <p style="font-weight:700; flex:1; padding-right:10px;">Soru ${i+1}: ${q.q}</p>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:5px">
+                        <span class="badge-${q.difficulty || 'easy'}">${(q.difficulty || 'easy').toUpperCase()}</span>
+                        <button class="btn-hint" onclick="app.toggleG11Hint(this)">
+                            <i class="fa-solid fa-lightbulb"></i> İpucu
+                        </button>
+                    </div>
                 </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                
+                <div class="hint-text">${q.hint || 'Bu soru için henüz ipucu eklenmedi.'}</div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
                     ${q.options.map(opt => `
-                        <button class="btn-back" style="font-size:0.8rem; padding:10px" onclick="app.checkG11Answer(this, '${opt}', '${q.a}')">${opt}</button>
+                        <button class="btn-back q-opt" style="font-size:0.85rem; padding:12px" onclick="app.checkG11Answer(this, '${opt.replace(/'/g, "\\'")}', '${q.a.replace(/'/g, "\\'")}', '${(q.explanation || '').replace(/'/g, "\\'")}')">${opt}</button>
                     `).join('')}
+                </div>
+
+                <div class="explanation-box" style="display:none">
+                    <div class="explanation-title">
+                        <i class="fa-solid fa-circle-info"></i> 👨‍🏫 Çözüm Açıklaması
+                    </div>
+                    <div class="explanation-content">
+                        ${q.explanation || 'Bu sorunun çözümü hakkında detaylı bilgi bulunmamaktadır.'}
+                    </div>
                 </div>
             </div>
         `).join('') || '<p style="text-align:center; padding:2rem; color:var(--text-muted)">Bu zorluk seviyesinde henüz soru eklenmedi.</p>';
@@ -527,22 +592,35 @@ const app = {
         if(!skipSound) this.playSound('click');
     },
 
-    checkG11Answer(btn, selected, correct) {
+    toggleG11Hint(btn) {
+        const card = btn.closest('.g11-question-card');
+        const hintEl = card.querySelector('.hint-text');
+        const isHidden = window.getComputedStyle(hintEl).display === 'none';
+        
+        hintEl.style.display = isHidden ? 'block' : 'none';
+        btn.innerHTML = isHidden ? '<i class="fa-solid fa-eye-slash"></i> Kapat' : '<i class="fa-solid fa-lightbulb"></i> İpucu';
+        if(isHidden) this.playSound('click');
+    },
+
+    checkG11Answer(btn, selected, correct, explanation) {
         if (btn.classList.contains('answered')) return;
         
+        const card = btn.closest('.g11-question-card');
         const topicId = this.state.currentTopicId;
+        
         if (!this.state.grade11_stats[topicId]) {
             this.state.grade11_stats[topicId] = { correct: 0, answered: [] };
         }
 
-        const questionText = btn.closest('.glass-card').querySelector('p').innerText;
+        const questionText = card.querySelector('p').innerText;
         if (this.state.grade11_stats[topicId].answered.includes(questionText)) {
-            // Soru zaten cevaplanmış ama buton state'i tutarsızsa (yeniden render vb)
             btn.classList.add('answered');
             return;
         }
 
-        if (selected === correct) {
+        const isCorrect = selected === correct;
+        
+        if (isCorrect) {
             btn.style.background = 'var(--success)';
             btn.style.color = 'white';
             this.playSound('correct');
@@ -565,13 +643,25 @@ const app = {
             setTimeout(() => btn.classList.remove('animate-shake'), 300);
         }
 
+        // Show Explanation
+        const explainBox = card.querySelector('.explanation-box');
+        if (explainBox) {
+            explainBox.style.display = 'block';
+            if (!isCorrect) {
+                explainBox.style.borderColor = 'var(--danger)';
+                const content = explainBox.querySelector('.explanation-content');
+                content.innerHTML = `<b style="color:var(--danger)">Yanlış!</b> Doğru cevap: <b>${correct}</b>.<br><br>${explanation || 'Bu konuda daha fazla çalışma yapman iyi olabilir.'}`;
+            }
+        }
+
         // Disable other options in this question
-        const optionsGrid = btn.parentElement;
+        const optionsGrid = card.querySelector('div[style*="grid"]');
         optionsGrid.querySelectorAll('button').forEach(b => {
             b.classList.add('answered');
             if (b.innerText === correct) {
                 b.style.background = 'var(--success)';
                 b.style.color = 'white';
+                b.style.fontWeight = '800';
             }
         });
 
