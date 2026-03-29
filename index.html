@@ -370,9 +370,12 @@
                                 <textarea id="admin-hw-desc" class="btn-back" style="width:100%; height:80px; margin-bottom:15px;" placeholder="Bu ödevi çözenler +500 puan alır!"></textarea>
                                 <button class="btn-primary" onclick="app.adminSaveHomework()">Ödevi Yayınla 🚀</button>
                             </div>
-                            <div class="admin-questions-area" id="admin-hw-questions-list">
-                                <label style="display:block; margin-bottom:10px;">Sorular (JSON Formatı):</label>
-                                <textarea id="admin-hw-questions-json" class="btn-back" style="width:100%; height:150px; font-family:monospace; font-size:0.7rem;" placeholder='[{"q": "Atomun merkezi?", "options": ["Çekirdek", "Katman"], "a": "Çekirdek"}]'></textarea>
+                            <div class="admin-questions-area">
+                                <label style="display:block; margin-bottom:10px;">Sorular:</label>
+                                <div id="admin-questions-container" style="max-height:300px; overflow-y:auto; margin-bottom:15px; border:1px dashed var(--border-color); padding:10px; border-radius:12px;">
+                                    <!-- Dynamic Rows -->
+                                </div>
+                                <button class="btn-back btn-block" onclick="app.adminAddQuestionRow()" style="border-color:var(--secondary); color:var(--secondary); margin-bottom:10px;"><i class="fa-solid fa-plus"></i> Soru Ekle</button>
                             </div>
                         </div>
                     </div>

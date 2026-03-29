@@ -1535,20 +1535,65 @@ const app = {
     },
 
     // --- HOMEWORK SYSTEM ---
+    adminAddQuestionRow() {
+        const container = document.getElementById('admin-questions-container');
+        const count = container.children.length + 1;
+        
+        const row = document.createElement('div');
+        row.className = 'glass-card admin-q-row animate-slide-up';
+        row.style.marginBottom = '10px';
+        row.style.background = 'rgba(255,255,255,0.03)';
+        
+        row.innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <b>Soru ${count}</b>
+                <button onclick="this.parentElement.parentElement.remove()" style="color:var(--danger); background:none; border:none; cursor:pointer"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+            <input type="text" class="q-text btn-back" placeholder="Soru metni..." style="width:100%; margin-bottom:8px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
+                <input type="text" class="q-opt btn-back" placeholder="A Şıkkı">
+                <input type="text" class="q-opt btn-back" placeholder="B Şıkkı">
+                <input type="text" class="q-opt btn-back" placeholder="C Şıkkı">
+                <input type="text" class="q-opt btn-back" placeholder="D Şıkkı">
+            </div>
+            <select class="q-ans btn-back" style="width:100%; margin-top:8px;">
+                <option value="">Doğru Cevabı Seç...</option>
+                <option value="0">A Şıkkı</option>
+                <option value="1">B Şıkkı</option>
+                <option value="2">C Şıkkı</option>
+                <option value="3">D Şıkkı</option>
+            </select>
+        `;
+        container.appendChild(row);
+        this.playSound('click');
+        container.scrollTop = container.scrollHeight;
+    },
+
     async adminSaveHomework() {
         if (!this.state.isAdmin) return;
         
         const title = document.getElementById('admin-hw-title').value;
         const desc = document.getElementById('admin-hw-desc').value;
-        const questionsStr = document.getElementById('admin-hw-questions-json').value;
+        const qRows = document.querySelectorAll('.admin-q-row');
 
-        if (!title || !questionsStr) {
-            alert("Başlık ve sorular boş olamaz!");
+        if (!title || qRows.length === 0) {
+            alert("Başlık ve en az bir soru girmelisiniz!");
             return;
         }
 
+        const questions = [];
         try {
-            const questions = JSON.parse(questionsStr);
+            qRows.forEach(row => {
+                const qText = row.querySelector('.q-text').value;
+                const opts = Array.from(row.querySelectorAll('.q-opt')).map(i => i.value);
+                const ansIdx = row.querySelector('.q-ans').value;
+
+                if (!qText || opts.some(o => !o) || ansIdx === "") {
+                    throw new Error("Lütfen tüm alanları ve doğru cevabı doldurun!");
+                }
+                questions.push({ q: qText, options: opts, a: opts[parseInt(ansIdx)] });
+            });
+
             const hwId = 'hw_' + Date.now();
             const payload = { id: hwId, title, desc, questions, active: true, reward: 500 };
 
@@ -1560,7 +1605,8 @@ const app = {
             alert("Ödev başarıyla tüm sınıfa yayınlandı! 🚀");
             document.getElementById('admin-hw-title').value = '';
             document.getElementById('admin-hw-desc').value = '';
-        } catch (e) { alert("Format Hatası: " + e.message); }
+            document.getElementById('admin-questions-container').innerHTML = '';
+        } catch (e) { alert("Hata: " + e.message); }
     },
 
     async loadHomeworkList() {
