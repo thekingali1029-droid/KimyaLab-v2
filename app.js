@@ -429,8 +429,9 @@ const app = {
         // ADMIN CHECK (STRICT ONLY FOR 'awm')
         const adminNav = document.getElementById('nav-item-admin');
         const isAwm = (this.state.currentUsername && this.state.currentUsername.toLowerCase() === 'awm');
-        if (adminNav) {
-            adminNav.style.display = isAwm ? 'flex' : 'none';
+        if (isAwm) {
+            adminNav.style.display = 'flex';
+            this.loadAdminNotifications();
         }
         this.state.isAdmin = isAwm;
 
@@ -1392,6 +1393,42 @@ const app = {
         }
     },
     // --- ADMIN ENGINE (SECURED FOR 'awm' ONLY) ---
+    async loadAdminNotifications() {
+        if (!this.state.isAdmin) return;
+        const list = document.getElementById('admin-notifications-list');
+        try {
+            const res = await fetch(this.getCloudURL() + "admin_notifications.json");
+            const data = await res.json();
+            if (!data) {
+                list.innerHTML = '<p style="text-align:center; opacity:0.5; padding:20px;">Henüz yeni bir aktivite yok...</p>';
+                return;
+            }
+            let html = '';
+            // Convert to array and sort by time
+            const notifs = Object.entries(data).reverse();
+            notifs.forEach(([id, n]) => {
+                html += `
+                    <div class="glass-card" style="padding:10px 15px; border-left:4px solid var(--success); display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02)">
+                        <div>
+                            <b style="color:var(--success)">${n.user.toUpperCase()}</b> ${n.msg} 
+                            <div style="font-size:0.7rem; opacity:0.6;">${new Date(n.time).toLocaleString()}</div>
+                        </div>
+                        <i class="fa-solid fa-circle-check" style="color:var(--success)"></i>
+                    </div>
+                `;
+            });
+            list.innerHTML = html;
+        } catch (e) { console.error("Notif load fail:", e); }
+    },
+
+    async clearAdminNotifications() {
+        if (!confirm("Tüm bildirimleri silmek istediğinize emin misiniz?")) return;
+        try {
+            await fetch(this.getCloudURL() + "admin_notifications.json", { method: 'DELETE' });
+            this.loadAdminNotifications();
+        } catch (e) { alert("Silinemedi: " + e.message); }
+    },
+
     async loadAdminUsers() {
         if (!this.state.isAdmin) return;
         const listContainer = document.getElementById('admin-user-list');
@@ -1706,6 +1743,17 @@ const app = {
             method: 'PATCH',
             body: JSON.stringify({ [hId]: true })
         }).catch(e => console.error("Cloud HW log failed:", e));
+
+        // --- NEW: NOTIFY ADMIN ---
+        const notif = {
+            user: this.state.currentUsername,
+            msg: `bir ödevi başarıyla tamamladı!`,
+            time: Date.now()
+        };
+        fetch(this.getCloudURL() + "admin_notifications.json", {
+            method: 'POST',
+            body: JSON.stringify(notif)
+        }).catch(e => console.error("Admin notif failed:", e));
 
         // Mark local as well for instant UI response
         localStorage.setItem(`hw_done_${hId}`, 'true');

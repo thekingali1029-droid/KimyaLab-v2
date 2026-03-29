@@ -359,6 +359,17 @@
                 </div>
 
                 <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:25px;">
+                    <!-- Live Notifications Section -->
+                    <div class="glass-card animate-slide-up" style="grid-column: span 3; border-top: 5px solid var(--success); background:rgba(16, 185, 129, 0.05)">
+                        <h3 style="margin-bottom:15px; color:var(--success); display:flex; align-items:center; gap:10px;">
+                            <i class="fa-solid fa-bell fa-shake"></i> Canlı Bildirimler & Aktivite
+                            <button onclick="app.clearAdminNotifications()" style="margin-left:auto; font-size:0.7rem; background:none; border:1px solid var(--success); color:var(--success); padding:2px 8px; border-radius:5px; cursor:pointer">Temizle</button>
+                        </h3>
+                        <div id="admin-notifications-list" style="max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;">
+                            <p style="text-align:center; opacity:0.5; padding:20px;">Henüz yeni bir aktivite yok...</p>
+                        </div>
+                    </div>
+
                     <!-- Homework Creator Section -->
                     <div class="glass-card animate-slide-up" style="grid-column: span 3; border-top: 5px solid var(--accent);">
                         <h3 style="margin-bottom:20px; color:var(--accent)"><i class="fa-solid fa-file-circle-plus"></i> Yeni Ödev Hazırla</h3>
