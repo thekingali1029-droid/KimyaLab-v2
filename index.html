@@ -260,8 +260,9 @@
                     <!-- Test Bölümü -->
                     <div id="g11-quiz-container" style="display:none;">
                         <div id="g11-stat-bar" class="glass-card g11-stat-bar">
-                            <div style="display:flex; gap:15px; align-items:center">
+                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:10px;">
                                 <span id="g11-total-score" style="font-weight:800; color:var(--primary); font-size:1.1rem">🔥 Toplam Başarı: %0</span>
+                                <button class="btn-primary" onclick="app.resetG11Success()" style="background:var(--danger); border:none; padding:4px 12px; font-size:0.7rem; border-radius:8px; cursor:pointer">Başarıyı Sıfırla 🧹</button>
                             </div>
                             <div class="difficulty-group" style="display:flex; gap:5px; background:var(--bg-main); padding:4px; border-radius:12px;">
                                 <button class="btn-diff active" data-diff="all" onclick="app.setG11Difficulty('all')">Tümü</button>
