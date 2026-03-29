@@ -34,7 +34,33 @@ const app = {
         this.bindEvents();
         this.applyInitialTheme();
         this.updateStats();
+        this.checkCloudConnectivity(); // New
         console.log("KimyaLab v2 Başlatıldı!");
+    },
+
+    async checkCloudConnectivity() {
+        const indicator = document.getElementById('cloud-test-status');
+        if (!indicator) return;
+
+        try {
+            // Fetch a small, public-friendly .json to test rules
+            let res = await fetch(this.cloudURL + ".json?shallow=true");
+            if (res.ok) {
+                indicator.innerHTML = '<i class="fa-solid fa-cloud-check" style="color:var(--success)"></i> Bulut Servisi Aktif ✅';
+                indicator.style.color = 'var(--success)';
+            } else {
+                let data = await res.json().catch(() => ({}));
+                if (data && data.error === "Permission denied") {
+                    indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Veritabanı İzni Yok (Firebase Rules!)';
+                } else {
+                    indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Bulut Bağlantı Sorunu (' + res.status + ')';
+                }
+                indicator.style.color = 'var(--danger)';
+            }
+        } catch (e) {
+            indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> İnternet/Bulut Hatası!';
+            indicator.style.color = 'var(--danger)';
+        }
     },
 
 
@@ -151,20 +177,23 @@ const app = {
     },
 
     async handleLogin() {
-        const u = this.els.userInput.value.trim();
+        const uRaw = this.els.userInput.value.trim();
         const p = this.els.passInput.value.trim();
         const emailInputEl = document.getElementById('email-input');
         const e = emailInputEl ? emailInputEl.value.trim() : '';
 
-        if (!u) return;
+        if (!uRaw) return;
 
+        // Firebase Key Sanitization (no . $ # [ ] / allowed)
+        const userKey = uRaw.toLowerCase().replace(/[.$#[\]/]/g, "_");
+        
         if (this.state.loginMode === 'guest') {
             // VIP Hesapları (Local Sadece)
             const vipAccounts = [
                 { username: 'ela', password: 'kaydek', displayName: 'Ela', title: 'V.I.P Prenses 👑', avatar: 'vip_1.png', theme: 'pink' },
                 { username: 'eye', password: 'ali', displayName: 'Ali EL Feriz', title: 'V.I.P Süper Simyacı 🧪', avatar: 'school_logo.jpg', theme: 'blue' }
             ];
-            const vipUser = vipAccounts.find(v => v.username === u.toLowerCase() && v.password === p);
+            const vipUser = vipAccounts.find(v => v.username === userKey && v.password === p);
 
             if (vipUser) {
                 this.state.currentUser = vipUser.displayName;
@@ -193,46 +222,57 @@ const app = {
                 if (!p) throw new Error("Şifre boş olamaz!");
                 if (!e) throw new Error("E-posta boş olamaz!");
                 
-                const userKey = u.toLowerCase();
                 let checkRes = await fetch(this.cloudURL + "users/" + userKey + ".json");
                 let existing = await checkRes.json();
-                if (existing) throw new Error("Bu kullanıcı adı veya e-posta çoktan alınmış!");
+                
+                if (existing) {
+                    if (existing.error) throw new Error("Bulut Hatası: " + existing.error);
+                    throw new Error("Bu kullanıcı adı çoktan alınmış!");
+                }
 
                 const seed = Math.random().toString(36).substring(7);
                 const newUser = {
-                    username: u, email: e.toLowerCase(), password: p, title: 'Çaylak',
+                    username: uRaw, email: e.toLowerCase(), password: p, title: 'Çaylak',
                     avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`
                 };
                 const saveData = { score: 0, totalGames: 0, maxCombo: 0, badges: [] };
 
                 // Firebase PUT creates the user object
-                await fetch(this.cloudURL + "users/" + userKey + ".json", {
+                let putRes = await fetch(this.cloudURL + "users/" + userKey + ".json", {
                     method: 'PUT', body: JSON.stringify({ profile: newUser, data: saveData })
                 });
+                
+                if (!putRes.ok) {
+                    let errData = await putRes.json();
+                    throw new Error("Kayıt Hatası: " + (errData.error || "Sunucuya yazılamadı. Lütfen internetinizi veya veritabanı izinlerini kontrol edin."));
+                }
 
                 // Update Local Cache
                 let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
                 customUsers.push(newUser);
                 localStorage.setItem('kimyalab_custom_users', JSON.stringify(customUsers));
 
-                this.state.currentUser = u;
+                this.state.currentUser = uRaw;
                 this.state.currentUsername = userKey;
                 this.loginSuccess();
 
             } else if (this.state.loginMode === 'forgot') {
                 if (!p || !e) throw new Error("Lütfen e-posta ve yeni şifrenizi girin!");
                 
-                const userKey = u.toLowerCase();
                 let res = await fetch(this.cloudURL + "users/" + userKey + ".json");
                 let cloudData = await res.json();
+                
                 if (!cloudData) throw new Error("Böyle bir bulut hesabı bulunamadı!");
+                if (cloudData.error) throw new Error("Erişim Reddedildi: " + cloudData.error);
                 
                 if (cloudData.profile.email !== e.toLowerCase()) throw new Error("E-posta adresiniz uyuşmuyor!");
                 
                 // Update only password
-                await fetch(this.cloudURL + "users/" + userKey + "/profile/password.json", {
+                let updateRes = await fetch(this.cloudURL + "users/" + userKey + "/profile/password.json", {
                     method: 'PUT', body: JSON.stringify(p)
                 });
+                
+                if (!updateRes.ok) throw new Error("Şifre güncellenemedi.");
                 
                 this.els.loginError.textContent = "Şifreniz başarıyla değişti! Giriş yapabilirsiniz.";
                 this.els.loginError.style.color = '#15803d';
@@ -243,12 +283,13 @@ const app = {
 
             } else {
                 // NORMAL LOGIN
-                const userKey = u.toLowerCase();
                 let res = await fetch(this.cloudURL + "users/" + userKey + ".json");
-                if (!res.ok) throw new Error("Bulut bağlantı hatası!");
-                
                 let cloudData = await res.json();
+
+                if (!res.ok) throw new Error("Bağlantı Hatası: " + (cloudData.error || "Sunucuya erişilemiyor."));
                 if (!cloudData) throw new Error("Hatalı kullanıcı adı!");
+                if (cloudData.error) throw new Error("Veritabanı Hatası: " + cloudData.error);
+                
                 if (cloudData.profile.password !== p) throw new Error("Hatalı şifre!");
                 
                 // 1. Update Profile Cache
@@ -272,6 +313,7 @@ const app = {
                 this.loginSuccess();
             }
         } catch (err) {
+            console.error("Login Error:", err);
             this.els.loginError.textContent = err.message;
             this.els.loginError.style.display = 'block';
             this.playSound('wrong');
@@ -1115,33 +1157,34 @@ const app = {
 
         // 2. BACKGROUND CLOUD SYNC
         if (this.cloudURL) {
-            let customUsers = JSON.parse(localStorage.getItem('kimyalab_custom_users') || '[]');
-            let prof = customUsers.find(x => x.username.toLowerCase() === this.state.currentUsername.toLowerCase());
+            const cloudIndicator = document.getElementById('cloud-sync-status');
+            if (cloudIndicator) {
+                cloudIndicator.innerHTML = '<i class="fa-solid fa-cloud-arrow-up fa-bounce"></i> Firebase Senkron...';
+                cloudIndicator.style.opacity = '1';
+            }
+
+            // Background sync - ensure currentUsername is stable
+            const key = this.state.currentUsername.toLowerCase();
             
-            if (prof) {
-                // UI feedback (subtle)
-                const cloudIndicator = document.getElementById('cloud-sync-status');
+            fetch(this.cloudURL + "users/" + key + "/data.json", {
+                method: 'PUT',
+                body: JSON.stringify(dataToSave)
+            }).then(async (res) => {
+                if (!res.ok) {
+                    let err = await res.json().catch(() => ({}));
+                    throw new Error(err.error || "Sunucu Hatası");
+                }
                 if (cloudIndicator) {
-                    cloudIndicator.innerHTML = '<i class="fa-solid fa-cloud-arrow-up fa-bounce"></i> Firebase Senkron...';
+                    cloudIndicator.innerHTML = '<i class="fa-solid fa-cloud-check" style="color:var(--success)"></i> Firebase Güncel';
+                    setTimeout(() => cloudIndicator.style.opacity = '0', 2000);
+                }
+            }).catch(e => {
+                console.warn("Firebase sync error:", e);
+                if (cloudIndicator) {
+                    cloudIndicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> ' + e.message;
                     cloudIndicator.style.opacity = '1';
                 }
-
-                // Use PATCH for background sync to avoid overwriting profile
-                fetch(this.cloudURL + "users/" + this.state.currentUsername.toLowerCase() + "/data.json", {
-                    method: 'PUT',
-                    body: JSON.stringify(dataToSave)
-                }).then(() => {
-                    if (cloudIndicator) {
-                        cloudIndicator.innerHTML = '<i class="fa-solid fa-cloud-check" style="color:var(--success)"></i> Firebase Güncel';
-                        setTimeout(() => cloudIndicator.style.opacity = '0', 2000);
-                    }
-                }).catch(e => {
-                    console.warn("Firebase sync ignore", e);
-                    if (cloudIndicator) {
-                        cloudIndicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Firebase Hatası!';
-                    }
-                });
-            }
+            });
         }
     },
 
