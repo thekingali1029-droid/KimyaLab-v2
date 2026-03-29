@@ -423,17 +423,35 @@ const app = {
 
     loginSuccess() {
         const u = this.state.currentUser;
+        const userKey = this.state.currentUsername ? this.state.currentUsername.toLowerCase() : '';
         localStorage.setItem('currentUser', u);
-        localStorage.setItem('currentUsername', this.state.currentUsername);
+        localStorage.setItem('currentUsername', userKey);
         
-        // ADMIN CHECK (STRICT ONLY FOR 'awm')
+        // --- 💎 VIP DETECTION ---
+        const vipList = ['ela', 'eye'];
+        if (vipList.includes(userKey)) {
+            this.state.isVIP = true;
+            this.state.vipTheme = (userKey === 'ela') ? 'pink' : 'blue';
+            this.applyVIPTheme(this.state.vipTheme);
+        } else {
+            this.state.isVIP = false;
+        }
+
+        // --- 🛡️ ADMIN CHECK (awm only) ---
         const adminNav = document.getElementById('nav-item-admin');
-        const isAwm = (this.state.currentUsername && this.state.currentUsername.toLowerCase() === 'awm');
+        const isAwm = (userKey === 'awm');
         if (isAwm) {
-            adminNav.style.display = 'flex';
+            if (adminNav) adminNav.style.display = 'flex';
             this.loadAdminNotifications();
+        } else {
+            if (adminNav) adminNav.style.display = 'none';
         }
         this.state.isAdmin = isAwm;
+
+        // Ensure everything is ready
+        this.updateStats();
+        this.renderBadges();
+        this.renderStats();
 
         const loginScr = document.getElementById('login-screen');
         const dashScr = document.getElementById('dashboard-screen');
