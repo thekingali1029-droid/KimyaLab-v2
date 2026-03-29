@@ -52,6 +52,8 @@ const app = {
                 let data = await res.json().catch(() => ({}));
                 if (data && data.error === "Permission denied") {
                     indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Veritabanı İzni Yok (Firebase Rules!)';
+                } else if (res.status === 404) {
+                    indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Bulut URL Hatası (404): app.js içindeki cloudURL adresi hatalı!';
                 } else {
                     indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Bulut Bağlantı Sorunu (' + res.status + ')';
                 }
