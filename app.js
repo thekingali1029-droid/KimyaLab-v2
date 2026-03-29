@@ -1482,6 +1482,17 @@ const app = {
         } catch (e) { alert("Silinemedi: " + e.message); }
     },
 
+    async adminResetAllHomework() {
+        if (!this.state.isAdmin) return;
+        if (!confirm("TÜM ÖDEVLERİ SİLMEK İSTEDIĞINIZE EMIN MISINIZ? \nBu işlem geri alınamaz ve tüm öğrenciler için ödev listesi temizlenir!")) return;
+        
+        try {
+            await fetch(this.getCloudURL() + "homework.json", { method: 'DELETE' });
+            alert("Tüm ödev havuzu başarıyla temizlendi! 🧹");
+            this.loadHomeworkList();
+        } catch (e) { alert("Sıfırlanamadı: " + e.message); }
+    },
+
     async loadAdminUsers() {
         if (!this.state.isAdmin) return;
         const listContainer = document.getElementById('admin-user-list');

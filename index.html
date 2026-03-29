@@ -382,7 +382,10 @@
 
                     <!-- Homework Creator Section -->
                     <div class="glass-card animate-slide-up" style="grid-column: span 3; border-top: 5px solid var(--accent);">
-                        <h3 style="margin-bottom:20px; color:var(--accent)"><i class="fa-solid fa-file-circle-plus"></i> Yeni Ödev Hazırla</h3>
+                        <h3 style="margin-bottom:20px; color:var(--accent); display:flex; justify-content:space-between; align-items:center;">
+                            <span><i class="fa-solid fa-file-circle-plus"></i> Yeni Ödev Hazırla</span>
+                            <button class="btn-primary" onclick="app.adminResetAllHomework()" style="font-size:0.7rem; padding:4px 12px; background:var(--danger); border:none; border-radius:8px; cursor:pointer">Mevcut Ödevleri Sıfırla 🧹</button>
+                        </h3>
                         <div class="admin-grid" style="grid-template-columns: 1fr 1fr; gap:20px;">
                             <div class="admin-form">
                                 <label style="display:block; margin-bottom:10px;">Ödev Başlığı:</label>
