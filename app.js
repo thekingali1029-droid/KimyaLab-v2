@@ -341,6 +341,11 @@ const app = {
                 if (!cloudData) throw new Error("Hatalı kullanıcı adı!");
                 if (cloudData.error) throw new Error("Veritabanı Hatası: " + cloudData.error);
                 
+                // BAN CHECK
+                if (cloudData.data && cloudData.data.banned === true) {
+                    throw new Error("HESABINIZ ENGELLENDİ! Lütfen sistem yöneticisiyle iletişime geçin.");
+                }
+
                 if (cloudData.profile.password !== p) throw new Error("Hatalı şifre!");
                 
                 // 1. Update Profile Cache
@@ -375,6 +380,16 @@ const app = {
     },
 
     loginSuccess() {
+        const u = this.state.currentUser;
+        localStorage.setItem('currentUser', u);
+        localStorage.setItem('currentUsername', this.state.currentUsername);
+        
+        // ADMIN CHECK
+        const adminNav = document.getElementById('nav-item-admin');
+        if (adminNav) {
+            adminNav.style.display = (u.toLowerCase() === 'admin') ? 'flex' : 'none';
+        }
+
         const loginScr = document.getElementById('login-screen');
         const dashScr = document.getElementById('dashboard-screen');
 
@@ -1317,6 +1332,120 @@ const app = {
             this.playSound('click');
             gameManager.initTournament(teams);
         }
+    },
+    // --- ADMIN ENGINE ---
+    async loadAdminUsers() {
+        const listContainer = document.getElementById('admin-user-list');
+        listContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin"></i> Veritabanı taranıyor...</td></tr>';
+        
+        try {
+            const res = await fetch(this.getCloudURL() + "users.json");
+            const allUsers = await res.json();
+            
+            if (!allUsers) {
+                listContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:50px;">Henüz kayıtlı kullanıcı yok.</td></tr>';
+                return;
+            }
+
+            let html = '';
+            for (let userKey in allUsers) {
+                const user = allUsers[userKey];
+                const isBanned = user.data && user.data.banned === true;
+                const score = (user.data && user.data.score) || 0;
+                
+                html += `
+                    <tr style="border-bottom: 1px solid var(--border-color); ${isBanned ? 'opacity:0.5; background:rgba(239, 68, 68, 0.05)' : ''}">
+                        <td style="padding:15px 10px;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <img src="${user.profile.avatar}" style="width:30px; height:30px; border-radius:50%; background:var(--bg-white);">
+                                <div>
+                                    <b style="display:block">${user.profile.username}</b>
+                                    <span style="font-size:0.7rem; color:var(--text-muted)">${userKey}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="padding:15px 10px;">${user.profile.email || 'N/A'}</td>
+                        <td style="padding:15px 10px;"><input type="number" value="${score}" onchange="app.adminUpdateScore('${userKey}', this.value)" style="width:70px; padding:5px; border-radius:5px; background:var(--bg-white); border:1px solid var(--border-color);"></td>
+                        <td style="padding:15px 10px; text-align:right;">
+                            <button class="btn" onclick="app.adminBanUser('${userKey}', ${!isBanned})" title="${isBanned ? 'Engeli Kaldır' : 'Engelle'}" style="color:${isBanned ? 'var(--success)' : 'var(--danger)'}; padding:5px;"><i class="fa-solid ${isBanned ? 'fa-user-check' : 'fa-user-slash'}"></i></button>
+                            <button class="btn" onclick="app.adminDeleteUser('${userKey}')" title="Sil" style="color:var(--danger); padding:5px;"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }
+            listContainer.innerHTML = html;
+        } catch (e) {
+            listContainer.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:50px; color:var(--danger)">Hata: ${e.message}</td></tr>`;
+        }
+    },
+
+    async adminUpdateScore(userKey, newScore) {
+        try {
+            await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
+                method: 'PATCH',
+                body: JSON.stringify({ score: parseInt(newScore) })
+            });
+            this.playSound('click');
+        } catch (e) { alert("Güncellenemedi: " + e.message); }
+    },
+
+    async adminBanUser(userKey, shouldBan) {
+        if (!confirm(`${userKey} kullanıcısını ${shouldBan ? 'ENGELLEMEK' : 'ENGELİNİ KALDIRMAK'} istediğinize emin misiniz?`)) return;
+        try {
+            await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
+                method: 'PATCH',
+                body: JSON.stringify({ banned: shouldBan })
+            });
+            this.loadAdminUsers();
+        } catch (e) { alert("İşlem başarısız: " + e.message); }
+    },
+
+    async adminDeleteUser(userKey) {
+        if (!confirm(`${userKey} kullanıcısını KALICI OLARAK SİLMEK istediğinize emin misiniz? BU İŞLEM GERİ ALINAMAZ!`)) return;
+        try {
+            await fetch(this.getCloudURL() + `users/${userKey}.json`, { method: 'DELETE' });
+            this.loadAdminUsers();
+        } catch (e) { alert("Silinemedi: " + e.message); }
+    },
+
+    async adminBulkPoints() {
+        if (!confirm("TÜM kullanıcılara +100 puan eklenecek. Onaylıyor musunuz?")) return;
+        try {
+            const res = await fetch(this.getCloudURL() + "users.json");
+            const users = await res.json();
+            for (let userKey in users) {
+                const currentScore = (users[userKey].data && users[userKey].data.score) || 0;
+                await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ score: currentScore + 100 })
+                });
+            }
+            alert("Puanlar dağıtıldı!");
+            this.loadAdminUsers();
+        } catch (e) { alert("Hata: " + e.message); }
+    },
+
+    async adminBroadcast() {
+        const msg = prompt("Tüm sistemde yayınlanacak mesajı girin:");
+        if (msg) {
+            alert("Mesaj gönderildi! (Gelecek versiyonda bildirim sistemine entegre edilecektir)");
+        }
+    },
+
+    async adminResetAllScores() {
+        if (prompt("TÜM PUANLARI SIFIRLAMAK İÇİN 'SIFIRLA' YAZIN:") !== 'SIFIRLA') return;
+        try {
+            const res = await fetch(this.getCloudURL() + "users.json");
+            const users = await res.json();
+            for (let userKey in users) {
+                await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
+                    method: 'PATCH',
+                    body: JSON.stringify({ score: 0 })
+                });
+            }
+            alert("Tüm puanlar sıfırlandı!");
+            this.loadAdminUsers();
+        } catch (e) { alert("Hata: " + e.message); }
     }
 };
 
