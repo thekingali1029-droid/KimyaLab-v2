@@ -348,7 +348,10 @@
 
             <!-- PAGE 7: BADGES -->
             <div id="page-badges" class="spa-page hidden">
-                <h2 style="margin-bottom:2rem">Bilim Rozetlerim 🏅</h2>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem">
+                    <h2>Bilim Rozetlerim 🏅</h2>
+                    <button class="btn-primary" onclick="app.resetMyBadges()" style="background:var(--danger); border:none; padding:8px 16px; border-radius:10px; font-size:0.8rem; cursor:pointer">Rozetleri Sıfırla 🧹</button>
+                </div>
                 <div id="rozet-grid" class="rozet-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:20px;">
                     <!-- Badge cards injected here -->
                 </div>

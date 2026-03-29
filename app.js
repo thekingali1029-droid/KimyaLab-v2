@@ -625,6 +625,27 @@ const app = {
         }).join('');
     },
 
+    resetMyBadges() {
+        if (!confirm("Tüm kazandığın rozetleri sıfırlamak istediğine emin misin? \nBu işlem geri alınamaz!")) return;
+        
+        this.state.badges = [];
+        localStorage.setItem('badges', JSON.stringify([]));
+        
+        // Update local user cache
+        const userKey = `kimyalab_user_${this.state.currentUsername.toLowerCase()}`;
+        const stored = JSON.parse(localStorage.getItem(userKey) || '{}');
+        stored.badges = [];
+        localStorage.setItem(userKey, JSON.stringify(stored));
+
+        // Background sync
+        this.saveUserData();
+        
+        // UI Update
+        this.renderBadges();
+        this.playSound('click');
+        alert("Rozetlerin başarıyla sıfırlandı. Başarılar dileriz! 🧪");
+    },
+
     updateStats() {
         if (this.els.displayScore) this.els.displayScore.textContent = this.state.score;
 
