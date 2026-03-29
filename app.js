@@ -21,7 +21,7 @@ const app = {
     },
 
     // Firebase Realtime Database REST API (Global & Ultra-reliable)
-    cloudURL: 'https://kimyalab-v2-default-rtdb.europe-west1.firebasedatabase.app/',
+    cloudURL: 'https://kimyalab-860f2-default-rtdb.firebaseio.com/',
 
     els: {},
 
@@ -57,7 +57,9 @@ const app = {
                     'https://kimyalab-v2.firebaseio.com/',
                     'https://ultimate-kimyalab-v2.firebaseio.com/',
                     'https://kimya-lab-v2.firebaseio.com/',
-                    'https://kimyalab-v2-dev.firebaseio.com/'
+                    'https://yesilvadi-kimyalab.firebaseio.com/',
+                    'https://yesilvadit-kimyalab.firebaseio.com/',
+                    'https://val-kimyalab.firebaseio.com/'
                 ];
 
                 for (let cand of candidates) {
@@ -96,11 +98,14 @@ const app = {
 
     repairCloudURL() {
         const current = localStorage.getItem('kimyalab_custom_cloud_url') || this.cloudURL;
-        const newURL = prompt("Firebase Realtime Database URL'sini girin (https://... ile başlar):", current);
+        const helpText = "Firebase Realtime Database URL'nizi girin.\n\n" + 
+                        "Örnek: https://proje-id.firebaseio.com/\n\n" + 
+                        "Bunu Firebase Console -> Realtime Database sayfasının en üstünde bulabilirsiniz.";
+        const newURL = prompt(helpText, current);
         if (newURL && newURL.startsWith('http')) {
             const formatted = newURL.endsWith('/') ? newURL : newURL + '/';
             localStorage.setItem('kimyalab_custom_cloud_url', formatted);
-            alert("Yeni URL kaydedildi! Sayfa yenileniyor...");
+            alert("URL kaydedildi! Yükleniyor...");
             location.reload();
         }
     },
