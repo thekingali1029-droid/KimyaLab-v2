@@ -44,7 +44,7 @@ const app = {
 
         try {
             // Fetch a small, public-friendly .json to test rules
-            let res = await fetch(this.cloudURL + ".json?shallow=true");
+            let res = await fetch(this.getCloudURL() + ".json?shallow=true");
             if (res.ok) {
                 indicator.innerHTML = '<i class="fa-solid fa-cloud-check" style="color:var(--success)"></i> Bulut Servisi Aktif ✅';
                 indicator.style.color = 'var(--success)';
@@ -53,16 +53,31 @@ const app = {
                 if (data && data.error === "Permission denied") {
                     indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Veritabanı İzni Yok (Firebase Rules!)';
                 } else if (res.status === 404) {
-                    indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Bulut URL Hatası (404): app.js içindeki cloudURL adresi hatalı!';
+                    indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Bulut URL Hatası (404): <a href="#" onclick="app.repairCloudURL(); return false;" style="color:var(--primary); text-decoration:underline; font-weight:800">Düzeltmek için Tıkla</a>';
                 } else {
                     indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Bulut Bağlantı Sorunu (' + res.status + ')';
                 }
                 indicator.style.color = 'var(--danger)';
             }
         } catch (e) {
-            indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> İnternet/Bulut Hatası!';
+            indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> İnternet/Bulut Hatası! <a href="#" onclick="app.repairCloudURL(); return false;" style="color:var(--primary); text-decoration:underline;">Yenile/Fix</a>';
             indicator.style.color = 'var(--danger)';
         }
+    },
+
+    repairCloudURL() {
+        const current = localStorage.getItem('kimyalab_custom_cloud_url') || this.cloudURL;
+        const newURL = prompt("Firebase Realtime Database URL'sini girin (https://... ile başlar):", current);
+        if (newURL && newURL.startsWith('http')) {
+            const formatted = newURL.endsWith('/') ? newURL : newURL + '/';
+            localStorage.setItem('kimyalab_custom_cloud_url', formatted);
+            alert("Yeni URL kaydedildi! Sayfa yenileniyor...");
+            location.reload();
+        }
+    },
+
+    getCloudURL() {
+        return localStorage.getItem('kimyalab_custom_cloud_url') || this.cloudURL;
     },
 
 
@@ -224,7 +239,7 @@ const app = {
                 if (!p) throw new Error("Şifre boş olamaz!");
                 if (!e) throw new Error("E-posta boş olamaz!");
                 
-                let checkRes = await fetch(this.cloudURL + "users/" + userKey + ".json");
+                let checkRes = await fetch(this.getCloudURL() + "users/" + userKey + ".json");
                 let existing = await checkRes.json();
                 
                 if (existing) {
@@ -240,7 +255,7 @@ const app = {
                 const saveData = { score: 0, totalGames: 0, maxCombo: 0, badges: [] };
 
                 // Firebase PUT creates the user object
-                let putRes = await fetch(this.cloudURL + "users/" + userKey + ".json", {
+                let putRes = await fetch(this.getCloudURL() + "users/" + userKey + ".json", {
                     method: 'PUT', body: JSON.stringify({ profile: newUser, data: saveData })
                 });
                 
@@ -261,7 +276,7 @@ const app = {
             } else if (this.state.loginMode === 'forgot') {
                 if (!p || !e) throw new Error("Lütfen e-posta ve yeni şifrenizi girin!");
                 
-                let res = await fetch(this.cloudURL + "users/" + userKey + ".json");
+                let res = await fetch(this.getCloudURL() + "users/" + userKey + ".json");
                 let cloudData = await res.json();
                 
                 if (!cloudData) throw new Error("Böyle bir bulut hesabı bulunamadı!");
@@ -270,7 +285,7 @@ const app = {
                 if (cloudData.profile.email !== e.toLowerCase()) throw new Error("E-posta adresiniz uyuşmuyor!");
                 
                 // Update only password
-                let updateRes = await fetch(this.cloudURL + "users/" + userKey + "/profile/password.json", {
+                let updateRes = await fetch(this.getCloudURL() + "users/" + userKey + "/profile/password.json", {
                     method: 'PUT', body: JSON.stringify(p)
                 });
                 
@@ -285,7 +300,7 @@ const app = {
 
             } else {
                 // NORMAL LOGIN
-                let res = await fetch(this.cloudURL + "users/" + userKey + ".json");
+                let res = await fetch(this.getCloudURL() + "users/" + userKey + ".json");
                 let cloudData = await res.json();
 
                 if (!res.ok) throw new Error("Bağlantı Hatası: " + (cloudData.error || "Sunucuya erişilemiyor."));
@@ -1158,7 +1173,7 @@ const app = {
         localStorage.setItem(userSaveKey, JSON.stringify(dataToSave));
 
         // 2. BACKGROUND CLOUD SYNC
-        if (this.cloudURL) {
+        if (this.getCloudURL()) {
             const cloudIndicator = document.getElementById('cloud-sync-status');
             if (cloudIndicator) {
                 cloudIndicator.innerHTML = '<i class="fa-solid fa-cloud-arrow-up fa-bounce"></i> Firebase Senkron...';
@@ -1168,7 +1183,7 @@ const app = {
             // Background sync - ensure currentUsername is stable
             const key = this.state.currentUsername.toLowerCase();
             
-            fetch(this.cloudURL + "users/" + key + "/data.json", {
+            fetch(this.getCloudURL() + "users/" + key + "/data.json", {
                 method: 'PUT',
                 body: JSON.stringify(dataToSave)
             }).then(async (res) => {
