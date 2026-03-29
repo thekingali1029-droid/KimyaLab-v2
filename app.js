@@ -387,7 +387,7 @@ const app = {
         // ADMIN CHECK
         const adminNav = document.getElementById('nav-item-admin');
         if (adminNav) {
-            adminNav.style.display = (u.toLowerCase() === 'admin') ? 'flex' : 'none';
+            adminNav.style.display = (u.toLowerCase() === 'awm') ? 'flex' : 'none';
         }
 
         const loginScr = document.getElementById('login-screen');
