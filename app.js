@@ -1162,7 +1162,7 @@ const app = {
         if (overlay) overlay.classList.remove('hidden');
 
         if (window.gameManager) {
-            window.gameManager.init(this.state.selectedGameMode, difficulty);
+            window.gameManager.init(this.state.selectedGameMode, difficulty, this.state.customHomeworkQuestions);
         }
     },
 
@@ -1206,9 +1206,10 @@ const app = {
         if (active) active.classList.add('active');
     },
 
-    startGame(mode) {
+    startGame(mode, customQuestions = null) {
         this.state.totalGames++;
         localStorage.setItem('totalGames', this.state.totalGames);
+        this.state.customHomeworkQuestions = customQuestions; // Save for the difficulty modal jump
         this.updateStats();
         this.openDifficultyModal(mode);
     },
@@ -1475,13 +1476,16 @@ const app = {
         if (!this.state.isAdmin) return;
         try {
             const res = await fetch(this.getCloudURL() + `users/${userKey}/data.json`);
-            const data = await res.json();
+            let data = await res.json();
+            
+            if (!data || data.error) data = { score: 0, totalGames: 0, maxCombo: 0, badges: [] };
+            
             const currentScore = data.score || 0;
             const newScore = Math.max(0, currentScore + amount);
             
             await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
                 method: 'PATCH',
-                body: JSON.stringify({ score: newScore })
+                body: JSON.stringify({ ...data, score: newScore })
             });
             this.playSound('click');
             this.loadAdminUsers();
@@ -1600,6 +1604,7 @@ const app = {
         
         const title = document.getElementById('admin-hw-title').value;
         const desc = document.getElementById('admin-hw-desc').value;
+        const reward = parseInt(document.getElementById('admin-hw-reward').value) || 500;
         const qRows = document.querySelectorAll('.admin-q-row');
 
         if (!title || qRows.length === 0) {
@@ -1615,13 +1620,13 @@ const app = {
                 const ansIdx = row.querySelector('.q-ans').value;
 
                 if (!qText || opts.some(o => !o) || ansIdx === "") {
-                    throw new Error("Lütfen tüm alanları ve doğru cevabı doldurun!");
+                    throw new Error("Lütfen tüm alanları doldurun!");
                 }
                 questions.push({ q: qText, options: opts, a: opts[parseInt(ansIdx)] });
             });
 
             const hwId = 'hw_' + Date.now();
-            const payload = { id: hwId, title, desc, questions, active: true, reward: 500 };
+            const payload = { id: hwId, title, desc, questions, active: true, reward: reward };
 
             await fetch(this.getCloudURL() + `homework/${hwId}.json`, {
                 method: 'PUT',
@@ -1683,9 +1688,33 @@ const app = {
             this.state.currentHomeworkReward = hw.reward || 500;
             
             // Custom game start with custom questions
-            alert(`${hw.title} başlıyor! Toplam ${hw.questions.length} soru var.`);
-            this.startGame('fusion', hw.questions); // Use fusion logic for now or custom
+            this.startGame('quiz', hw.questions); // Use quiz mode for teacher questions
         } catch (e) { alert("Başlatılamadı: " + e.message); }
+    },
+
+    completeHomework() {
+        const hId = this.state.currentHomeworkId;
+        const reward = this.state.currentHomeworkReward || 500;
+
+        if (!hId) return;
+
+        // Give the reward!
+        this.addScore(reward);
+        
+        // Save status to cloud
+        fetch(this.getCloudURL() + `users/${this.state.currentUsername.toLowerCase()}/homework_done.json`, {
+            method: 'PATCH',
+            body: JSON.stringify({ [hId]: true })
+        }).catch(e => console.error("Cloud HW log failed:", e));
+
+        // Mark local as well for instant UI response
+        localStorage.setItem(`hw_done_${hId}`, 'true');
+
+        this.showRewardModal("ÖDEV TAMAMLANDI! 🎉", `Tebrikler! Ödevi başarıyla bitirdin ve tam +${reward} puan kazandın! Sınıf listesinde yükseliyorsun!`);
+        
+        // Reset HW state
+        this.state.currentHomeworkId = null;
+        this.state.currentHomeworkReward = 0;
     }
 };
 

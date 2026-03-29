@@ -17,11 +17,13 @@ window.gameManager = {
     isRetryMode: false,
     quizIdx: 0,
     shuffledQuiz: [],
+    customQuestions: null,
 
-    init(mode, difficulty = 'normal') {
+    init(mode, difficulty = 'normal', customQuestions = null) {
         console.log(`Oyun Başlatıldı: ${mode} (${difficulty})`);
         this.currentMode = mode;
         this.difficulty = difficulty;
+        this.customQuestions = customQuestions;
         this.score = 0;
         this.combo = 0;
         this.lives = 5;
@@ -223,7 +225,7 @@ window.gameManager = {
     },
 
     nextFusion() {
-        let pool = this.isRetryMode ? this.wrongQuestions : this.currentPool;
+        let pool = this.customQuestions || (this.isRetryMode ? this.wrongQuestions : this.currentPool);
         if (!pool || pool.length === 0) pool = this.currentPool;
 
         const item = utils.getRandomItem(pool);
@@ -281,7 +283,7 @@ window.gameManager = {
     },
 
     nextFill() {
-        let pool = this.isRetryMode ? this.wrongQuestions : this.currentPool;
+        let pool = this.customQuestions || (this.isRetryMode ? this.wrongQuestions : this.currentPool);
         if (!pool || pool.length === 0) pool = this.currentPool;
 
         const item = utils.getRandomItem(pool);
@@ -422,9 +424,12 @@ window.gameManager = {
     renderQuiz() {
         const wrap = document.getElementById('quiz-wrap');
         if (!wrap) return;
-        const pool = this.isRetryMode ? this.wrongQuestions : this.shuffledQuiz;
+        const pool = this.customQuestions || (this.isRetryMode ? this.wrongQuestions : this.shuffledQuiz);
 
         if (this.quizIdx >= pool.length) {
+            if (this.customQuestions && !this.isRetryMode) {
+                return this.endGame("Ödev Tamamlandı! ✨");
+            }
             return this.endGame(this.isRetryMode ? "Tekrar Bitti! ✨" : "Test Bitti!");
         }
 
@@ -728,6 +733,11 @@ window.gameManager = {
             
             window.app.updateStats();
             window.app.saveUserData();
+
+            // Homework Completion logic
+            if (window.app.state.currentHomeworkId && msg.includes("Tamamlandı")) {
+                window.app.completeHomework();
+            }
         }
 
         con.innerHTML = `

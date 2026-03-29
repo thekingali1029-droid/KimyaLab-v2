@@ -366,8 +366,10 @@
                             <div class="admin-form">
                                 <label style="display:block; margin-bottom:10px;">Ödev Başlığı:</label>
                                 <input type="text" id="admin-hw-title" class="btn-back" style="width:100%; margin-bottom:15px;" placeholder="Örn: Atomun Yapısı Sınavı">
-                                <label style="display:block; margin-bottom:10px;">Açıklama (Ödül vb.):</label>
-                                <textarea id="admin-hw-desc" class="btn-back" style="width:100%; height:80px; margin-bottom:15px;" placeholder="Bu ödevi çözenler +500 puan alır!"></textarea>
+                                <label style="display:block; margin-bottom:10px;">Açıklama / Mesaj:</label>
+                                <textarea id="admin-hw-desc" class="btn-back" style="width:100%; height:80px; margin-bottom:15px;" placeholder="Bu ödevi çözenler +X puan alır!"></textarea>
+                                <label style="display:block; margin-bottom:10px;">Bitirme Ödülü (Puan):</label>
+                                <input type="number" id="admin-hw-reward" class="btn-back" style="width:100%; margin-bottom:15px;" value="500">
                                 <button class="btn-primary" onclick="app.adminSaveHomework()">Ödevi Yayınla 🚀</button>
                             </div>
                             <div class="admin-questions-area">
