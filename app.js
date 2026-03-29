@@ -549,6 +549,41 @@ const app = {
         } else if (pgBar) {
             pgBar.style.width = '100%';
         }
+        
+        // Render history log
+        this.renderActivityHistory();
+    },
+
+    async renderActivityHistory() {
+        const logContainer = document.getElementById('student-activity-log');
+        if (!logContainer) return;
+        
+        try {
+            const userKey = this.state.currentUsername.toLowerCase();
+            const res = await fetch(this.getCloudURL() + `users/${userKey}/history.json`);
+            const history = await res.json();
+            
+            if (!history) {
+                logContainer.innerHTML = '<p style="text-align:center; opacity:0.5; padding:30px;">Henüz bir geçmiş kaydı bulunmuyor...</p>';
+                return;
+            }
+
+            const entries = Object.entries(history).reverse();
+            logContainer.innerHTML = entries.map(([id, h]) => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:rgba(255,255,255,0.02); border-radius:12px; border:1px solid var(--border-color);">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <i class="fa-solid fa-certificate" style="color:var(--success); font-size:1.2rem;"></i>
+                        <div>
+                            <b style="display:block; font-size:1rem;">${h.title}</b>
+                            <span style="font-size:0.75rem; color:var(--text-muted);">${new Date(h.time).toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <b style="color:var(--primary); font-size:1.1rem;">+${h.score} P</b>
+                </div>
+            `).join('');
+        } catch (e) {
+            logContainer.innerHTML = '<p style="text-align:center; opacity:0.5; padding:20px;">Geçmiş yüklenemedi.</p>';
+        }
     },
 
     renderBadges() {
@@ -1732,6 +1767,7 @@ const app = {
     completeHomework() {
         const hId = this.state.currentHomeworkId;
         const reward = this.state.currentHomeworkReward || 500;
+        const hwTitle = "Ödev Başarısı"; // Dynamic title search? Let's keep it simple
 
         if (!hId) return;
 
@@ -1743,6 +1779,17 @@ const app = {
             method: 'PATCH',
             body: JSON.stringify({ [hId]: true })
         }).catch(e => console.error("Cloud HW log failed:", e));
+
+        // --- NEW: Add to History ---
+        const historyLog = {
+            title: "Tamamlanan Ödev: " + hId,
+            score: reward,
+            time: Date.now()
+        };
+        fetch(this.getCloudURL() + `users/${this.state.currentUsername.toLowerCase()}/history.json`, {
+            method: 'POST',
+            body: JSON.stringify(historyLog)
+        }).catch(e => console.error("History log failed:", e));
 
         // --- NEW: NOTIFY ADMIN ---
         const notif = {
