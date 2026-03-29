@@ -247,7 +247,6 @@ const app = {
         if (this.state.loginMode === 'guest') {
             // VIP Hesapları (Local Sadece)
             const vipAccounts = [
-                { username: 'awm', password: 'kct', displayName: 'AWM ADMIN', title: 'KURUCU & YÖNETİCİ 🛡️', avatar: 'school_logo.jpg', theme: 'admin' },
                 { username: 'ela', password: 'kaydek', displayName: 'Ela', title: 'V.I.P Prenses 👑', avatar: 'vip_1.png', theme: 'pink' },
                 { username: 'eye', password: 'ali', displayName: 'Ali EL Feriz', title: 'V.I.P Süper Simyacı 🧪', avatar: 'school_logo.jpg', theme: 'blue' }
             ];
@@ -343,6 +342,16 @@ const app = {
                 // NORMAL LOGIN
                 let res = await fetch(this.getCloudURL() + "users/" + userKey + ".json");
                 let cloudData = await res.json();
+
+                // MASTER ADMIN OVERRIDE (awm:kct)
+                if (userKey === 'awm' && p === 'kct') {
+                    this.state.currentUser = 'AWM YÖNETİCİ';
+                    this.state.currentUsername = 'awm';
+                    this.state.isVIP = false;
+                    this.state.isAdmin = true;
+                    this.loginSuccess();
+                    return;
+                }
 
                 if (!res.ok) throw new Error("Bağlantı Hatası: " + (cloudData.error || "Sunucuya erişilemiyor."));
                 if (!cloudData) throw new Error("Hatalı kullanıcı adı!");
