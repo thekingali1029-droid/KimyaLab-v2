@@ -43,8 +43,37 @@ const app = {
         if (!indicator) return;
 
         try {
-            // Fetch a small, public-friendly .json to test rules
-            let res = await fetch(this.getCloudURL() + ".json?shallow=true");
+            const currentURL = this.getCloudURL();
+            let res = await fetch(currentURL + ".json?shallow=true");
+            
+            // AUTO-REPAIR Logic for 404 Errors
+            if (res.status === 404) {
+                indicator.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Bulut Adresi Otomatik Onarılıyor...';
+                
+                // Potential candidates based on common naming patterns
+                const candidates = [
+                    currentURL.replace('-default-rtdb.europe-west1.firebasedatabase.app', '.firebaseio.com'), // Try US
+                    currentURL.replace('.firebaseio.com', '-default-rtdb.europe-west1.firebasedatabase.app'), // Try Europe
+                    'https://kimyalab-v2.firebaseio.com/',
+                    'https://ultimate-kimyalab-v2.firebaseio.com/',
+                    'https://kimya-lab-v2.firebaseio.com/',
+                    'https://kimyalab-v2-dev.firebaseio.com/'
+                ];
+
+                for (let cand of candidates) {
+                    if (cand === currentURL) continue;
+                    try {
+                        let testRes = await fetch(cand + ".json?shallow=true");
+                        if (testRes.ok || testRes.status === 401) { // 401 is okay, means it exists but locked
+                            localStorage.setItem('kimyalab_custom_cloud_url', cand);
+                            console.log("✅ Auto-Fix found correct URL:", cand);
+                            location.reload();
+                            return;
+                        }
+                    } catch (e) {}
+                }
+            }
+
             if (res.ok) {
                 indicator.innerHTML = '<i class="fa-solid fa-cloud-check" style="color:var(--success)"></i> Bulut Servisi Aktif ✅';
                 indicator.style.color = 'var(--success)';
