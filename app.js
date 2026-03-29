@@ -1520,77 +1520,66 @@ const app = {
         listContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin"></i> Veritabanı taranıyor...</td></tr>';
         
         try {
-            // 1. Get VIP List (Hardcoded IDs)
             const vips = ['ela', 'eye'];
-            
-            // 2. Fetch Cloud Users
             const res = await fetch(this.getCloudURL() + "users.json");
             const allUsers = await res.json() || {};
-            
             let html = '';
 
-            // Combine and Render
             const renderRow = (userKey, userData) => {
                 const isVip = vips.includes(userKey.toLowerCase());
                 const isBanned = userData.data && userData.data.banned === true;
                 const score = (userData.data && userData.data.score) || 0;
                 const avatar = (userData.profile && userData.profile.avatar) || 'school_logo.jpg';
                 const name = (userData.profile && userData.profile.username) || userKey;
+                const email = (userData.profile && userData.profile.email) || 'Bulut Yok';
 
                 return `
-                    <tr style="border-bottom: 1px solid var(--border-color); ${isBanned ? 'opacity:0.5; background:rgba(239, 68, 68, 0.05)' : ''}">
-                        <td style="padding:15px 10px;">
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <img src="${avatar}" style="width:30px; height:30px; border-radius:50%; background:var(--bg-white);">
+                    <tr style="${isBanned ? 'opacity:0.5; background:rgba(239,68,68,0.05)' : ''}">
+                        <td>
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <img src="${avatar}" style="width:40px; height:40px; border-radius:12px; background:var(--bg-white); border:2px solid ${isVip ? 'var(--accent)' : 'var(--primary)'}">
                                 <div>
-                                    <b style="display:flex; align-items:center; gap:5px;">
-                                        ${name} ${isVip ? '<span style="color:var(--accent); font-size:0.6rem; background:rgba(251,192,45,0.1); padding:2px 6px; border-radius:4px;">💎 VIP</span>' : ''}
-                                    </b>
-                                    <span style="font-size:0.7rem; color:var(--text-muted)">${userKey}</span>
+                                    <b style="display:block; font-size:1rem;">${name}</b>
+                                    <span style="font-size:0.7rem; color:var(--text-muted)">ID: ${userKey} ${isVip ? '<b style="color:var(--accent)">💎 VIP</b>' : ''}</span>
                                 </div>
                             </div>
                         </td>
-                        <td style="padding:15px 10px;">${(userData.profile && userData.profile.email) || 'V.I.P / Bulut Yok'}</td>
-                        <td style="padding:15px 10px;">
-                            <div style="display:flex; align-items:center; gap:5px;">
-                                <button class="btn-back" onclick="app.adminAdjustScore('${userKey}', -100)" style="padding:2px 8px; font-size:0.7rem;">-100</button>
-                                <b style="min-width:40px; text-align:center">${score}</b>
-                                <button class="btn-back" onclick="app.adminAdjustScore('${userKey}', 100)" style="padding:2px 8px; font-size:0.7rem; color:var(--success)">+100</button>
-                            </div>
+                        <td>
+                            <div style="font-size:0.8rem; color:var(--text-white); font-weight:600">${email}</div>
+                            <div style="font-size:1rem; color:var(--primary); font-weight:900; margin-top:3px;"><i class="fa-solid fa-star"></i> ${score} Puan</div>
                         </td>
-                        <td style="padding:15px 10px; text-align:right;">
-                            <button class="btn" onclick="app.adminWarnUser('${userKey}')" title="Uyarı Gönder" style="color:var(--accent); padding:5px;"><i class="fa-solid fa-comment-dots"></i></button>
-                            <button class="btn" onclick="app.adminBanUser('${userKey}', ${!isBanned})" title="${isBanned ? 'Engeli Kaldır' : 'Engelle'}" style="color:${isBanned ? 'var(--success)' : 'var(--danger)'}; padding:5px;"><i class="fa-solid ${isBanned ? 'fa-user-check' : 'fa-user-slash'}"></i></button>
-                            <button class="btn" onclick="app.adminDeleteUser('${userKey}')" title="Sil" style="color:var(--danger); padding:5px;"><i class="fa-solid fa-trash-can"></i></button>
+                        <td>
+                            <div style="display:flex; gap:6px; justify-content:flex-end;">
+                                <button class="admin-action-btn btn-success" onclick="app.adminAwardBadge('${userKey}')" title="Rozet Ver"><i class="fa-solid fa-medal"></i></button>
+                                <button class="admin-action-btn" onclick="app.adminAdjustScore('${userKey}', 100)" title="+100 Puan"><i class="fa-solid fa-plus"></i></button>
+                                <button class="admin-action-btn" onclick="app.adminAdjustScore('${userKey}', -100)" title="-100 Puan"><i class="fa-solid fa-minus"></i></button>
+                                <button class="admin-action-btn btn-warning" onclick="app.adminWarnUser('${userKey}')" title="Uyar"><i class="fa-solid fa-triangle-exclamation"></i></button>
+                                <button class="admin-action-btn" onclick="app.adminBanUser('${userKey}', ${!isBanned})" title="${isBanned ? 'Engeli Kaldır' : 'Engelle'}"><i class="fa-solid ${isBanned ? 'fa-user-check' : 'fa-user-slash'}"></i></button>
+                                <button class="admin-action-btn btn-danger" onclick="app.adminDeleteUser('${userKey}')" title="Sil"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
                         </td>
                     </tr>
                 `;
             };
 
-            // Render VIPs First
+            const userCount = Object.keys(allUsers).length;
+            const resHw = await fetch(this.getCloudURL() + "homework.json");
+            const hwData = await resHw.json() || {};
+            const activeHw = Object.keys(hwData).length;
+
+            if (document.getElementById('admin-stat-total-users')) document.getElementById('admin-stat-total-users').textContent = userCount;
+            if (document.getElementById('admin-stat-active-hw')) document.getElementById('admin-stat-active-hw').textContent = activeHw;
+
             for (let v of vips) {
-                if (allUsers[v]) {
-                    html += renderRow(v, allUsers[v]);
-                } else {
-                    // Show placeholders for VIPs not in cloud yet
-                    html += renderRow(v, { profile: { username: v, avatar:'vip_1.png' }, data: { score: 0 } });
-                }
+                if (allUsers[v]) html += renderRow(v, allUsers[v]);
+                else html += renderRow(v, { profile: { username: v, avatar:'vip_1.png' }, data: { score: 0 } });
             }
-
-            // Render Others
-            for (let userKey in allUsers) {
-                if (!vips.includes(userKey.toLowerCase())) {
-                    html += renderRow(userKey, allUsers[userKey]);
-                }
+            for (let k in allUsers) {
+                if (!vips.includes(k.toLowerCase())) html += renderRow(k, allUsers[k]);
             }
-
-            if (html === '') {
-                listContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:50px;">Kullanıcı bulunamadı.</td></tr>';
-            } else {
-                listContainer.innerHTML = html;
-            }
+            listContainer.innerHTML = html || '<tr><td colspan="3" style="text-align:center; padding:30px;">Kullanıcı yok.</td></tr>';
         } catch (e) {
-            listContainer.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:50px; color:var(--danger)">Hata: ${e.message}</td></tr>`;
+            listContainer.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:50px; color:var(--danger)">Erişim Hatası: ${e.message}</td></tr>`;
         }
     },
 
@@ -1684,6 +1673,96 @@ const app = {
             alert("Tüm puanlar sıfırlandı!");
             this.loadAdminUsers();
         } catch (e) { alert("Hata: " + e.message); }
+    },
+
+    async adminAwardBadge(userKey) {
+        if (!this.state.isAdmin) return;
+        const badges = KIMYALAB_DATA.badges;
+        const bList = badges.map((b, i) => `${i + 1}. ${b.name}`).join('\n');
+        const choice = prompt(`Hangi rozeti ${userKey.toUpperCase()} kullanıcısına vermek istiyorsunuz? (Sayı girin):\n\n${bList}`);
+        
+        if (!choice) return;
+        const idx = parseInt(choice) - 1;
+        if (idx < 0 || idx >= badges.length) return alert("Geçersiz seçim!");
+
+        const badgeId = badges[idx].id;
+        try {
+            const res = await fetch(this.getCloudURL() + `users/${userKey}/data.json`);
+            let data = await res.json();
+            if (!data || data.error) data = { score: 0, totalGames: 0, maxCombo: 0, badges: [] };
+            const currentBadges = data.badges || [];
+            if (currentBadges.includes(badgeId)) return alert("Bu öğrenci zaten bu rozete sahip!");
+            currentBadges.push(badgeId);
+            await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
+                method: 'PATCH',
+                body: JSON.stringify({ ...data, badges: currentBadges })
+            });
+            this.playSound('levelup');
+            alert(`Tebrikler! ${userKey.toUpperCase()} kullanıcısına '${badges[idx].name}' rozeti başarıyla verildi! 🏅`);
+            this.loadAdminUsers();
+        } catch (e) { alert("Hata: " + e.message); }
+    },
+
+    async resetG11Success() {
+        if (!confirm("Tüm 11. Sınıf konu başarılarını sıfırlamak istediğine emin misin?")) return;
+        localStorage.removeItem('g11_scores');
+        
+        // Sync to cloud if possible
+        if (this.state.currentUsername) {
+            const userKey = this.state.currentUsername.toLowerCase();
+            await fetch(this.getCloudURL() + `users/${userKey}/profile/g11_scores.json`, {
+                method: 'DELETE'
+            }).catch(e => console.error(e));
+        }
+        
+        this.renderGrade11();
+        this.playSound('click');
+        alert("Konu başarıları sıfırlandı! Yeni bir başlangıç zamanı. ✨");
+    },
+
+    async adminAwardBadge(userKey) {
+        if (!this.state.isAdmin) return;
+        const badges = KIMYALAB_DATA.badges;
+        const bList = badges.map((b, i) => `${i + 1}. ${b.name}`).join('\n');
+        const choice = prompt(`Hangi rozeti ${userKey.toUpperCase()} kullanıcısına vermek istiyorsunuz? (Sayı girin):\n\n${bList}`);
+        
+        if (!choice) return;
+        const idx = parseInt(choice) - 1;
+        if (idx < 0 || idx >= badges.length) return alert("Geçersiz seçim!");
+
+        const badgeId = badges[idx].id;
+        try {
+            const res = await fetch(this.getCloudURL() + `users/${userKey}/data.json`);
+            let data = await res.json();
+            if (!data || data.error) data = { score: 0, totalGames: 0, maxCombo: 0, badges: [] };
+            const currentBadges = data.badges || [];
+            if (currentBadges.includes(badgeId)) return alert("Bu öğrenci zaten bu rozete sahip!");
+            currentBadges.push(badgeId);
+            await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
+                method: 'PATCH',
+                body: JSON.stringify({ ...data, badges: currentBadges })
+            });
+            this.playSound('levelup');
+            alert(`Tebrikler! ${userKey.toUpperCase()} kullanıcısına '${badges[idx].name}' rozeti başarıyla verildi! 🏅`);
+            this.loadAdminUsers();
+        } catch (e) { alert("Hata: " + e.message); }
+    },
+
+    async resetG11Success() {
+        if (!confirm("Tüm 11. Sınıf konu başarılarını sıfırlamak istediğine emin misin?")) return;
+        localStorage.removeItem('g11_scores');
+        
+        // Sync to cloud if possible
+        if (this.state.currentUsername) {
+            const userKey = this.state.currentUsername.toLowerCase();
+            await fetch(this.getCloudURL() + `users/${userKey}/profile/g11_scores.json`, {
+                method: 'DELETE'
+            }).catch(e => console.error(e));
+        }
+        
+        this.renderGrade11();
+        this.playSound('click');
+        alert("Konu başarıları sıfırlandı! Yeni bir başlangıç zamanı. ✨");
     },
 
     // --- HOMEWORK SYSTEM ---

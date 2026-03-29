@@ -359,95 +359,93 @@
 
             <!-- PAGE 7: ADMIN PANEL -->
             <div id="page-admin" class="spa-page hidden container-wide">
-                <div class="admin-header card-glass animate-slide-up" style="border-left: 5px solid var(--danger); margin-bottom: 2rem; background:rgba(239, 68, 68, 0.02)">
-                    <div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:20px;">
-                        <div>
-                            <h1 style="margin:0; font-size:1.8rem; color:var(--danger); letter-spacing:1px;"><i class="fa-solid fa-crown"></i> MERKEZİ KONTROL</h1>
-                            <p style="margin:5px 0 0 0; opacity:0.7; font-weight:600">Sistem genelindeki tüm kullanıcıları yönetin.</p>
-                        </div>
-                        <div style="display:flex; gap:10px;">
-                            <button class="btn-back" onclick="app.loadAdminUsers()" style="border-color:var(--secondary); color:var(--secondary)"><i class="fa-solid fa-rotate"></i> Listeyi Güncelle</button>
-                        </div>
+                <!-- 1. Admin Header -->
+                <div class="admin-section-header animate-slide-up">
+                    <div>
+                        <h1 style="color:var(--danger); letter-spacing:2px; display:flex; align-items:center; gap:15px;">
+                            <i class="fa-solid fa-shield-halved"></i> MERKEZİ KONTROL PANELİ
+                        </h1>
+                        <p style="color:var(--text-muted); font-weight:600;">Laboratuvar ekosistemi ve öğrenci yönetimi.</p>
                     </div>
                 </div>
 
-                <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:25px;">
-                    <!-- Live Notifications Section -->
-                    <div class="glass-card animate-slide-up" style="grid-column: span 3; border-top: 5px solid var(--success); background:rgba(16, 185, 129, 0.05)">
-                        <h3 style="margin-bottom:15px; color:var(--success); display:flex; align-items:center; gap:10px;">
-                            <i class="fa-solid fa-bell fa-shake"></i> Canlı Bildirimler & Aktivite
-                            <button onclick="app.clearAdminNotifications()" style="margin-left:auto; font-size:0.7rem; background:none; border:1px solid var(--success); color:var(--success); padding:2px 8px; border-radius:5px; cursor:pointer">Temizle</button>
-                        </h3>
-                        <div id="admin-notifications-list" style="max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;">
-                            <p style="text-align:center; opacity:0.5; padding:20px;">Henüz yeni bir aktivite yok...</p>
+                <!-- 2. Dashboard Stats Overview -->
+                <div class="stats-grid stats-auto" style="margin-bottom:30px;">
+                    <div class="admin-stat-card animate-slide-up">
+                        <i class="fa-solid fa-users" style="color:var(--primary); font-size:1.5rem; margin-bottom:1rem;"></i>
+                        <h4 style="opacity:0.6; font-size:0.7rem; text-transform:uppercase;">Toplam Kayıtlı Öğrenci</h4>
+                        <h3 id="admin-stat-total-users" style="font-size:2rem; font-weight:900;">--</h3>
+                    </div>
+                    <div class="admin-stat-card animate-slide-up" style="animation-delay:0.1s">
+                        <i class="fa-solid fa-list-check" style="color:var(--success); font-size:1.5rem; margin-bottom:1rem;"></i>
+                        <h4 style="opacity:0.6; font-size:0.7rem; text-transform:uppercase;">Aktif Ödev Sayısı</h4>
+                        <h3 id="admin-stat-active-hw" style="font-size:2rem; font-weight:900;">--</h3>
+                    </div>
+                    <div class="admin-stat-card animate-slide-up" style="animation-delay:0.2s">
+                        <i class="fa-solid fa-bolt" style="color:var(--accent); font-size:1.5rem; margin-bottom:1rem;"></i>
+                        <h4 style="opacity:0.6; font-size:0.7rem; text-transform:uppercase;">Sistem Sağlığı</h4>
+                        <h3 id="admin-stat-status" style="font-size:1.2rem; font-weight:900; color:var(--success)">AKTİF</h3>
+                    </div>
+                </div>
+
+                <!-- 3. Two Column Layout for Activity and Homework -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:30px;">
+                    <!-- Activity Feed -->
+                    <div class="glass-card animate-slide-up" style="border-top:3px solid var(--success);">
+                        <div class="admin-section-header" style="margin-bottom:15px; border:none; padding:0;">
+                            <h3 style="color:var(--success); font-size:1.1rem;"><i class="fa-solid fa-bell fa-shake"></i> Canlı Bildirimler</h3>
+                            <button class="btn-primary" onclick="app.clearAdminNotifications()" style="font-size:0.65rem; padding:4px 10px; background:none; border:1px solid var(--success); color:var(--success)">Temizle</button>
+                        </div>
+                        <div id="admin-notifications-list" style="max-height:300px; overflow-y:auto;">
+                            <p style="text-align:center; padding:50px; opacity:0.3;">Sistem dinleniyor...</p>
                         </div>
                     </div>
 
-                    <!-- Homework Creator Section -->
-                    <div class="glass-card animate-slide-up" style="grid-column: span 3; border-top: 5px solid var(--accent);">
-                        <h3 style="margin-bottom:20px; color:var(--accent); display:flex; justify-content:space-between; align-items:center;">
-                            <span><i class="fa-solid fa-file-circle-plus"></i> Yeni Ödev Hazırla</span>
-                            <button class="btn-primary" onclick="app.adminResetAllHomework()" style="font-size:0.7rem; padding:4px 12px; background:var(--danger); border:none; border-radius:8px; cursor:pointer">Mevcut Ödevleri Sıfırla 🧹</button>
-                        </h3>
-                        <div class="admin-grid" style="grid-template-columns: 1fr 1fr; gap:20px;">
-                            <div class="admin-form">
-                                <label style="display:block; margin-bottom:10px;">Ödev Başlığı:</label>
-                                <input type="text" id="admin-hw-title" class="btn-back" style="width:100%; margin-bottom:15px;" placeholder="Örn: Atomun Yapısı Sınavı">
-                                <label style="display:block; margin-bottom:10px;">Açıklama / Mesaj:</label>
-                                <textarea id="admin-hw-desc" class="btn-back" style="width:100%; height:80px; margin-bottom:15px;" placeholder="Bu ödevi çözenler +X puan alır!"></textarea>
-                                <label style="display:block; margin-bottom:10px;">Bitirme Ödülü (Puan):</label>
-                                <input type="number" id="admin-hw-reward" class="btn-back" style="width:100%; margin-bottom:15px;" value="500">
-                                <button class="btn-primary" onclick="app.adminSaveHomework()">Ödevi Yayınla 🚀</button>
-                            </div>
-                            <div class="admin-questions-area">
-                                <label style="display:block; margin-bottom:10px;">Sorular:</label>
-                                <div id="admin-questions-container" style="max-height:300px; overflow-y:auto; margin-bottom:15px; border:1px dashed var(--border-color); padding:10px; border-radius:12px;">
-                                    <!-- Dynamic Rows -->
-                                </div>
-                                <button class="btn-back btn-block" onclick="app.adminAddQuestionRow()" style="border-color:var(--secondary); color:var(--secondary); margin-bottom:10px;"><i class="fa-solid fa-plus"></i> Soru Ekle</button>
+                    <!-- Homework Control -->
+                    <div class="glass-card animate-slide-up" style="border-top:3px solid var(--accent);">
+                        <div class="admin-section-header" style="margin-bottom:15px; border:none; padding:0;">
+                            <h3 style="color:var(--accent); font-size:1.1rem;"><i class="fa-solid fa-file-circle-plus"></i> Ödev Platformu</h3>
+                            <button class="btn-primary" onclick="app.adminResetAllHomework()" style="font-size:0.65rem; padding:4px 10px; background:var(--danger); border:none">Sıfırla 🧹</button>
+                        </div>
+                        <div class="admin-form" style="margin-bottom:20px;">
+                            <input type="text" id="admin-hw-title" class="btn-back" placeholder="Ödev Başlığı..." style="width:100%; margin-bottom:10px;">
+                            <textarea id="admin-hw-desc" class="btn-back" placeholder="Mesajınız..." style="width:100%; height:60px; margin-bottom:10px; resize:none"></textarea>
+                            <div style="display:flex; gap:10px;">
+                                <input type="number" id="admin-hw-reward" class="btn-back" value="500" style="width:80px;">
+                                <button class="btn-primary" onclick="app.adminAddQuestionRow()" style="flex:1; background:var(--bg-white); color:var(--bg-main); font-weight:800"><i class="fa-solid fa-plus"></i> Soru Ekle</button>
+                                <button class="btn-primary" onclick="app.adminSaveHomework()" style="flex:1;"><i class="fa-solid fa-paper-plane"></i> Yayınla</button>
                             </div>
                         </div>
+                        <div id="admin-questions-container" style="max-height:150px; overflow-y:auto;"></div>
                     </div>
+                </div>
 
-                    <!-- User Management Section -->
-                    <div class="glass-card animate-slide-up" style="grid-column: span 2;">
-                        <h3 style="margin-bottom:20px; display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-users"></i> Aktif Kullanıcılar</h3>
-                        <div style="overflow-x:auto;">
-                            <table class="admin-table" style="width:100%; border-collapse:collapse; min-width:600px;">
-                                <thead>
-                                    <tr style="text-align:left; border-bottom:2px solid var(--border-color); color:var(--text-muted); font-size:0.8rem; text-transform:uppercase;">
-                                        <th style="padding:15px 10px;">Kullanıcı</th>
-                                        <th style="padding:15px 10px;">E-Posta</th>
-                                        <th style="padding:15px 10px;">Puan Kontrol</th>
-                                        <th style="padding:15px 10px; text-align:right;">Yönetim İşlemleri</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admin-user-list">
-                                    <!-- Dynamic rows -->
-                                    <tr><td colspan="4" style="text-align:center; padding:50px; opacity:0.5">Yükleniyor...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <!-- 4. User Management Table -->
+                <div class="glass-card animate-slide-up" style="padding:0; overflow:hidden;">
+                    <div class="admin-section-header" style="padding:20px; border-bottom:1px solid rgba(255,255,255,0.05); margin:0;">
+                        <h3><i class="fa-solid fa-users-gear"></i> Öğrenci Yönetimi</h3>
+                        <button class="btn-back" onclick="app.loadAdminUsers()"><i class="fa-solid fa-rotate"></i> Yenile</button>
                     </div>
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Öğrenci Kİmlİğİ</th>
+                                    <th>İletİşİm / Puan</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-user-list"></tbody>
+                        </table>
+                    </div>
+                </div>
 
-                    <!-- System Controls -->
-                    <div class="glass-card animate-slide-up" style="height:fit-content">
-                        <h3 style="margin-bottom:20px; color:var(--primary)"><i class="fa-solid fa-sliders"></i> Sistem Araçları</h3>
-                        <div style="display:flex; flex-direction:column; gap:15px;">
-                            <div class="admin-tool-item">
-                                <p style="font-size:0.85rem; font-weight:700; margin-bottom:10px;">Hızlı Puan Dağıt</p>
-                                <button class="btn-back btn-block" onclick="app.adminBulkPoints()" style="border-color:var(--accent); color:var(--accent)"><i class="fa-solid fa-gift"></i> Herkese +100 Puan Ver</button>
-                            </div>
-                            <div class="admin-tool-item">
-                                <p style="font-size:0.85rem; font-weight:700; margin-bottom:10px;">Sistem Duyurusu</p>
-                                <button class="btn-back btn-block" onclick="app.adminBroadcast()" style="border-color:var(--secondary); color:var(--secondary)"><i class="fa-solid fa-bullhorn"></i> Global Mesaj Gönder</button>
-                            </div>
-                            <div style="margin-top:20px; padding:15px; background:rgba(239, 68, 68, 0.1); border-radius:12px; border:1px solid var(--danger)">
-                                <h4 style="color:var(--danger); margin-bottom:5px;"><i class="fa-solid fa-skull-crossbones"></i> Tehlikeli Bölge</h4>
-                                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:10px;">Bu işlemler geri alınamaz!</p>
-                                <button class="btn-back btn-block" onclick="app.adminResetAllScores()" style="border-color:var(--danger); color:var(--danger); font-size:0.8rem">Tüm Puanları SIFIRLA</button>
-                            </div>
-                        </div>
+                <!-- 5. Advanced Admin Tools -->
+                <div class="glass-card animate-slide-up" style="margin-top:25px; border-top:3px solid var(--danger); background:rgba(239, 68, 68, 0.02)">
+                    <h3 style="color:var(--danger); margin-bottom:15px;"><i class="fa-solid fa-skull-crossbones"></i> Tehlikeli Bölge</h3>
+                    <div style="display:flex; gap:15px; flex-wrap:wrap">
+                        <button class="btn-primary" onclick="app.adminResetAllScores()" style="background:var(--danger); border:none; padding:10px 20px;">Tüm Puanları Sıfırla! 💀</button>
+                        <button class="btn-primary" onclick="app.adminGlobalBroadcast()" style="background:var(--secondary); border:none; padding:10px 20px;">Global Mesaj 📢</button>
                     </div>
                 </div>
             </div>
