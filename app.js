@@ -425,6 +425,14 @@ const app = {
             nameHtml = `<i class="fa-solid fa-crown" style="color:#ff85a1; filter:drop-shadow(0 0 8px #ff4d6d); margin-right:8px;"></i>${this.state.currentUser}`;
         }
 
+        // --- NEW: CLOUD WARNING MESSAGE CHECK ---
+        const userSaveKey = `kimyalab_user_${this.state.currentUsername.toLowerCase()}`;
+        const localData = JSON.parse(localStorage.getItem(userSaveKey) || '{}');
+        if (localData.message) {
+            this.showRewardModal("YÖNETİCİ MESAJI 🏮", localData.message);
+            // Clear message after showing? No, keep it until admin clears or user continues
+        }
+
         if (this.els.displayUser) this.els.displayUser.innerHTML = nameHtml;
         if (this.els.quoteUser) this.els.quoteUser.innerHTML = nameHtml;
 
@@ -436,9 +444,8 @@ const app = {
             if (userData.title) this.state.title = userData.title;
         }
         
-        // --- DATA SYNCED ALREADY in handleLogin, but fallback reading from local cache ---
-        const userSaveKey = `kimyalab_user_${this.state.currentUsername}`;
-        const savedData = JSON.parse(localStorage.getItem(userSaveKey) || '{}');
+        // --- DATA SYNCED ALREADY in handleLogin ---
+        const savedData = localData;
         
         // Only set from local if state is currently empty/zero (prevents double set)
         if (this.state.score === 0 && savedData.score > 0) {
@@ -1381,8 +1388,15 @@ const app = {
                             </div>
                         </td>
                         <td style="padding:15px 10px;">${user.profile.email || 'N/A'}</td>
-                        <td style="padding:15px 10px;"><input type="number" value="${score}" onchange="app.adminUpdateScore('${userKey}', this.value)" style="width:70px; padding:5px; border-radius:5px; background:var(--bg-white); border:1px solid var(--border-color);"></td>
+                        <td style="padding:15px 10px;">
+                            <div style="display:flex; align-items:center; gap:5px;">
+                                <button class="btn-back" onclick="app.adminAdjustScore('${userKey}', -100)" style="padding:2px 8px; font-size:0.7rem;">-100</button>
+                                <b style="min-width:40px; text-align:center">${score}</b>
+                                <button class="btn-back" onclick="app.adminAdjustScore('${userKey}', 100)" style="padding:2px 8px; font-size:0.7rem; color:var(--success)">+100</button>
+                            </div>
+                        </td>
                         <td style="padding:15px 10px; text-align:right;">
+                            <button class="btn" onclick="app.adminWarnUser('${userKey}')" title="Uyarı Gönder" style="color:var(--accent); padding:5px;"><i class="fa-solid fa-comment-dots"></i></button>
                             <button class="btn" onclick="app.adminBanUser('${userKey}', ${!isBanned})" title="${isBanned ? 'Engeli Kaldır' : 'Engelle'}" style="color:${isBanned ? 'var(--success)' : 'var(--danger)'}; padding:5px;"><i class="fa-solid ${isBanned ? 'fa-user-check' : 'fa-user-slash'}"></i></button>
                             <button class="btn" onclick="app.adminDeleteUser('${userKey}')" title="Sil" style="color:var(--danger); padding:5px;"><i class="fa-solid fa-trash-can"></i></button>
                         </td>
@@ -1395,14 +1409,32 @@ const app = {
         }
     },
 
-    async adminUpdateScore(userKey, newScore) {
+    async adminAdjustScore(userKey, amount) {
+        try {
+            const res = await fetch(this.getCloudURL() + `users/${userKey}/data.json`);
+            const data = await res.json();
+            const currentScore = data.score || 0;
+            const newScore = Math.max(0, currentScore + amount);
+            
+            await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
+                method: 'PATCH',
+                body: JSON.stringify({ score: newScore })
+            });
+            this.playSound('click');
+            this.loadAdminUsers();
+        } catch (e) { alert("Hata: " + e.message); }
+    },
+
+    async adminWarnUser(userKey) {
+        const msg = prompt(`${userKey} kullanıcısına gönderilecek mesajı yazın:`);
+        if (!msg) return;
         try {
             await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
                 method: 'PATCH',
-                body: JSON.stringify({ score: parseInt(newScore) })
+                body: JSON.stringify({ message: msg })
             });
-            this.playSound('click');
-        } catch (e) { alert("Güncellenemedi: " + e.message); }
+            alert("Mesaj başarıyla gönderildi!");
+        } catch (e) { alert("Hata: " + e.message); }
     },
 
     async adminBanUser(userKey, shouldBan) {
