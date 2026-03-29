@@ -1370,32 +1370,37 @@ const app = {
         listContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin"></i> Veritabanı taranıyor...</td></tr>';
         
         try {
-            const res = await fetch(this.getCloudURL() + "users.json");
-            const allUsers = await res.json();
+            // 1. Get VIP List (Hardcoded IDs)
+            const vips = ['ela', 'eye'];
             
-            if (!allUsers) {
-                listContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:50px;">Henüz kayıtlı kullanıcı yok.</td></tr>';
-                return;
-            }
-
+            // 2. Fetch Cloud Users
+            const res = await fetch(this.getCloudURL() + "users.json");
+            const allUsers = await res.json() || {};
+            
             let html = '';
-            for (let userKey in allUsers) {
-                const user = allUsers[userKey];
-                const isBanned = user.data && user.data.banned === true;
-                const score = (user.data && user.data.score) || 0;
-                
-                html += `
+
+            // Combine and Render
+            const renderRow = (userKey, userData) => {
+                const isVip = vips.includes(userKey.toLowerCase());
+                const isBanned = userData.data && userData.data.banned === true;
+                const score = (userData.data && userData.data.score) || 0;
+                const avatar = (userData.profile && userData.profile.avatar) || 'school_logo.jpg';
+                const name = (userData.profile && userData.profile.username) || userKey;
+
+                return `
                     <tr style="border-bottom: 1px solid var(--border-color); ${isBanned ? 'opacity:0.5; background:rgba(239, 68, 68, 0.05)' : ''}">
                         <td style="padding:15px 10px;">
                             <div style="display:flex; align-items:center; gap:10px;">
-                                <img src="${user.profile.avatar}" style="width:30px; height:30px; border-radius:50%; background:var(--bg-white);">
+                                <img src="${avatar}" style="width:30px; height:30px; border-radius:50%; background:var(--bg-white);">
                                 <div>
-                                    <b style="display:block">${user.profile.username}</b>
+                                    <b style="display:flex; align-items:center; gap:5px;">
+                                        ${name} ${isVip ? '<span style="color:var(--accent); font-size:0.6rem; background:rgba(251,192,45,0.1); padding:2px 6px; border-radius:4px;">💎 VIP</span>' : ''}
+                                    </b>
                                     <span style="font-size:0.7rem; color:var(--text-muted)">${userKey}</span>
                                 </div>
                             </div>
                         </td>
-                        <td style="padding:15px 10px;">${user.profile.email || 'N/A'}</td>
+                        <td style="padding:15px 10px;">${(userData.profile && userData.profile.email) || 'V.I.P / Bulut Yok'}</td>
                         <td style="padding:15px 10px;">
                             <div style="display:flex; align-items:center; gap:5px;">
                                 <button class="btn-back" onclick="app.adminAdjustScore('${userKey}', -100)" style="padding:2px 8px; font-size:0.7rem;">-100</button>
@@ -1410,8 +1415,30 @@ const app = {
                         </td>
                     </tr>
                 `;
+            };
+
+            // Render VIPs First
+            for (let v of vips) {
+                if (allUsers[v]) {
+                    html += renderRow(v, allUsers[v]);
+                } else {
+                    // Show placeholders for VIPs not in cloud yet
+                    html += renderRow(v, { profile: { username: v, avatar:'vip_1.png' }, data: { score: 0 } });
+                }
             }
-            listContainer.innerHTML = html;
+
+            // Render Others
+            for (let userKey in allUsers) {
+                if (!vips.includes(userKey.toLowerCase())) {
+                    html += renderRow(userKey, allUsers[userKey]);
+                }
+            }
+
+            if (html === '') {
+                listContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:50px;">Kullanıcı bulunamadı.</td></tr>';
+            } else {
+                listContainer.innerHTML = html;
+            }
         } catch (e) {
             listContainer.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:50px; color:var(--danger)">Hata: ${e.message}</td></tr>`;
         }
