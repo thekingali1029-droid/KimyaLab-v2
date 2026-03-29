@@ -84,16 +84,22 @@ const app = {
                 if (data && data.error === "Permission denied") {
                     indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Veritabanı İzni Yok (Firebase Rules!)';
                 } else if (res.status === 404) {
-                    indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Bulut URL Hatası (404): <a href="#" onclick="app.repairCloudURL(); return false;" style="color:var(--primary); text-decoration:underline; font-weight:800">Düzeltmek için Tıkla</a>';
+                    indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Bulut URL Hatası (404): <a href="#" onclick="app.repairCloudURL(); return false;" style="color:var(--primary); text-decoration:underline; font-weight:800">Düzelt</a> | <a href="#" onclick="app.resetCloudURL(); return false;" style="color:var(--danger); font-size:0.7rem;">Sıfırla/Fix</a>';
                 } else {
                     indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> Bulut Bağlantı Sorunu (' + res.status + ')';
                 }
                 indicator.style.color = 'var(--danger)';
             }
         } catch (e) {
-            indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> İnternet/Bulut Hatası! <a href="#" onclick="app.repairCloudURL(); return false;" style="color:var(--primary); text-decoration:underline;">Yenile/Fix</a>';
+            indicator.innerHTML = '<i class="fa-solid fa-cloud-bolt" style="color:var(--danger)"></i> İnternet/Bulut Hatası! <a href="#" onclick="app.resetCloudURL(); return false;" style="color:var(--primary); text-decoration:underline;">Yenile/Sıfırla</a>';
             indicator.style.color = 'var(--danger)';
         }
+    },
+
+    resetCloudURL() {
+        localStorage.removeItem('kimyalab_custom_cloud_url');
+        alert("Bağlantı ayarları sıfırlandı. Tekrar deneniyor...");
+        location.reload();
     },
 
     repairCloudURL() {
