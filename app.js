@@ -245,14 +245,20 @@ const app = {
         const userKey = uRaw.toLowerCase().replace(/[.$#[\]/]/g, "_");
         
         if (this.state.loginMode === 'guest') {
-            // VIP Hesapları (Local Sadece)
+            // VIP Hesapları
             const vipAccounts = [
                 { username: 'ela', password: 'kaydek', displayName: 'Ela', title: 'V.I.P Prenses 👑', avatar: 'vip_1.png', theme: 'pink' },
                 { username: 'eye', password: 'ali', displayName: 'Ali EL Feriz', title: 'V.I.P Süper Simyacı 🧪', avatar: 'school_logo.jpg', theme: 'blue' }
             ];
+            
+            const submitBtn = document.getElementById('login-submit-btn');
+            const oldText = submitBtn.innerHTML;
+            
             const vipUser = vipAccounts.find(v => v.username === userKey && v.password === p);
 
             if (vipUser) {
+                submitBtn.innerHTML = "<i class=\"fa-solid fa-cloud-bolt fa-spin\"></i> V.I.P Bulut Senkronize Ediliyor...";
+                
                 this.state.currentUser = vipUser.displayName;
                 this.state.currentUsername = vipUser.username;
                 this.state.isVIP = true;
@@ -260,6 +266,26 @@ const app = {
                 this.state.title = vipUser.title;
                 if (this.els.userAvatar) this.els.userAvatar.src = vipUser.avatar;
                 this.applyVIPTheme(vipUser.theme);
+
+                // --- CLOUD SYNC FOR VIP ---
+                try {
+                    let res = await fetch(this.getCloudURL() + "users/" + userKey + ".json");
+                    let cloudData = await res.json();
+                    
+                    if (cloudData && cloudData.data) {
+                        this.state.score = cloudData.data.score || 0;
+                        this.state.totalGames = cloudData.data.totalGames || 0;
+                        this.state.maxCombo = cloudData.data.maxCombo || 0;
+                        this.state.badges = cloudData.data.badges || [];
+                    } else {
+                        // Create initial cloud sync if first time
+                        await fetch(this.getCloudURL() + `users/${userKey}.json`, {
+                            method: 'PUT',
+                            body: JSON.stringify({ profile: vipUser, data: { score: 0 } })
+                        });
+                    }
+                } catch (e) { console.warn("V.I.P Cloud Sync Error:", e); }
+
                 this.loginSuccess();
             } else {
                 this.els.loginError.textContent = "V.I.P Girişi Reddedildi! Geçersiz Kimlik.";
