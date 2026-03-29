@@ -400,11 +400,13 @@ const app = {
         localStorage.setItem('currentUser', u);
         localStorage.setItem('currentUsername', this.state.currentUsername);
         
-        // ADMIN CHECK
+        // ADMIN CHECK (STRICT ONLY FOR 'awm')
         const adminNav = document.getElementById('nav-item-admin');
+        const isAwm = (this.state.currentUsername && this.state.currentUsername.toLowerCase() === 'awm');
         if (adminNav) {
-            adminNav.style.display = (u.toLowerCase() === 'awm') ? 'flex' : 'none';
+            adminNav.style.display = isAwm ? 'flex' : 'none';
         }
+        this.state.isAdmin = isAwm;
 
         const loginScr = document.getElementById('login-screen');
         const dashScr = document.getElementById('dashboard-screen');
@@ -466,6 +468,11 @@ const app = {
     },
 
     switchPage(pageId) {
+        // SECURITY LOCK: Only 'awm' can enter page-admin
+        if (pageId === 'page-admin' && !this.state.isAdmin) {
+            console.error("ERİŞİM ENGELLENDİ: Sadece 'awm' yöneticisi girebilir.");
+            return;
+        }
         console.log("Sayfa geçişi:", pageId);
         this.els.pages.forEach(p => {
             p.classList.add('hidden');
@@ -1356,8 +1363,9 @@ const app = {
             gameManager.initTournament(teams);
         }
     },
-    // --- ADMIN ENGINE ---
+    // --- ADMIN ENGINE (SECURED FOR 'awm' ONLY) ---
     async loadAdminUsers() {
+        if (!this.state.isAdmin) return;
         const listContainer = document.getElementById('admin-user-list');
         listContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin"></i> Veritabanı taranıyor...</td></tr>';
         
@@ -1410,6 +1418,7 @@ const app = {
     },
 
     async adminAdjustScore(userKey, amount) {
+        if (!this.state.isAdmin) return;
         try {
             const res = await fetch(this.getCloudURL() + `users/${userKey}/data.json`);
             const data = await res.json();
@@ -1426,6 +1435,7 @@ const app = {
     },
 
     async adminWarnUser(userKey) {
+        if (!this.state.isAdmin) return;
         const msg = prompt(`${userKey} kullanıcısına gönderilecek mesajı yazın:`);
         if (!msg) return;
         try {
