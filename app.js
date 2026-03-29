@@ -34,8 +34,27 @@ const app = {
         this.bindEvents();
         this.applyInitialTheme();
         this.updateStats();
-        this.checkCloudConnectivity(); // New
+        this.checkCloudConnectivity(); 
+        
+        // --- 📢 BROADCAST ENGINE START ---
+        this.checkGlobalBroadcast();
+        setInterval(() => this.checkGlobalBroadcast(), 120000); // Check every 2 mins
+        
         console.log("KimyaLab v2 Başlatıldı!");
+    },
+
+    async checkGlobalBroadcast() {
+        try {
+            const res = await fetch(this.getCloudURL() + "global_broadcast.json");
+            const b = await res.json();
+            if (!b || !b.id) return;
+
+            const lastId = localStorage.getItem('last_bcast_id');
+            if (b.id !== lastId) {
+                localStorage.setItem('last_bcast_id', b.id);
+                this.showLevelUpModal("Sistem Duyurusu 📢", b.msg);
+            }
+        } catch (e) { console.warn("Broadcast check failed:", e); }
     },
 
     async checkCloudConnectivity() {
@@ -1652,11 +1671,17 @@ const app = {
         } catch (e) { alert("Hata: " + e.message); }
     },
 
-    async adminBroadcast() {
-        const msg = prompt("Tüm sistemde yayınlanacak mesajı girin:");
-        if (msg) {
-            alert("Mesaj gönderildi! (Gelecek versiyonda bildirim sistemine entegre edilecektir)");
-        }
+    async adminGlobalBroadcast() {
+        const msg = prompt("Tüm sistemde (herkesin ekranında) yayınlanacak duyuruyu yazın:");
+        if (!msg) return;
+        try {
+            const bId = 'bcast_' + Date.now();
+            await fetch(this.getCloudURL() + "global_broadcast.json", {
+                method: 'PUT',
+                body: JSON.stringify({ id: bId, msg: msg, time: Date.now() })
+            });
+            alert("Sistem Duyurusu başarıyla tüm sınıfa yayınlandı! 📢");
+        } catch (e) { alert("Hata: " + e.message); }
     },
 
     async adminResetAllScores() {
@@ -1664,15 +1689,20 @@ const app = {
         try {
             const res = await fetch(this.getCloudURL() + "users.json");
             const users = await res.json();
-            for (let userKey in users) {
-                await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
+            if (!users) return;
+
+            const promises = Object.keys(users).map(userKey => {
+                return fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
                     method: 'PATCH',
                     body: JSON.stringify({ score: 0 })
                 });
-            }
-            alert("Tüm puanlar sıfırlandı!");
+            });
+
+            await Promise.all(promises);
+            this.playSound('click');
+            alert("Tüm öğrenci puanları başarıyla sıfırlandı! 💀");
             this.loadAdminUsers();
-        } catch (e) { alert("Hata: " + e.message); }
+        } catch (e) { alert("Başarısız: " + e.message); }
     },
 
     async adminAwardBadge(userKey) {
