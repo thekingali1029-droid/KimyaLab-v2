@@ -241,6 +241,7 @@ const app = {
         if (this.state.loginMode === 'guest') {
             // VIP Hesapları (Local Sadece)
             const vipAccounts = [
+                { username: 'awm', password: 'kct', displayName: 'AWM ADMIN', title: 'KURUCU & YÖNETİCİ 🛡️', avatar: 'school_logo.jpg', theme: 'admin' },
                 { username: 'ela', password: 'kaydek', displayName: 'Ela', title: 'V.I.P Prenses 👑', avatar: 'vip_1.png', theme: 'pink' },
                 { username: 'eye', password: 'ali', displayName: 'Ali EL Feriz', title: 'V.I.P Süper Simyacı 🧪', avatar: 'school_logo.jpg', theme: 'blue' }
             ];
