@@ -561,6 +561,7 @@ const app = {
         if (pageId === 'page-stats') this.renderStats();
         if (pageId === 'page-badges') this.renderBadges();
         if (pageId === 'page-homework') this.loadHomeworkList();
+        if (pageId === 'page-notifications') this.loadNotifications();
     },
 
     renderStats() {
@@ -1676,12 +1677,53 @@ const app = {
         if (!msg) return;
         try {
             const bId = 'bcast_' + Date.now();
+            const payload = { id: bId, msg: msg, time: Date.now() };
+            
+            // 1. Popup (Immediate for everyone)
             await fetch(this.getCloudURL() + "global_broadcast.json", {
                 method: 'PUT',
-                body: JSON.stringify({ id: bId, msg: msg, time: Date.now() })
+                body: JSON.stringify(payload)
             });
+
+            // 2. Persistent History (For the notifications area)
+            await fetch(this.getCloudURL() + "system_messages.json", {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            });
+
             alert("Sistem Duyurusu başarıyla tüm sınıfa yayınlandı! 📢");
         } catch (e) { alert("Hata: " + e.message); }
+    },
+
+    async loadNotifications() {
+        const feed = document.getElementById('student-notifications-feed');
+        if (!feed) return;
+        feed.innerHTML = '<p style="text-align:center; padding:50px; opacity:0.5"><i class="fa-solid fa-spinner fa-spin"></i> Panoya erişiliyor...</p>';
+        
+        try {
+            const res = await fetch(this.getCloudURL() + "system_messages.json");
+            const data = await res.json();
+            if (!data) {
+                feed.innerHTML = '<div class="glass-card animate-slide-up" style="text-align:center; padding:50px; opacity:0.5">🔍 Henüz yayınlanmış bir duyuru bulunmuyor.</div>';
+                return;
+            }
+
+            let html = '';
+            const msgs = Object.values(data).reverse();
+            msgs.forEach(m => {
+                const date = new Date(m.time).toLocaleString('tr-TR');
+                html += `
+                    <div class="glass-card animate-slide-up" style="border-left:4px solid var(--primary); padding:20px; margin-bottom:15px">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.75rem; font-weight:700; color:var(--text-muted)">
+                            <span>📣 SİSTEM DUYURUSU</span>
+                            <span>${date}</span>
+                        </div>
+                        <p style="font-size:1.1rem; color:var(--text-white); line-height:1.6; font-weight:600;">${m.msg}</p>
+                    </div>
+                `;
+            });
+            feed.innerHTML = html;
+        } catch (e) { feed.innerHTML = `<p style="color:var(--danger)">Hata: ${e.message}</p>`; }
     },
 
     async adminResetAllScores() {

@@ -95,8 +95,11 @@
                 <a href="#" class="nav-item" data-target="page-homework"><i class="fa-solid fa-file-pen"></i> <span>Ödevler & Sınıf</span></a>
                 <a href="#" class="nav-item" id="nav-item-admin" data-target="page-admin" style="display:none; color:var(--danger); border-left-color:var(--danger)"><i class="fa-solid fa-shield-halved"></i> <span>YÖNETİCİ</span></a>
 
-                <p class="nav-title" style="margin-top:2rem">KİŞİSEL</p>
                 <a href="#" class="nav-item" data-target="page-stats"><i class="fa-solid fa-chart-pie"></i> <span>Başarılarım</span></a>
+                <a href="#" class="nav-item" data-target="page-notifications" style="position:relative">
+                    <i class="fa-solid fa-bell"></i> <span>Bildirimler</span>
+                    <div id="nav-notif-dot" style="display:none; position:absolute; top:10px; right:15px; width:8px; height:8px; background:var(--danger); border-radius:50%; border:2px solid var(--bg-main)"></div>
+                </a>
                 <a href="#" class="nav-item" data-target="page-badges"><i class="fa-solid fa-medal"></i> <span>Rozetler</span></a>
             </nav>
 
@@ -347,7 +350,22 @@
                 </div>
             </div>
 
-            <!-- PAGE 7: BADGES -->
+            <!-- PAGE 7: NOTIFICATIONS AREA -->
+            <div id="page-notifications" class="spa-page hidden container-wide">
+                <div class="admin-section-header">
+                    <div>
+                        <h2 style="color:var(--primary); display:flex; align-items:center; gap:15px;">
+                            <i class="fa-solid fa-bell"></i> Laboratuvar Duyuruları
+                        </h2>
+                        <p style="color:var(--text-muted); font-size:0.9rem;">Öğretmeninizden gelen güncel mesajlar ve ders notları.</p>
+                    </div>
+                </div>
+                <div id="student-notifications-feed" style="display:flex; flex-direction:column; gap:15px; padding-bottom:100px;">
+                    <p style="text-align:center; opacity:0.3; padding:100px;">Duyuru panosu taranıyor...</p>
+                </div>
+            </div>
+
+            <!-- PAGE 8: BADGES -->
             <div id="page-badges" class="spa-page hidden">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem">
                     <h2>Bilim Rozetlerim 🏅</h2>
