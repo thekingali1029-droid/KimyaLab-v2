@@ -496,6 +496,7 @@ const app = {
         if (pageId === 'page-grade11') this.renderGrade11();
         if (pageId === 'page-stats') this.renderStats();
         if (pageId === 'page-badges') this.renderBadges();
+        if (pageId === 'page-homework') this.loadHomeworkList();
     },
 
     renderStats() {
@@ -1531,6 +1532,88 @@ const app = {
             alert("Tüm puanlar sıfırlandı!");
             this.loadAdminUsers();
         } catch (e) { alert("Hata: " + e.message); }
+    },
+
+    // --- HOMEWORK SYSTEM ---
+    async adminSaveHomework() {
+        if (!this.state.isAdmin) return;
+        
+        const title = document.getElementById('admin-hw-title').value;
+        const desc = document.getElementById('admin-hw-desc').value;
+        const questionsStr = document.getElementById('admin-hw-questions-json').value;
+
+        if (!title || !questionsStr) {
+            alert("Başlık ve sorular boş olamaz!");
+            return;
+        }
+
+        try {
+            const questions = JSON.parse(questionsStr);
+            const hwId = 'hw_' + Date.now();
+            const payload = { id: hwId, title, desc, questions, active: true, reward: 500 };
+
+            await fetch(this.getCloudURL() + `homework/${hwId}.json`, {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            });
+
+            alert("Ödev başarıyla tüm sınıfa yayınlandı! 🚀");
+            document.getElementById('admin-hw-title').value = '';
+            document.getElementById('admin-hw-desc').value = '';
+        } catch (e) { alert("Format Hatası: " + e.message); }
+    },
+
+    async loadHomeworkList() {
+        const list = document.getElementById('student-homework-list');
+        list.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:100px;"><i class="fa-solid fa-spinner fa-spin"></i> Ödevler yükleniyor...</div>';
+
+        try {
+            const res = await fetch(this.getCloudURL() + "homework.json");
+            const homeworks = await res.json();
+
+            if (!homeworks) {
+                list.innerHTML = '<div class="glass-card" style="grid-column:1/-1; text-align:center; padding:50px; opacity:0.5">Henüz ödev atanmamış...</div>';
+                return;
+            }
+
+            let html = '';
+            for (let id in homeworks) {
+                const hw = homeworks[id];
+                const doneKey = `hw_done_${hw.id}`;
+                const isDone = localStorage.getItem(doneKey) === 'true'; // Fallback for local
+                
+                html += `
+                    <div class="glass-card animate-slide-up" style="border-left: 5px solid ${isDone ? 'var(--success)' : 'var(--primary)'}; opacity: ${isDone ? '0.7' : '1'}">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                            <span class="badge" style="background:${isDone ? 'var(--success)' : 'var(--accent)'}">${isDone ? 'TAMAMLANDI' : 'YENİ ÖDEV'}</span>
+                            <b style="color:var(--primary)">+${hw.reward} Puan</b>
+                        </div>
+                        <h3>${hw.title}</h3>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">${hw.desc}</p>
+                        <button class="btn-primary" ${isDone ? 'disabled' : ''} onclick="app.startHomework('${hw.id}')" style="width:100%; border-radius:10px;">
+                            ${isDone ? 'Çözenlerin Arasındasın ✨' : 'Ödevi Çözmeye Başla! 🚀'}
+                        </button>
+                    </div>
+                `;
+            }
+            list.innerHTML = html;
+        } catch (e) { list.innerHTML = `<p>Hata: ${e.message}</p>`; }
+    },
+
+    async startHomework(hwId) {
+        try {
+            const res = await fetch(this.getCloudURL() + `homework/${hwId}.json`);
+            const hw = await res.json();
+            
+            if (!hw) return;
+            
+            this.state.currentHomeworkId = hwId;
+            this.state.currentHomeworkReward = hw.reward || 500;
+            
+            // Custom game start with custom questions
+            alert(`${hw.title} başlıyor! Toplam ${hw.questions.length} soru var.`);
+            this.startGame('fusion', hw.questions); // Use fusion logic for now or custom
+        } catch (e) { alert("Başlatılamadı: " + e.message); }
     }
 };
 

@@ -92,6 +92,7 @@
                 <a href="#" class="nav-item" data-target="page-tablolar"><i class="fa-solid fa-book-open"></i> <span>Ders Materyalleri</span></a>
                 <a href="#" class="nav-item" data-target="page-periodic-lab"><i class="fa-solid fa-atom"></i> <span>P. Tablo Lab</span></a>
                 <a href="#" class="nav-item" data-target="page-grade11"><i class="fa-solid fa-graduation-cap"></i> <span>11. Sınıf</span></a>
+                <a href="#" class="nav-item" data-target="page-homework"><i class="fa-solid fa-file-pen"></i> <span>Ödevler & Sınıf</span></a>
                 <a href="#" class="nav-item" id="nav-item-admin" data-target="page-admin" style="display:none; color:var(--danger); border-left-color:var(--danger)"><i class="fa-solid fa-shield-halved"></i> <span>YÖNETİCİ</span></a>
 
                 <p class="nav-title" style="margin-top:2rem">KİŞİSEL</p>
@@ -326,7 +327,16 @@
                 </div>
             </div>
 
-            <!-- PAGE 6: BADGES -->
+            <!-- PAGE 6: HOMEWORK -->
+            <div id="page-homework" class="spa-page hidden">
+                <h2 style="margin-bottom:2rem"><i class="fa-solid fa-file-pen"></i> Mevcut Ödevler & Sınıf</h2>
+                <div id="student-homework-list" class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+                    <!-- Dynamic assignments -->
+                    <div class="glass-card" style="text-align:center; padding:50px; opacity:0.5">Henüz ödev atanmamış...</div>
+                </div>
+            </div>
+
+            <!-- PAGE 7: BADGES -->
             <div id="page-badges" class="spa-page hidden">
                 <h2 style="margin-bottom:2rem">Bilim Rozetlerim 🏅</h2>
                 <div id="rozet-grid" class="rozet-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:20px;">
@@ -349,6 +359,24 @@
                 </div>
 
                 <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:25px;">
+                    <!-- Homework Creator Section -->
+                    <div class="glass-card animate-slide-up" style="grid-column: span 3; border-top: 5px solid var(--accent);">
+                        <h3 style="margin-bottom:20px; color:var(--accent)"><i class="fa-solid fa-file-circle-plus"></i> Yeni Ödev Hazırla</h3>
+                        <div class="admin-grid" style="grid-template-columns: 1fr 1fr; gap:20px;">
+                            <div class="admin-form">
+                                <label style="display:block; margin-bottom:10px;">Ödev Başlığı:</label>
+                                <input type="text" id="admin-hw-title" class="btn-back" style="width:100%; margin-bottom:15px;" placeholder="Örn: Atomun Yapısı Sınavı">
+                                <label style="display:block; margin-bottom:10px;">Açıklama (Ödül vb.):</label>
+                                <textarea id="admin-hw-desc" class="btn-back" style="width:100%; height:80px; margin-bottom:15px;" placeholder="Bu ödevi çözenler +500 puan alır!"></textarea>
+                                <button class="btn-primary" onclick="app.adminSaveHomework()">Ödevi Yayınla 🚀</button>
+                            </div>
+                            <div class="admin-questions-area" id="admin-hw-questions-list">
+                                <label style="display:block; margin-bottom:10px;">Sorular (JSON Formatı):</label>
+                                <textarea id="admin-hw-questions-json" class="btn-back" style="width:100%; height:150px; font-family:monospace; font-size:0.7rem;" placeholder='[{"q": "Atomun merkezi?", "options": ["Çekirdek", "Katman"], "a": "Çekirdek"}]'></textarea>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- User Management Section -->
                     <div class="glass-card animate-slide-up" style="grid-column: span 2;">
                         <h3 style="margin-bottom:20px; display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-users"></i> Aktif Kullanıcılar</h3>
