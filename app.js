@@ -909,6 +909,10 @@ const app = {
         const topic = KIMYALAB_DATA.grade9.find(t => t.id === topicId);
         if (!topic) return;
 
+        // Update UI buttons
+        document.querySelectorAll('.btn-diff-g9').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.diff === diff);
+        });
         let filteredQuestions = diff === 'all' ? topic.questions : topic.questions.filter(q => q.difficulty === diff);
         const questionsArea = document.getElementById('g9-questions');
         if (!questionsArea) return;
@@ -1040,6 +1044,10 @@ const app = {
     setG10Difficulty(diff, skipSound = false) {
         this.state.currentDifficulty = diff; const topicId = this.state.currentTopicId;
         const topic = KIMYALAB_DATA.grade10.find(t => t.id === topicId); if (!topic) return;
+        // Update UI buttons
+        document.querySelectorAll('.btn-diff-g10').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.diff === diff);
+        });
         let filtered = diff === 'all' ? topic.questions : topic.questions.filter(q => q.difficulty === diff);
         const questionsArea = document.getElementById('g10-questions'); if (!questionsArea) return;
         questionsArea.innerHTML = filtered.map((q, i) => `
@@ -1373,6 +1381,10 @@ const app = {
     setG12Difficulty(diff, skipSound = false) {
         this.state.currentDifficulty = diff; const topicId = this.state.currentTopicId;
         const topic = KIMYALAB_DATA.grade12.find(t => t.id === topicId); if (!topic) return;
+        // Update UI buttons
+        document.querySelectorAll('.btn-diff-g12').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.diff === diff);
+        });
         let filtered = diff === 'all' ? topic.questions : topic.questions.filter(q => q.difficulty === diff);
         const questionsArea = document.getElementById('g12-questions'); if (!questionsArea) return;
         questionsArea.innerHTML = filtered.map((q, i) => `
