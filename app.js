@@ -52,7 +52,8 @@ const app = {
             const lastId = localStorage.getItem('last_bcast_id');
             if (b.id !== lastId) {
                 localStorage.setItem('last_bcast_id', b.id);
-                this.showLevelUpModal("Sistem Duyurusu 📢", b.msg);
+                this.showRewardModal("Sistem Duyurusu 📢", b.msg);
+                this.playSound('login');
             }
         } catch (e) { console.warn("Broadcast check failed:", e); }
     },
@@ -1488,6 +1489,21 @@ const app = {
         }
     },
 
+    async refreshAdminData() {
+        // Visual feedback
+        const btn = (event && event.currentTarget) || document.querySelector('.btn-back[onclick*="refreshAdminData"]');
+        if (btn) btn.querySelector('i')?.classList.add('fa-spin');
+        
+        try {
+            await this.loadAdminUsers();
+            await this.loadAdminNotifications();
+            await this.loadAdminHomeworkV2();
+            this.playSound('click');
+        } catch (e) { console.error(e); }
+        
+        if (btn) setTimeout(() => btn.querySelector('i')?.classList.remove('fa-spin'), 1000);
+    },
+
     async loadAdminNotifications() {
         if (!this.state.isAdmin) return;
         const list = document.getElementById('admin-notifications-list-full') || document.getElementById('admin-notifications-list');
@@ -1746,13 +1762,50 @@ const app = {
         this.loadAdminUsers();
     },
 
-    async adminGlobalBroadcast() {
-        const msg = prompt("Mesaj :");
+    async adminSendGlobalMessage() {
+        const input = document.getElementById('admin-global-msg');
+        const msg = input ? input.value : null;
         if (!msg) return;
-        const payload = { id: Date.now(), msg: msg, time: Date.now() };
-        await fetch(this.getCloudURL() + "global_broadcast.json", { method: 'PUT', body: JSON.stringify(payload) });
-        await fetch(this.getCloudURL() + "system_messages.json", { method: 'POST', body: JSON.stringify(payload) });
-        alert("Yayınlandı!");
+        
+        try {
+            const payload = { id: Date.now(), msg: msg, time: Date.now() };
+            await fetch(this.getCloudURL() + "global_broadcast.json", { method: 'PUT', body: JSON.stringify(payload) });
+            await fetch(this.getCloudURL() + "system_messages.json", { method: 'POST', body: JSON.stringify(payload) });
+            alert("Global Mesaj Başarıyla Gönderildi! ✨");
+            if(input) input.value = '';
+            this.loadAdminNotifications();
+        } catch (e) { alert("Hata: " + e.message); }
+    },
+
+    async loadNotifications() {
+        const feed = document.getElementById('student-notifications-feed');
+        if (!feed) return;
+        feed.innerHTML = '<p style="text-align:center; padding:50px; opacity:0.5"><i class="fa-solid fa-spinner fa-spin"></i> Duyurular yükleniyor...</p>';
+        
+        try {
+            const res = await fetch(this.getCloudURL() + "system_messages.json");
+            const data = await res.json();
+            if (!data) {
+                feed.innerHTML = '<div class="glass-card" style="text-align:center; padding:50px; opacity:0.5">Henüz yayınlanmış bir duyuru bulunmuyor.</div>';
+                return;
+            }
+
+            let html = '';
+            const msgs = Object.values(data).reverse().slice(0, 20); // Son 20 duyuru
+            msgs.forEach(m => {
+                const date = new Date(m.time).toLocaleString('tr-TR');
+                html += `
+                    <div class="glass-card animate-slide-up" style="border-left:4px solid var(--primary); padding:20px; margin-bottom:15px">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.75rem; font-weight:700; color:var(--text-muted)">
+                            <span>📣 SİSTEM DUYURUSU</span>
+                            <span>${date}</span>
+                        </div>
+                        <p style="font-size:1.1rem; color:white; line-height:1.6; font-weight:600;">${m.msg}</p>
+                    </div>
+                `;
+            });
+            feed.innerHTML = html;
+        } catch (e) { feed.innerHTML = `<p style="color:var(--danger)">Erişim Hatası: ${e.message}</p>`; }
     },
 
     async startHomework(hwId) {

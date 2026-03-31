@@ -386,8 +386,8 @@
                         <p style="color:var(--text-muted); font-weight:600; font-size:0.9rem;">Sistem durumu, öğrenci verileri ve akademik yönetim.</p>
                     </div>
                     <div style="display:flex; gap:10px;">
-                        <button class="btn-back" onclick="app.loadAdminUsers()"><i class="fa-solid fa-rotate"></i> Verileri Yenile</button>
-                        <button class="btn-primary" style="background:var(--danger); color:white; border:none; padding:10px 20px;" onclick="app.adminGlobalBroadcast()"><i class="fa-solid fa-bullhorn"></i> Acil Duyuru</button>
+                        <button class="btn-back" onclick="app.refreshAdminData()"><i class="fa-solid fa-rotate"></i> Verileri Yenile</button>
+                        <button class="btn-primary" style="background:var(--danger); color:white; border:none; padding:10px 20px;" onclick="app.switchAdminView('broadcast')"><i class="fa-solid fa-bullhorn"></i> Acil Duyuru</button>
                     </div>
                 </div>
 
