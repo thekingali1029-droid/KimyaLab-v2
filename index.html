@@ -91,10 +91,7 @@
                 <a href="#" class="nav-item" data-target="page-games"><i class="fa-solid fa-gamepad"></i> <span>Oyun Modları</span></a>
                 <a href="#" class="nav-item" data-target="page-tablolar"><i class="fa-solid fa-book-open"></i> <span>Ders Materyalleri</span></a>
                 <a href="#" class="nav-item" data-target="page-periodic-lab"><i class="fa-solid fa-atom"></i> <span>P. Tablo Lab</span></a>
-                <a href="#" class="nav-item" data-target="page-grade9"><i class="fa-solid fa-graduation-cap"></i> <span>9. Sınıf</span></a>
-                <a href="#" class="nav-item" data-target="page-grade10"><i class="fa-solid fa-graduation-cap"></i> <span>10. Sınıf</span></a>
-                <a href="#" class="nav-item" data-target="page-grade11"><i class="fa-solid fa-graduation-cap"></i> <span>11. Sınıf</span></a>
-                <a href="#" class="nav-item" data-target="page-grade12"><i class="fa-solid fa-graduation-cap"></i> <span>12. Sınıf</span></a>
+                <a href="#" class="nav-item" data-target="page-grades"><i class="fa-solid fa-graduation-cap"></i> <span>Müfredat & Sınıflar</span></a>
                 <a href="#" class="nav-item" data-target="page-homework"><i class="fa-solid fa-file-pen"></i> <span>Ödevler & Sınıf</span></a>
                 <a href="#" class="nav-item" id="nav-item-admin" data-target="page-admin" style="display:none; color:var(--danger); border-left-color:var(--danger)"><i class="fa-solid fa-shield-halved"></i> <span>YÖNETİCİ</span></a>
 
@@ -207,6 +204,57 @@
                 </div>
             </div>
 
+            <!-- PAGE 3: ALL GRADES (NEW) -->
+            <div id="page-grades" class="spa-page hidden">
+                <h2 style="margin-bottom:2rem">Müfredat ve Sınıflar 🎓</h2>
+                <div class="grades-main-grid">
+                    <div class="grade-main-card glass-card animate-slide-up" onclick="app.switchPage('page-grade9')">
+                        <div class="g-card-icon" style="background:#4ade80"><i class="fa-solid fa-flask"></i></div>
+                        <div class="g-card-info">
+                            <h3>9. Sınıf</h3>
+                            <p>Kimya Bilimi, Atom ve Periyodik Sistem, Türler Arası Etkileşimler</p>
+                            <div class="g-card-footer">
+                                <span><i class="fa-solid fa-list-check"></i> 5 Ünite</span>
+                                <span><i class="fa-solid fa-award"></i> %0 Başarı</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grade-main-card glass-card animate-slide-up" onclick="app.switchPage('page-grade10')" style="animation-delay:0.1s">
+                        <div class="g-card-icon" style="background:#3b82f6"><i class="fa-solid fa-vial"></i></div>
+                        <div class="g-card-info">
+                            <h3>10. Sınıf</h3>
+                            <p>Kimyanın Temel Kanunları, Karışımlar, Asitler, Bazlar ve Tuzlar</p>
+                            <div class="g-card-footer">
+                                <span><i class="fa-solid fa-list-check"></i> 4 Ünite</span>
+                                <span><i class="fa-solid fa-award"></i> %0 Başarı</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grade-main-card glass-card animate-slide-up" onclick="app.switchPage('page-grade11')" style="animation-delay:0.2s">
+                        <div class="g-card-icon" style="background:#fbbf24"><i class="fa-solid fa-microscope"></i></div>
+                        <div class="g-card-info">
+                            <h3>11. Sınıf</h3>
+                            <p>Modern Atom Teorisi, Gazlar, Sıvı Çözeltiler, Kimyasal Enerji ve Hız</p>
+                            <div class="g-card-footer">
+                                <span><i class="fa-solid fa-list-check"></i> 8 Ünite</span>
+                                <span><i class="fa-solid fa-award"></i> %0 Başarı</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grade-main-card glass-card animate-slide-up" onclick="app.switchPage('page-grade12')" style="animation-delay:0.3s">
+                        <div class="g-card-icon" style="background:#8b5cf6"><i class="fa-solid fa-bolt"></i></div>
+                        <div class="g-card-info">
+                            <h3>12. Sınıf</h3>
+                            <p>Kimya ve Elektrik, Karbon Kimyasına Giriş, Organik Bileşikler</p>
+                            <div class="g-card-footer">
+                                <span><i class="fa-solid fa-list-check"></i> 4 Ünite</span>
+                                <span><i class="fa-solid fa-award"></i> %0 Başarı</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- PAGE 3: TABLES -->
             <div id="page-tablolar" class="spa-page hidden">
                 <h2 style="margin-bottom:2rem">Ders Materyalleri 📚</h2>
@@ -236,7 +284,10 @@
 
             <!-- PAGE 4: GRADE 9 -->
             <div id="page-grade9" class="spa-page hidden">
-                <h2 style="margin-bottom:2rem">9. Sınıf Kimya Odası 🎓</h2>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:15px;">
+                    <h2 style="margin:0">9. Sınıf Kimya Odası 🎓</h2>
+                    <button class="btn-back" onclick="app.switchPage('page-grades')" style="font-weight:700"><i class="fa-solid fa-arrow-left"></i> Sınıf Seçimine Dön</button>
+                </div>
                 <div class="grade9-grid">
                     <!-- Topic cards will be injected here -->
                 </div>
@@ -286,7 +337,10 @@
 
             <!-- PAGE 5: GRADE 10 -->
             <div id="page-grade10" class="spa-page hidden">
-                <h2 style="margin-bottom:2rem">10. Sınıf Kimya Odası 🎓</h2>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:15px;">
+                    <h2 style="margin:0">10. Sınıf Kimya Odası 🎓</h2>
+                    <button class="btn-back" onclick="app.switchPage('page-grades')" style="font-weight:700"><i class="fa-solid fa-arrow-left"></i> Sınıf Seçimine Dön</button>
+                </div>
                 <div class="grade10-grid">
                     <!-- Topic cards will be injected here -->
                 </div>
@@ -336,7 +390,10 @@
 
             <!-- PAGE 5: GRADE 11 -->
             <div id="page-grade11" class="spa-page hidden">
-                <h2 style="margin-bottom:2rem">11. Sınıf Kimya Odası 🎓</h2>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:15px;">
+                    <h2 style="margin:0">11. Sınıf Kimya Odası 🎓</h2>
+                    <button class="btn-back" onclick="app.switchPage('page-grades')" style="font-weight:700"><i class="fa-solid fa-arrow-left"></i> Sınıf Seçimine Dön</button>
+                </div>
                 <div class="grade11-grid">
                     <!-- Topic cards will be injected here -->
                 </div>
@@ -446,7 +503,10 @@
 
             <!-- PAGE 7: GRADE 12 -->
             <div id="page-grade12" class="spa-page hidden">
-                <h2 style="margin-bottom:2rem">12. Sınıf Kimya Odası 🎓</h2>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:15px;">
+                    <h2 style="margin:0">12. Sınıf Kimya Odası 🎓</h2>
+                    <button class="btn-back" onclick="app.switchPage('page-grades')" style="font-weight:700"><i class="fa-solid fa-arrow-left"></i> Sınıf Seçimine Dön</button>
+                </div>
                 <div class="grade12-grid">
                     <!-- Topic cards will be injected here -->
                 </div>

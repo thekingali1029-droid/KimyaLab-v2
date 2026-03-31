@@ -457,6 +457,74 @@ body.theme-vip-pink h3 {
     font-weight: 900;
 }
 
+/* GRADIENT TEXT V2 */
+.animate-glow {
+    background: linear-gradient(90deg, #fff, var(--primary), #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s linear infinite;
+}
+
+/* GRADES MAIN PAGE STYLES */
+.grades-main-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 25px;
+    padding: 10px 0;
+}
+.grade-main-card {
+    display: flex;
+    gap: 20px;
+    padding: 25px;
+    align-items: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    position: relative;
+}
+.grade-main-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--primary);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2), 0 0 10px var(--primary-glow);
+}
+.grade-main-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+    transform: translateX(-100%);
+    transition: 0.6s;
+}
+.grade-main-card:hover::after { transform: translateX(100%); }
+
+.g-card-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.g-card-info { flex: 1; }
+.g-card-info h3 { font-size: 1.5rem; margin-bottom: 8px; color: var(--primary); }
+.g-card-info p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px; }
+.g-card-footer { display: flex; gap: 15px; border-top: 1px solid var(--border-color); padding-top: 12px; }
+.g-card-footer span { font-size: 0.75rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 5px; }
+.g-card-footer i { color: var(--primary); }
+
+@media (max-width: 768px) {
+    .grades-main-grid { grid-template-columns: 1fr; }
+    .grade-main-card { flex-direction: column; text-align: center; }
+    .g-card-footer { justify-content: center; }
+}
+
 /* Butterfly & Heart Particles */
 .butterfly-container {
     position: fixed;

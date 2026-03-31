@@ -565,12 +565,41 @@ const app = {
         if (pageId === 'page-grade10') this.renderGrade10();
         if (pageId === 'page-grade11') this.renderGrade11();
         if (pageId === 'page-grade12') this.renderGrade12();
+        if (pageId === 'page-grades') this.renderGrades();
         if (pageId === 'page-stats') this.renderStats();
         if (pageId === 'page-badges') this.renderBadges();
         if (pageId === 'page-homework') this.loadHomeworkList();
         if (pageId === 'page-notifications') this.loadNotifications();
         if (pageId === 'page-admin') this.switchAdminView('dashboard');
         if (pageId === 'page-tournament') this.loadLiveTournament();
+    },
+
+    renderGrades() {
+        const grades = [9, 10, 11, 12];
+        const container = document.querySelector('.grades-main-grid');
+        if (!container) return;
+
+        grades.forEach(g => {
+            const stats = JSON.parse(localStorage.getItem(`grade${g}_stats`) || '{}');
+            let totalPossible = 0;
+            let totalCorrect = 0;
+            
+            KIMYALAB_DATA[`grade${g}`].forEach(topic => {
+                totalPossible += topic.questions.length;
+                if (stats[topic.id]) {
+                    totalCorrect += stats[topic.id].correct || 0;
+                }
+            });
+
+            const percent = totalPossible > 0 ? Math.round((totalCorrect / totalPossible) * 100) : 0;
+            
+            // Find card index and update it
+            const card = container.children[g - 9];
+            if (card) {
+                const badge = card.querySelector('.fa-award').parentElement;
+                if (badge) badge.innerHTML = `<i class="fa-solid fa-award"></i> %${percent} Başarı`;
+            }
+        });
     },
 
     renderStats() {
