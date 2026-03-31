@@ -562,6 +562,7 @@ const app = {
         if (pageId === 'page-badges') this.renderBadges();
         if (pageId === 'page-homework') this.loadHomeworkList();
         if (pageId === 'page-notifications') this.loadNotifications();
+        if (pageId === 'page-admin') this.switchAdminView('dashboard');
     },
 
     renderStats() {
@@ -1486,32 +1487,38 @@ const app = {
             gameManager.initTournament(teams);
         }
     },
-    // --- ADMIN ENGINE (SECURED FOR 'awm' ONLY) ---
+
     async loadAdminNotifications() {
         if (!this.state.isAdmin) return;
-        const list = document.getElementById('admin-notifications-list');
+        const list = document.getElementById('admin-notifications-list-full') || document.getElementById('admin-notifications-list');
+        const miniList = document.getElementById('admin-notifications-list-mini');
+        if (!list) return;
+
         try {
             const res = await fetch(this.getCloudURL() + "admin_notifications.json");
             const data = await res.json();
+            
             if (!data) {
-                list.innerHTML = '<p style="text-align:center; opacity:0.5; padding:20px;">Henüz yeni bir aktivite yok...</p>';
+                const empty = '<p style="text-align:center; padding:50px; opacity:0.3;">Henüz bir aktivite yok.</p>';
+                list.innerHTML = empty;
+                if(miniList) miniList.innerHTML = empty;
                 return;
             }
+
             let html = '';
-            // Convert to array and sort by time
-            const notifs = Object.entries(data).reverse();
+            const notifs = Object.entries(data).reverse().slice(0, 50); // Last 50
             notifs.forEach(([id, n]) => {
                 html += `
-                    <div class="glass-card" style="padding:10px 15px; border-left:4px solid var(--success); display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02)">
+                    <div class="glass-card" style="padding:10px 15px; border-left:4px solid var(--success); display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); margin-bottom:8px;">
                         <div>
                             <b style="color:var(--success)">${n.user.toUpperCase()}</b> ${n.msg} 
                             <div style="font-size:0.7rem; opacity:0.6;">${new Date(n.time).toLocaleString()}</div>
                         </div>
-                        <i class="fa-solid fa-circle-check" style="color:var(--success)"></i>
                     </div>
                 `;
             });
             list.innerHTML = html;
+            if(miniList) miniList.innerHTML = html; // Mini dashboard view
         } catch (e) { console.error("Notif load fail:", e); }
     },
 
@@ -1523,476 +1530,253 @@ const app = {
         } catch (e) { alert("Silinemedi: " + e.message); }
     },
 
-    async adminResetAllHomework() {
-        if (!this.state.isAdmin) return;
-        if (!confirm("TÜM ÖDEVLERİ SİLMEK İSTEDIĞINIZE EMIN MISINIZ? \nBu işlem geri alınamaz ve tüm öğrenciler için ödev listesi temizlenir!")) return;
-        
-        try {
-            await fetch(this.getCloudURL() + "homework.json", { method: 'DELETE' });
-            alert("Tüm ödev havuzu başarıyla temizlendi! 🧹");
-            this.loadHomeworkList();
-        } catch (e) { alert("Sıfırlanamadı: " + e.message); }
-    },
-
     async loadAdminUsers() {
         if (!this.state.isAdmin) return;
-        const listContainer = document.getElementById('admin-user-list');
-        listContainer.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:50px;"><i class="fa-solid fa-spinner fa-spin"></i> Veritabanı taranıyor...</td></tr>';
-        
+        const newTable = document.getElementById('admin-user-list-new');
+        if (!newTable) return;
+
         try {
             const vips = ['ela', 'eye'];
             const res = await fetch(this.getCloudURL() + "users.json");
             const allUsers = await res.json() || {};
-            let html = '';
+            
+            let newHtml = '';
+            const userEntries = Object.entries(allUsers);
+            
+            for (let [k, u] of userEntries) {
+                const isVip = vips.includes(k.toLowerCase());
+                const isBanned = u.data && u.data.banned === true;
+                const score = (u.data && u.data.score) || 0;
+                const name = (u.profile && u.profile.username) || k;
+                const email = (u.profile && u.profile.email) || 'E-posta yok';
+                const avatar = (u.profile && u.profile.avatar) || 'school_logo.jpg';
+                const level = Math.floor(score / 500) + 1;
 
-            const renderRow = (userKey, userData) => {
-                const isVip = vips.includes(userKey.toLowerCase());
-                const isBanned = userData.data && userData.data.banned === true;
-                const score = (userData.data && userData.data.score) || 0;
-                const avatar = (userData.profile && userData.profile.avatar) || 'school_logo.jpg';
-                const name = (userData.profile && userData.profile.username) || userKey;
-                const email = (userData.profile && userData.profile.email) || 'Bulut Yok';
-
-                return `
-                    <tr style="${isBanned ? 'opacity:0.5; background:rgba(239,68,68,0.05)' : ''}">
+                newHtml += `
+                    <tr style="${isBanned ? 'opacity:0.6;' : ''}">
                         <td>
                             <div style="display:flex; align-items:center; gap:12px;">
-                                <img src="${avatar}" style="width:40px; height:40px; border-radius:12px; background:var(--bg-white); border:2px solid ${isVip ? 'var(--accent)' : 'var(--primary)'}">
+                                <div style="position:relative">
+                                    <img src="${avatar}" style="width:45px; height:45px; border-radius:14px; background:var(--bg-white); border:2px solid ${isVip ? 'var(--accent)' : 'var(--border-color)'}">
+                                    ${isVip ? '<i class="fa-solid fa-crown" style="position:absolute; top:-8px; right:-8px; color:var(--accent); font-size:0.8rem;"></i>' : ''}
+                                </div>
                                 <div>
-                                    <b style="display:block; font-size:1rem;">${name}</b>
-                                    <span style="font-size:0.7rem; color:var(--text-muted)">ID: ${userKey} ${isVip ? '<b style="color:var(--accent)">💎 VIP</b>' : ''}</span>
+                                    <b style="display:block; font-size:0.95rem;">${name}</b>
+                                    <span style="font-size:0.7rem; color:var(--text-muted)">ID: ${k}</span>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <div style="font-size:0.8rem; color:var(--text-white); font-weight:600">${email}</div>
-                            <div style="font-size:1rem; color:var(--primary); font-weight:900; margin-top:3px;"><i class="fa-solid fa-star"></i> ${score} Puan</div>
+                            <div style="font-size:0.8rem; font-weight:600;">${email}</div>
+                            <div class="status-pill ${isBanned ? 'status-banned' : 'status-online'}" style="margin-top:5px;">
+                                <i class="fa-solid ${isBanned ? 'fa-ban' : 'fa-circle-check'}"></i> ${isBanned ? 'YASAKLI' : 'AKTİF'}
+                            </div>
                         </td>
                         <td>
-                            <div style="display:flex; gap:6px; justify-content:flex-end;">
-                                <button class="admin-action-btn btn-success" onclick="app.adminAwardBadge('${userKey}')" title="Rozet Ver"><i class="fa-solid fa-medal"></i></button>
-                                <button class="admin-action-btn" onclick="app.adminAdjustScore('${userKey}', 100)" title="+100 Puan"><i class="fa-solid fa-plus"></i></button>
-                                <button class="admin-action-btn" onclick="app.adminAdjustScore('${userKey}', -100)" title="-100 Puan"><i class="fa-solid fa-minus"></i></button>
-                                <button class="admin-action-btn btn-warning" onclick="app.adminWarnUser('${userKey}')" title="Uyar"><i class="fa-solid fa-triangle-exclamation"></i></button>
-                                <button class="admin-action-btn" onclick="app.adminBanUser('${userKey}', ${!isBanned})" title="${isBanned ? 'Engeli Kaldır' : 'Engelle'}"><i class="fa-solid ${isBanned ? 'fa-user-check' : 'fa-user-slash'}"></i></button>
-                                <button class="admin-action-btn btn-danger" onclick="app.adminDeleteUser('${userKey}')" title="Sil"><i class="fa-solid fa-trash-can"></i></button>
+                            <div style="font-size:1rem; font-weight:900; color:var(--primary);"><i class="fa-solid fa-bolt"></i> ${score}</div>
+                            <div style="font-size:0.7rem; color:var(--text-muted); font-weight:700;">Seviye ${level}</div>
+                        </td>
+                        <td>
+                            <div style="display:flex; gap:8px; justify-content:flex-end;">
+                                <button class="admin-action-btn btn-success" onclick="app.adminAwardBadge('${k}')" title="Rozet Ver"><i class="fa-solid fa-medal"></i></button>
+                                <button class="admin-action-btn" onclick="app.adminAdjustScore('${k}', 100)" title="+100 Puan"><i class="fa-solid fa-chevron-up"></i></button>
+                                <button class="admin-action-btn" onclick="app.adminAdjustScore('${k}', -100)" title="-100 Puan"><i class="fa-solid fa-chevron-down"></i></button>
+                                <button class="admin-action-btn btn-danger" onclick="app.adminDeleteUser('${k}')" title="Kalıcı Olarak Sil"><i class="fa-solid fa-trash"></i></button>
+                                <button class="admin-action-btn" onclick="app.adminBanUser('${k}', ${!isBanned})" title="${isBanned ? 'Engeli Kaldır' : 'Engelle'}">
+                                    <i class="fa-solid ${isBanned ? 'fa-user-check' : 'fa-user-slash'}"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
                 `;
-            };
-
-            const userCount = Object.keys(allUsers).length;
+            }
+            newTable.innerHTML = newHtml || '<tr><td colspan="4" style="text-align:center; padding:30px;">Öğrenci bulunamadı.</td></tr>';
+            
+            // Dashboard Stats
+            this.state.allAdminUsers = allUsers;
+            this.state.vips = vips;
+            if(document.getElementById('admin-dash-user-count')) document.getElementById('admin-dash-user-count').textContent = `${userEntries.length} Kayıtlı Öğrenci`;
+            
             const resHw = await fetch(this.getCloudURL() + "homework.json");
             const hwData = await resHw.json() || {};
-            const activeHw = Object.keys(hwData).length;
+            if(document.getElementById('admin-dash-hw-count')) document.getElementById('admin-dash-hw-count').textContent = `${Object.keys(hwData).length} Aktif Ödev`;
 
-            if (document.getElementById('admin-stat-total-users')) document.getElementById('admin-stat-total-users').textContent = userCount;
-            if (document.getElementById('admin-stat-active-hw')) document.getElementById('admin-stat-active-hw').textContent = activeHw;
-
-            for (let v of vips) {
-                if (allUsers[v]) html += renderRow(v, allUsers[v]);
-                else html += renderRow(v, { profile: { username: v, avatar:'vip_1.png' }, data: { score: 0 } });
-            }
-            for (let k in allUsers) {
-                if (!vips.includes(k.toLowerCase())) html += renderRow(k, allUsers[k]);
-            }
-            listContainer.innerHTML = html || '<tr><td colspan="3" style="text-align:center; padding:30px;">Kullanıcı yok.</td></tr>';
-        } catch (e) {
-            listContainer.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:50px; color:var(--danger)">Erişim Hatası: ${e.message}</td></tr>`;
-        }
+        } catch (e) { console.error("Admin load users fail:", e); }
     },
 
-    async adminAdjustScore(userKey, amount) {
-        if (!this.state.isAdmin) return;
-        try {
-            const res = await fetch(this.getCloudURL() + `users/${userKey}/data.json`);
-            let data = await res.json();
-            
-            if (!data || data.error) data = { score: 0, totalGames: 0, maxCombo: 0, badges: [] };
-            
-            const currentScore = data.score || 0;
-            const newScore = Math.max(0, currentScore + amount);
-            
-            await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
-                method: 'PATCH',
-                body: JSON.stringify({ ...data, score: newScore })
-            });
-            this.playSound('click');
-            this.loadAdminUsers();
-        } catch (e) { alert("Hata: " + e.message); }
-    },
+    filterAdminUsers(query) {
+        const q = query.toLowerCase();
+        const users = this.state.allAdminUsers;
+        if (!users) return;
 
-    async adminWarnUser(userKey) {
-        if (!this.state.isAdmin) return;
-        const msg = prompt(`${userKey} kullanıcısına gönderilecek mesajı yazın:`);
-        if (!msg) return;
-        try {
-            await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
-                method: 'PATCH',
-                body: JSON.stringify({ message: msg })
-            });
-            alert("Mesaj başarıyla gönderildi!");
-        } catch (e) { alert("Hata: " + e.message); }
-    },
-
-    async adminBanUser(userKey, shouldBan) {
-        if (!confirm(`${userKey} kullanıcısını ${shouldBan ? 'ENGELLEMEK' : 'ENGELİNİ KALDIRMAK'} istediğinize emin misiniz?`)) return;
-        try {
-            await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
-                method: 'PATCH',
-                body: JSON.stringify({ banned: shouldBan })
-            });
-            this.loadAdminUsers();
-        } catch (e) { alert("İşlem başarısız: " + e.message); }
-    },
-
-    async adminDeleteUser(userKey) {
-        if (!confirm(`${userKey} kullanıcısını KALICI OLARAK SİLMEK istediğinize emin misiniz? BU İŞLEM GERİ ALINAMAZ!`)) return;
-        try {
-            await fetch(this.getCloudURL() + `users/${userKey}.json`, { method: 'DELETE' });
-            this.loadAdminUsers();
-        } catch (e) { alert("Silinemedi: " + e.message); }
-    },
-
-    async adminBulkPoints() {
-        if (!confirm("TÜM kullanıcılara +100 puan eklenecek. Onaylıyor musunuz?")) return;
-        try {
-            const res = await fetch(this.getCloudURL() + "users.json");
-            const users = await res.json();
-            for (let userKey in users) {
-                const currentScore = (users[userKey].data && users[userKey].data.score) || 0;
-                await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
-                    method: 'PATCH',
-                    body: JSON.stringify({ score: currentScore + 100 })
-                });
-            }
-            alert("Puanlar dağıtıldı!");
-            this.loadAdminUsers();
-        } catch (e) { alert("Hata: " + e.message); }
-    },
-
-    async adminGlobalBroadcast() {
-        const msg = prompt("Tüm sistemde (herkesin ekranında) yayınlanacak duyuruyu yazın:");
-        if (!msg) return;
-        try {
-            const bId = 'bcast_' + Date.now();
-            const payload = { id: bId, msg: msg, time: Date.now() };
-            
-            // 1. Popup (Immediate for everyone)
-            await fetch(this.getCloudURL() + "global_broadcast.json", {
-                method: 'PUT',
-                body: JSON.stringify(payload)
-            });
-
-            // 2. Persistent History (For the notifications area)
-            await fetch(this.getCloudURL() + "system_messages.json", {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
-
-            alert("Sistem Duyurusu başarıyla tüm sınıfa yayınlandı! 📢");
-        } catch (e) { alert("Hata: " + e.message); }
-    },
-
-    async loadNotifications() {
-        const feed = document.getElementById('student-notifications-feed');
-        if (!feed) return;
-        feed.innerHTML = '<p style="text-align:center; padding:50px; opacity:0.5"><i class="fa-solid fa-spinner fa-spin"></i> Panoya erişiliyor...</p>';
+        const table = document.getElementById('admin-user-list-new');
+        let html = '';
         
-        try {
-            const res = await fetch(this.getCloudURL() + "system_messages.json");
-            const data = await res.json();
-            if (!data) {
-                feed.innerHTML = '<div class="glass-card animate-slide-up" style="text-align:center; padding:50px; opacity:0.5">🔍 Henüz yayınlanmış bir duyuru bulunmuyor.</div>';
-                return;
-            }
+        for (let k in users) {
+            const u = users[k];
+            const name = ((u.profile && u.profile.username) || k).toLowerCase();
+            const email = ((u.profile && u.profile.email) || '').toLowerCase();
+            
+            if (name.includes(q) || k.toLowerCase().includes(q) || email.includes(q)) {
+                const isVip = this.state.vips.includes(k.toLowerCase());
+                const isBanned = u.data && u.data.banned === true;
+                const score = (u.data && u.data.score) || 0;
+                const avatar = (u.profile && u.profile.avatar) || 'school_logo.jpg';
+                const level = Math.floor(score / 500) + 1;
 
-            let html = '';
-            const msgs = Object.values(data).reverse();
-            msgs.forEach(m => {
-                const date = new Date(m.time).toLocaleString('tr-TR');
                 html += `
-                    <div class="glass-card animate-slide-up" style="border-left:4px solid var(--primary); padding:20px; margin-bottom:15px">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.75rem; font-weight:700; color:var(--text-muted)">
-                            <span>📣 SİSTEM DUYURUSU</span>
-                            <span>${date}</span>
-                        </div>
-                        <p style="font-size:1.1rem; color:var(--text-white); line-height:1.6; font-weight:600;">${m.msg}</p>
-                    </div>
+                    <tr style="${isBanned ? 'opacity:0.6;' : ''}">
+                        <td>
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <img src="${avatar}" style="width:45px; height:45px; border-radius:14px; border:2px solid ${isVip ? 'var(--accent)' : 'var(--border-color)'}">
+                                <div>
+                                    <b style="display:block;">${(u.profile && u.profile.username) || k}</b>
+                                    <span style="font-size:0.7rem; color:var(--text-muted)">ID: ${k}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td><div class="status-pill ${isBanned ? 'status-banned' : 'status-online'}">...</div></td>
+                        <td><div style="font-weight:900;">${score} PK</div></td>
+                        <td><button class="admin-action-btn" onclick="app.adminDeleteUser('${k}')"><i class="fa-solid fa-trash"></i></button></td>
+                    </tr>
                 `;
-            });
-            feed.innerHTML = html;
-        } catch (e) { feed.innerHTML = `<p style="color:var(--danger)">Hata: ${e.message}</p>`; }
-    },
-
-    async adminResetAllScores() {
-        if (prompt("TÜM PUANLARI SIFIRLAMAK İÇİN 'SIFIRLA' YAZIN:") !== 'SIFIRLA') return;
-        try {
-            const res = await fetch(this.getCloudURL() + "users.json");
-            const users = await res.json();
-            if (!users) return;
-
-            const promises = Object.keys(users).map(userKey => {
-                return fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
-                    method: 'PATCH',
-                    body: JSON.stringify({ score: 0 })
-                });
-            });
-
-            await Promise.all(promises);
-            this.playSound('click');
-            alert("Tüm öğrenci puanları başarıyla sıfırlandı! 💀");
-            this.loadAdminUsers();
-        } catch (e) { alert("Başarısız: " + e.message); }
-    },
-
-    async adminAwardBadge(userKey) {
-        if (!this.state.isAdmin) return;
-        const badges = KIMYALAB_DATA.badges;
-        const bList = badges.map((b, i) => `${i + 1}. ${b.name}`).join('\n');
-        const choice = prompt(`Hangi rozeti ${userKey.toUpperCase()} kullanıcısına vermek istiyorsunuz? (Sayı girin):\n\n${bList}`);
-        
-        if (!choice) return;
-        const idx = parseInt(choice) - 1;
-        if (idx < 0 || idx >= badges.length) return alert("Geçersiz seçim!");
-
-        const badgeId = badges[idx].id;
-        try {
-            const res = await fetch(this.getCloudURL() + `users/${userKey}/data.json`);
-            let data = await res.json();
-            if (!data || data.error) data = { score: 0, totalGames: 0, maxCombo: 0, badges: [] };
-            const currentBadges = data.badges || [];
-            if (currentBadges.includes(badgeId)) return alert("Bu öğrenci zaten bu rozete sahip!");
-            currentBadges.push(badgeId);
-            await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
-                method: 'PATCH',
-                body: JSON.stringify({ ...data, badges: currentBadges })
-            });
-            this.playSound('levelup');
-            alert(`Tebrikler! ${userKey.toUpperCase()} kullanıcısına '${badges[idx].name}' rozeti başarıyla verildi! 🏅`);
-            this.loadAdminUsers();
-        } catch (e) { alert("Hata: " + e.message); }
-    },
-
-    async resetG11Success() {
-        if (!confirm("Tüm 11. Sınıf konu başarılarını sıfırlamak istediğine emin misin?")) return;
-        localStorage.removeItem('g11_scores');
-        
-        // Sync to cloud if possible
-        if (this.state.currentUsername) {
-            const userKey = this.state.currentUsername.toLowerCase();
-            await fetch(this.getCloudURL() + `users/${userKey}/profile/g11_scores.json`, {
-                method: 'DELETE'
-            }).catch(e => console.error(e));
+            }
         }
-        
-        this.renderGrade11();
-        this.playSound('click');
-        alert("Konu başarıları sıfırlandı! Yeni bir başlangıç zamanı. ✨");
+        table.innerHTML = html;
     },
 
-    async adminAwardBadge(userKey) {
-        if (!this.state.isAdmin) return;
-        const badges = KIMYALAB_DATA.badges;
-        const bList = badges.map((b, i) => `${i + 1}. ${b.name}`).join('\n');
-        const choice = prompt(`Hangi rozeti ${userKey.toUpperCase()} kullanıcısına vermek istiyorsunuz? (Sayı girin):\n\n${bList}`);
-        
-        if (!choice) return;
-        const idx = parseInt(choice) - 1;
-        if (idx < 0 || idx >= badges.length) return alert("Geçersiz seçim!");
-
-        const badgeId = badges[idx].id;
-        try {
-            const res = await fetch(this.getCloudURL() + `users/${userKey}/data.json`);
-            let data = await res.json();
-            if (!data || data.error) data = { score: 0, totalGames: 0, maxCombo: 0, badges: [] };
-            const currentBadges = data.badges || [];
-            if (currentBadges.includes(badgeId)) return alert("Bu öğrenci zaten bu rozete sahip!");
-            currentBadges.push(badgeId);
-            await fetch(this.getCloudURL() + `users/${userKey}/data.json`, {
-                method: 'PATCH',
-                body: JSON.stringify({ ...data, badges: currentBadges })
-            });
-            this.playSound('levelup');
-            alert(`Tebrikler! ${userKey.toUpperCase()} kullanıcısına '${badges[idx].name}' rozeti başarıyla verildi! 🏅`);
-            this.loadAdminUsers();
-        } catch (e) { alert("Hata: " + e.message); }
+    switchAdminView(viewId) {
+        document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.adminTarget === viewId));
+        document.querySelectorAll('.admin-view').forEach(view => {
+            view.classList.toggle('hidden', view.id !== `admin-view-${viewId}`);
+            view.classList.toggle('active', view.id === `admin-view-${viewId}`);
+        });
+        if (viewId === 'students') this.loadAdminUsers();
+        if (viewId === 'broadcast') this.loadAdminNotifications();
+        if (viewId === 'homework') this.loadAdminHomeworkV2();
     },
 
-    async resetG11Success() {
-        if (!confirm("Tüm 11. Sınıf konu başarılarını sıfırlamak istediğine emin misin?")) return;
-        localStorage.removeItem('g11_scores');
-        
-        // Sync to cloud if possible
-        if (this.state.currentUsername) {
-            const userKey = this.state.currentUsername.toLowerCase();
-            await fetch(this.getCloudURL() + `users/${userKey}/profile/g11_scores.json`, {
-                method: 'DELETE'
-            }).catch(e => console.error(e));
-        }
-        
-        this.renderGrade11();
-        this.playSound('click');
-        alert("Konu başarıları sıfırlandı! Yeni bir başlangıç zamanı. ✨");
-    },
-
-    // --- HOMEWORK SYSTEM ---
-    adminAddQuestionRow() {
-        const container = document.getElementById('admin-questions-container');
-        const count = container.children.length + 1;
-        
-        const row = document.createElement('div');
-        row.className = 'glass-card admin-q-row animate-slide-up';
-        row.style.marginBottom = '10px';
-        row.style.background = 'rgba(255,255,255,0.03)';
-        
-        row.innerHTML = `
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <b>Soru ${count}</b>
-                <button onclick="this.parentElement.parentElement.remove()" style="color:var(--danger); background:none; border:none; cursor:pointer"><i class="fa-solid fa-trash-can"></i></button>
-            </div>
-            <input type="text" class="q-text btn-back" placeholder="Soru metni..." style="width:100%; margin-bottom:8px;">
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:5px;">
-                <input type="text" class="q-opt btn-back" placeholder="A Şıkkı">
-                <input type="text" class="q-opt btn-back" placeholder="B Şıkkı">
-                <input type="text" class="q-opt btn-back" placeholder="C Şıkkı">
-                <input type="text" class="q-opt btn-back" placeholder="D Şıkkı">
-            </div>
-            <select class="q-ans btn-back" style="width:100%; margin-top:8px;">
-                <option value="">Doğru Cevabı Seç...</option>
-                <option value="0">A Şıkkı</option>
-                <option value="1">B Şıkkı</option>
-                <option value="2">C Şıkkı</option>
-                <option value="3">D Şıkkı</option>
-            </select>
-        `;
-        container.appendChild(row);
-        this.playSound('click');
-        container.scrollTop = container.scrollHeight;
-    },
-
-    async adminSaveHomework() {
-        if (!this.state.isAdmin) return;
-        
-        const title = document.getElementById('admin-hw-title').value;
-        const desc = document.getElementById('admin-hw-desc').value;
-        const reward = parseInt(document.getElementById('admin-hw-reward').value) || 500;
-        const qRows = document.querySelectorAll('.admin-q-row');
-
-        if (!title || qRows.length === 0) {
-            alert("Başlık ve en az bir soru girmelisiniz!");
-            return;
-        }
-
-        const questions = [];
-        try {
-            qRows.forEach(row => {
-                const qText = row.querySelector('.q-text').value;
-                const opts = Array.from(row.querySelectorAll('.q-opt')).map(i => i.value);
-                const ansIdx = row.querySelector('.q-ans').value;
-
-                if (!qText || opts.some(o => !o) || ansIdx === "") {
-                    throw new Error("Lütfen tüm alanları doldurun!");
-                }
-                questions.push({ q: qText, options: opts, a: opts[parseInt(ansIdx)] });
-            });
-
-            const hwId = 'hw_' + Date.now();
-            const payload = { id: hwId, title, desc, questions, active: true, reward: reward };
-
-            await fetch(this.getCloudURL() + `homework/${hwId}.json`, {
-                method: 'PUT',
-                body: JSON.stringify(payload)
-            });
-
-            alert("Ödev başarıyla tüm sınıfa yayınlandı! 🚀");
-            document.getElementById('admin-hw-title').value = '';
-            document.getElementById('admin-hw-desc').value = '';
-            document.getElementById('admin-questions-container').innerHTML = '';
-        } catch (e) { alert("Hata: " + e.message); }
-    },
-
-    async loadHomeworkList() {
-        const list = document.getElementById('student-homework-list');
-        list.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:100px;"><i class="fa-solid fa-spinner fa-spin"></i> Ödevler yükleniyor...</div>';
-
+    async loadAdminHomeworkV2() {
+        const list = document.getElementById('admin-homework-list-v2');
+        if(!list) return;
         try {
             const res = await fetch(this.getCloudURL() + "homework.json");
             const homeworks = await res.json();
-
-            if (!homeworks) {
-                list.innerHTML = '<div class="glass-card" style="grid-column:1/-1; text-align:center; padding:50px; opacity:0.5">Henüz ödev atanmamış...</div>';
+            if(!homeworks) {
+                list.innerHTML = '<p style="text-align:center; opacity:0.3;">Ödev yok.</p>';
                 return;
             }
-
             let html = '';
-            for (let id in homeworks) {
-                const hw = homeworks[id];
-                const doneKey = `hw_done_${hw.id}`;
-                const isDone = localStorage.getItem(doneKey) === 'true'; // Fallback for local
-                
+            Object.entries(homeworks).reverse().forEach(([id, hw]) => {
                 html += `
-                    <div class="glass-card animate-slide-up" style="border-left: 5px solid ${isDone ? 'var(--success)' : 'var(--primary)'}; opacity: ${isDone ? '0.7' : '1'}">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                            <span class="badge" style="background:${isDone ? 'var(--success)' : 'var(--accent)'}">${isDone ? 'TAMAMLANDI' : 'YENİ ÖDEV'}</span>
-                            <b style="color:var(--primary)">+${hw.reward} Puan</b>
-                        </div>
-                        <h3>${hw.title}</h3>
-                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">${hw.desc}</p>
-                        <button class="btn-primary" ${isDone ? 'disabled' : ''} onclick="app.startHomework('${hw.id}')" style="width:100%; border-radius:10px;">
-                            ${isDone ? 'Çözenlerin Arasındasın ✨' : 'Ödevi Çözmeye Başla! 🚀'}
-                        </button>
+                    <div class="glass-card" style="padding:15px; border-left:4px solid var(--primary); margin-bottom:10px;">
+                        <h4 style="margin:0">${hw.title}</h4>
+                        <p style="font-size:0.75rem; color:var(--text-muted);">${hw.desc}</p>
+                        <button class="btn-back" style="font-size:0.6rem;" onclick="app.adminDeleteHomework('${id}')">SİL</button>
                     </div>
                 `;
-            }
+            });
             list.innerHTML = html;
-        } catch (e) { list.innerHTML = `<p>Hata: ${e.message}</p>`; }
+        } catch (e) { console.error(e); }
+    },
+
+    async adminDeleteHomework(id) {
+        if(!confirm("Silinsin mi?")) return;
+        await fetch(this.getCloudURL() + `homework/${id}.json`, { method: 'DELETE' });
+        this.loadAdminHomeworkV2();
+    },
+
+    async adminSaveHomeworkV2() {
+        const title = document.getElementById('admin-hw-title-v2').value;
+        const desc = document.getElementById('admin-hw-desc-v2').value;
+        const reward = parseInt(document.getElementById('admin-hw-reward-v2').value);
+        if(!title) return alert("Başlık girin!");
+        const hwId = 'hw_' + Date.now();
+        await fetch(this.getCloudURL() + `homework/${hwId}.json`, {
+            method: 'PUT',
+            body: JSON.stringify({ id: hwId, title, desc, reward, active: true, time: Date.now(), questions: [] })
+        });
+        alert("Yayınlandı!");
+        this.loadAdminHomeworkV2();
+    },
+
+    async adminAwardBadge(userKey) {
+        const badges = KIMYALAB_DATA.badges;
+        const choice = prompt(badges.map((b, i) => `${i + 1}. ${b.name}`).join('\n'));
+        if (!choice) return;
+        const idx = parseInt(choice) - 1;
+        const badgeId = badges[idx].id;
+        const res = await fetch(this.getCloudURL() + `users/${userKey}/data.json`);
+        let data = await res.json() || { badges: [] };
+        if (!data.badges) data.badges = [];
+        if (data.badges.includes(badgeId)) return alert("Zaten var.");
+        data.badges.push(badgeId);
+        await fetch(this.getCloudURL() + `users/${userKey}/data.json`, { method: 'PATCH', body: JSON.stringify(data) });
+        alert("Rozet Verildi!");
+        this.loadAdminUsers();
+    },
+
+    async adminAdjustScore(userKey, amount) {
+        const res = await fetch(this.getCloudURL() + `users/${userKey}/data.json`);
+        let data = await res.json() || { score: 0 };
+        const newScore = Math.max(0, (data.score || 0) + amount);
+        await fetch(this.getCloudURL() + `users/${userKey}/data.json`, { method: 'PATCH', body: JSON.stringify({ score: newScore }) });
+        this.loadAdminUsers();
+    },
+
+    async adminBanUser(userKey, shouldBan) {
+        await fetch(this.getCloudURL() + `users/${userKey}/data.json`, { method: 'PATCH', body: JSON.stringify({ banned: shouldBan }) });
+        this.loadAdminUsers();
+    },
+
+    async adminDeleteUser(userKey) {
+        if(!confirm("KALICI Silinsin mi?")) return;
+        await fetch(this.getCloudURL() + `users/${userKey}.json`, { method: 'DELETE' });
+        this.loadAdminUsers();
+    },
+
+    async adminResetAllScores() {
+        if (prompt("SIFIRLA yazın:") !== 'SIFIRLA') return;
+        const res = await fetch(this.getCloudURL() + "users.json");
+        const users = await res.json();
+        for (let k in users) {
+            await fetch(this.getCloudURL() + `users/${k}/data.json`, { method: 'PATCH', body: JSON.stringify({ score: 0 }) });
+        }
+        alert("Puanlar Sıfırlandı!");
+        this.loadAdminUsers();
+    },
+
+    async adminGlobalBroadcast() {
+        const msg = prompt("Mesaj :");
+        if (!msg) return;
+        const payload = { id: Date.now(), msg: msg, time: Date.now() };
+        await fetch(this.getCloudURL() + "global_broadcast.json", { method: 'PUT', body: JSON.stringify(payload) });
+        await fetch(this.getCloudURL() + "system_messages.json", { method: 'POST', body: JSON.stringify(payload) });
+        alert("Yayınlandı!");
     },
 
     async startHomework(hwId) {
-        try {
-            const res = await fetch(this.getCloudURL() + `homework/${hwId}.json`);
-            const hw = await res.json();
-            
-            if (!hw) return;
-            
-            this.state.currentHomeworkId = hwId;
-            this.state.currentHomeworkReward = hw.reward || 500;
-            
-            // Custom game start with custom questions
-            this.startGame('quiz', hw.questions); // Use quiz mode for teacher questions
-        } catch (e) { alert("Başlatılamadı: " + e.message); }
+        const res = await fetch(this.getCloudURL() + `homework/${hwId}.json`);
+        const hw = await res.json();
+        if(!hw) return;
+        this.state.currentHomeworkId = hwId;
+        this.state.currentHomeworkReward = hw.reward || 500;
+        this.startGame('quiz', hw.questions.length > 0 ? hw.questions : KIMYALAB_DATA.quiz_9[0].questions);
     },
 
     completeHomework() {
         const hId = this.state.currentHomeworkId;
         const reward = this.state.currentHomeworkReward || 500;
-        const hwTitle = "Ödev Başarısı"; // Dynamic title search? Let's keep it simple
-
         if (!hId) return;
-
-        // Give the reward!
         this.addScore(reward);
-        
-        // Save status to cloud
         fetch(this.getCloudURL() + `users/${this.state.currentUsername.toLowerCase()}/homework_done.json`, {
             method: 'PATCH',
             body: JSON.stringify({ [hId]: true })
-        }).catch(e => console.error("Cloud HW log failed:", e));
+        });
+        localStorage.setItem(`hw_done_${hId}`, 'true');
+        this.showRewardModal("TAMAMLANDI!", `+${reward} Puan Kazandın!`);
+        this.state.currentHomeworkId = null;
 
-        // --- NEW: Add to History ---
-        const historyLog = {
-            title: "Tamamlanan Ödev: " + hId,
-            score: reward,
-            time: Date.now()
-        };
-        fetch(this.getCloudURL() + `users/${this.state.currentUsername.toLowerCase()}/history.json`, {
-            method: 'POST',
-            body: JSON.stringify(historyLog)
-        }).catch(e => console.error("History log failed:", e));
-
-        // --- NEW: NOTIFY ADMIN ---
         const notif = {
             user: this.state.currentUsername,
             msg: `bir ödevi başarıyla tamamladı!`,
