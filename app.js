@@ -1984,48 +1984,6 @@ const app = {
         
         html += '</div>';
         container.innerHTML = html;
-    },
-
-    togglePresenterMode(show) {
-        const overlay = document.getElementById('presenter-overlay');
-        if (!overlay) return;
-        overlay.style.display = show ? 'flex' : 'none';
-        if (show) {
-            this.updatePresenterData();
-            this.state.presenterInterval = setInterval(() => this.updatePresenterData(), 10000);
-        } else {
-            clearInterval(this.state.presenterInterval);
-        }
-    },
-
-    async updatePresenterData() {
-        try {
-            // Update Leaderboard
-            const res = await fetch(this.getCloudURL() + "users.json");
-            const allUsers = await res.json() || {};
-            const sorted = Object.entries(allUsers)
-                .sort((a,b) => ((b[1].data?.score)||0) - ((a[1].data?.score)||0))
-                .slice(0, 5);
-
-            const lb = document.getElementById('presenter-leaderboard-list');
-            lb.innerHTML = sorted.map(([k, u], i) => `
-                <div class="presenter-item">
-                    <span>${i+1}. ${u.profile?.username || k}</span>
-                    <b>${u.data?.score || 0} PK</b>
-                </div>
-            `).join('');
-
-            // Update Ticker (Recent Actions)
-            const resNotif = await fetch(this.getCloudURL() + "admin_notifications.json");
-            const notifs = await resNotif.json() || {};
-            const ticker = document.getElementById('presenter-ticker-content');
-            ticker.innerHTML = Object.values(notifs).reverse().slice(0, 5).map(n => `
-                <div class="ticker-item">
-                    <b style="color:var(--primary)">${n.user.toUpperCase()}</b> ${n.msg}
-                </div>
-            `).join('');
-
-        } catch (e) { console.error("Presenter sync fail:", e); }
     }
 };
 

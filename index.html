@@ -512,11 +512,11 @@
                                         <p>Canlı Akış</p>
                                     </div>
                                 </div>
-                                <div class="quick-action-item qa-green" onclick="app.togglePresenterMode(true)" style="background:var(--primary); color:white; border-color:var(--primary-glow)">
-                                    <i class="fa-solid fa-broadcast-tower"></i>
+                                <div class="quick-action-item qa-red">
+                                    <i class="fa-solid fa-server"></i>
                                     <div class="qa-info">
-                                        <h4>Yayın Modu</h4>
-                                        <p>TV / Projeksiyon</p>
+                                        <h4>Sunucu</h4>
+                                        <p>Firebase Aktif</p>
                                     </div>
                                 </div>
                             </div>
@@ -689,65 +689,6 @@
             </div>
         </main>
     </section>
-
-    <!-- PRESENTER MODE OVERLAY (TV/Classroom Mode) -->
-    <div id="presenter-overlay" class="modal-backdrop" style="background:rgba(2, 6, 23, 0.98); backdrop-filter:blur(30px); z-index:99999; display:none; flex-direction:column; padding:40px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
-            <div style="display:flex; align-items:center; gap:20px;">
-                <div class="circle-logo" style="width:80px; height:80px;"><img src="school_logo.jpg" class="circle-logo-img"></div>
-                <div>
-                    <h1 style="color:var(--primary); font-size:2.5rem; margin:0;">KİMYALAB CANLI YAYIN</h1>
-                    <p style="color:var(--text-muted); font-size:1.1rem; margin:0; font-weight:700;"><i class="fa-solid fa-signal-stream"></i> Sınıf Etkinliği Aktif</p>
-                </div>
-            </div>
-            <button class="btn-back" onclick="app.togglePresenterMode(false)" style="padding:15px 25px; font-size:1.1rem;"><i class="fa-solid fa-xmark"></i> Yayını Kapat</button>
-        </div>
-
-        <div class="presenter-grid">
-            <!-- Left: Hero Match / Current Event -->
-            <div class="presenter-main">
-                <div id="presenter-live-event" class="glass-card" style="height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; border:2px solid var(--primary-glow)">
-                    <div id="presenter-vs-view" class="hidden">
-                        <div style="display:flex; align-items:center; gap:100px; justify-content:center;">
-                            <div class="vs-user">
-                                <div class="vs-avatar" id="vs-u1-avatar">?</div>
-                                <h2 id="vs-u1-name">OYUNCU 1</h2>
-                            </div>
-                            <div style="font-size:8rem; font-weight:900; font-style:italic; color:var(--danger); text-shadow:0 0 40px var(--danger)">VS</div>
-                            <div class="vs-user">
-                                <div class="vs-avatar" id="vs-u2-avatar">?</div>
-                                <h2 id="vs-u2-name">OYUNCU 2</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="presenter-idle-view">
-                        <i class="fa-solid fa-atom fa-spin" style="font-size:10rem; color:var(--primary); margin-bottom:40px;"></i>
-                        <h2 style="font-size:3rem;">HAZIR MISINIZ?</h2>
-                        <p style="font-size:1.5rem; opacity:0.6;">Sıradaki eşleşme bekleniyor...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right: Real-time Leaderboard -->
-            <aside class="presenter-sidebar">
-                <div class="glass-card" style="height:100%; padding:30px;">
-                    <h3 style="font-size:1.5rem; margin-bottom:30px; border-bottom:1px solid var(--border-color); padding-bottom:15px;">
-                        <i class="fa-solid fa-ranking-stars" style="color:var(--accent);"></i> GÜNCEL LİDERLİK
-                    </h3>
-                    <div id="presenter-leaderboard-list" style="display:flex; flex-direction:column; gap:20px;">
-                        <!-- Top 5 injected here -->
-                    </div>
-                    
-                    <div class="presenter-ticker" style="margin-top:40px; border-top:1px solid var(--border-color); padding-top:25px;">
-                        <h4 style="font-size:1.1rem; color:var(--text-muted); margin-bottom:15px;">SON AKTİVİTELER</h4>
-                        <div id="presenter-ticker-content" style="height:200px; overflow:hidden;">
-                            <!-- Ticker items -->
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </div>
-    </div>
 
     <!-- OVERLAYS -->
     <div id="game-overlay" class="hidden">
