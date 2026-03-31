@@ -95,6 +95,7 @@
                 <a href="#" class="nav-item" data-target="page-homework"><i class="fa-solid fa-file-pen"></i> <span>Ödevler & Sınıf</span></a>
                 <a href="#" class="nav-item" id="nav-item-admin" data-target="page-admin" style="display:none; color:var(--danger); border-left-color:var(--danger)"><i class="fa-solid fa-shield-halved"></i> <span>YÖNETİCİ</span></a>
 
+                <a href="#" class="nav-item" data-target="page-tournament" style="color:var(--accent); border-left-color:var(--accent)"><i class="fa-solid fa-trophy"></i> <span>CANLI TURNUVA</span></a>
                 <a href="#" class="nav-item" data-target="page-stats"><i class="fa-solid fa-chart-pie"></i> <span>Başarılarım</span></a>
                 <a href="#" class="nav-item" data-target="page-notifications" style="position:relative">
                     <i class="fa-solid fa-bell"></i> <span>Bildirimler</span>
@@ -376,6 +377,76 @@
                 </div>
             </div>
 
+            <!-- PAGE: LIVE TOURNAMENT -->
+            <div id="page-tournament" class="spa-page hidden container">
+                <div class="tournament-hero animate-slide-up">
+                    <div class="hero-content">
+                        <span class="live-badge"><i class="fa-solid fa-circle fa-beat"></i> CANLI</span>
+                        <h1>Kimya Şampiyonlar Ligi</h1>
+                        <p>En iyilerle yarış, kürsüye çık ve devasa ödülleri topla!</p>
+                        <div class="tournament-stats">
+                            <div class="t-stat">
+                                <i class="fa-solid fa-users"></i>
+                                <span id="t-participant-count">0 Katılımcı</span>
+                            </div>
+                            <div class="t-stat">
+                                <i class="fa-solid fa-trophy"></i>
+                                <span id="t-prize-pool">2000 Puan + Rozet</span>
+                            </div>
+                        </div>
+                        <button class="btn-primary btn-glow" id="t-join-btn" onclick="app.joinTournament()">Turuva'ya Katıl! 🚀</button>
+                    </div>
+                    <div class="hero-trophy">
+                        <i class="fa-solid fa-trophy-star"></i>
+                    </div>
+                </div>
+
+                <div class="tournament-grid">
+                    <!-- Live Matches & Brackets -->
+                    <div class="tournament-main-area">
+                        <div class="glass-header">
+                            <h3><i class="fa-solid fa-sitemap"></i> Turnuva Tablosu (Brackets)</h3>
+                            <button class="btn-back" onclick="app.loadLiveTournament()"><i class="fa-solid fa-rotate"></i> Yenile</button>
+                        </div>
+                        <div class="bracket-container" id="tournament-bracket-view">
+                            <div class="bracket-loading">
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                                <p>Eşleşmeler hazırlanıyor...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Sidebar -->
+                    <div class="tournament-sidebar">
+                        <div class="glass-card podium-card">
+                            <h3><i class="fa-solid fa-podium"></i> Kürsü Beklentisi</h3>
+                            <div class="mini-podium">
+                                <div class="p-item p-2">
+                                    <div class="p-avatar" id="t-podium-2"><i class="fa-solid fa-user"></i></div>
+                                    <div class="p-rank">2</div>
+                                </div>
+                                <div class="p-item p-1">
+                                    <div class="p-crown"><i class="fa-solid fa-crown"></i></div>
+                                    <div class="p-avatar" id="t-podium-1"><i class="fa-solid fa-user"></i></div>
+                                    <div class="p-rank">1</div>
+                                </div>
+                                <div class="p-item p-3">
+                                    <div class="p-avatar" id="t-podium-3"><i class="fa-solid fa-user"></i></div>
+                                    <div class="p-rank">3</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="glass-card" style="margin-top:20px;">
+                            <h3 style="font-size:0.9rem; margin-bottom:15px;"><i class="fa-solid fa-bolt"></i> Canlı Skor Takibi</h3>
+                            <div id="t-live-scores" class="t-score-list">
+                                <p style="text-align:center; padding:20px; opacity:0.5; font-size:0.8rem;">Maçlar başlamadı...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- PAGE 7: ADMIN PANEL -->
             <div id="page-admin" class="spa-page hidden container-wide">
                 <div class="admin-section-header animate-slide-up">
@@ -595,6 +666,11 @@
                                     <h4 style="color:var(--success); margin-bottom:15px;"><i class="fa-solid fa-file-export"></i> Veri Dışa Aktar</h4>
                                     <p style="font-size:0.8rem; margin-bottom:15px;">Öğrenci puanlarını ve başarılarını Excel/JSON formatında alın.</p>
                                     <button class="btn-back" onclick="app.adminExportData()" style="width:100%;">Dışa Aktar (JSON)</button>
+                                </div>
+                                <div class="glass-card" style="border-top:3px solid var(--accent);">
+                                    <h4 style="color:var(--accent); margin-bottom:15px;"><i class="fa-solid fa-trophy"></i> Turnuva Yönetimi</h4>
+                                    <p style="font-size:0.8rem; margin-bottom:15px;">Katılımcıları karıştır ve turnuva ağacını oluştur.</p>
+                                    <button class="btn-primary" onclick="app.adminInitializeTournament()" style="width:100%;"><i class="fa-solid fa-play"></i> Turnuvayı BAŞLAT</button>
                                 </div>
                             </div>
 

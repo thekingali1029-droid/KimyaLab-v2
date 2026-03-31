@@ -1583,3 +1583,164 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
 
 .qa-info h4 { font-size: 0.9rem; margin-bottom: 2px; }
 .qa-info p { font-size: 0.7rem; color: var(--text-muted); margin: 0; }
+/* --- LIVE TOURNAMENT STYLES --- */
+.tournament-hero {
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(37, 99, 235, 0.3);
+}
+
+.tournament-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: url('https://www.transparenttextures.com/patterns/cubes.png');
+    opacity: 0.1;
+}
+
+.live-badge {
+    background: rgba(239, 68, 68, 0.9);
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.hero-content h1 { font-size: 2.8rem; margin: 0 0 10px 0; text-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.tournament-stats { display: flex; gap: 20px; margin: 25px 0; }
+.t-stat { display: flex; align-items: center; gap: 8px; font-weight: 600; opacity: 0.9; }
+
+.hero-trophy {
+    font-size: 10rem;
+    color: rgba(255, 255, 255, 0.2);
+    transform: rotate(15deg);
+    position: relative;
+    z-index: 1;
+}
+
+.tournament-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 30px;
+}
+
+/* Bracket Logic */
+.bracket-container {
+    padding: 30px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    min-height: 500px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+}
+
+.bracket-match {
+    background: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    width: 200px;
+    overflow: hidden;
+}
+
+.match-user {
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.match-user:first-child { border-bottom: 1px solid var(--border-color); }
+.match-user.winner { background: rgba(16, 185, 129, 0.05); color: var(--success); }
+.match-user span { opacity: 0.6; font-size: 0.7rem; }
+
+/* Podium Sidebar */
+.mini-podium {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px 0;
+}
+
+.p-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.p-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--bg-white);
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.p-rank {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 900;
+    color: white;
+    border-radius: 6px 6px 0 0;
+}
+
+.p-1 .p-rank { height: 80px; background: #fbbf24; width: 60px; font-size: 2rem; }
+.p-2 .p-rank { height: 60px; background: #94a3b8; width: 55px; font-size: 1.5rem; }
+.p-3 .p-rank { height: 40px; background: #b45309; width: 55px; font-size: 1.2rem; }
+
+.p-crown {
+    position: absolute;
+    top: -20px;
+    color: #fbbf24;
+    font-size: 1.5rem;
+    filter: drop-shadow(0 2px 5px rgba(251, 191, 36, 0.5));
+}
+
+.match-line {
+    position: absolute;
+    background: var(--border-color);
+}
+
+.t-score-list { display: flex; flex-direction: column; gap: 8px; }
+.score-pill {
+    background: rgba(255,255,255,0.03);
+    padding: 10px 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.score-pill b { color: var(--primary); }
+
+@media (max-width: 992px) {
+    .tournament-grid { grid-template-columns: 1fr; }
+    .tournament-hero { flex-direction: column; text-align: center; }
+    .hero-trophy { display: none; }
+    .bracket-container { flex-direction: column; gap: 50px; }
+}
