@@ -347,6 +347,456 @@ const KIMYALAB_DATA = {
         { s: 'Zn', n: 'Çinko' }, { s: 'Hg', n: 'Cıva' }, { s: 'Pb', n: 'Kurşun' }, { s: 'Sn', n: 'Kalay' },
         { s: 'NaCl', n: 'Tuz' }, { s: 'H₂O', n: 'Su' }, { s: 'CO₂', n: 'Karbondioksit' }
     ],
+    grade9: [
+        {
+            id: 'kimya_bilimi',
+            name: 'KİMYA BİLİMİ',
+            desc: 'Simyadan kimyaya, kimya disiplinleri, sembolik dil ve güvenlik işaretleri.',
+            content: `<b>1. Simyadan Kimyaya:</b> Simya bir bilim değildir; deneme-yanılmaya dayalıdır, teorik temelleri yoktur. Kimya ise deney, gözlem ve ölçmeye dayalı bir bilimdir. 
+            <b>2. Kimya Disiplinleri:</b> Analitik Kimya, Biyokimya, Fizikokimya, Polimer Kimyası, Anorganik Kimya, Organik Kimya.
+            <b>3. Sembolik Dil:</b> 
+            • <b>Elementler:</b> Tek tür atom içerir (Örn: H, He, Fe). İlk 20 element ve yaygın metallerin sembolleri önemlidir.
+            • <b>Bileşikler:</b> En az iki farklı atomun kimyasal bağlarla bağlanmasıdır (Örn: H₂O, HCl, NaCl).
+            <b>4. Güvenlik:</b> Yanıcı, yakıcı, korozif, toksik, tahriş edici ve çevreye zararlı işaretleri laboratuvar güvenliği için kritiktir.`,
+            questions: [
+                { q: "Simyanın bilim sayılmamasının temel nedeni nedir?", options: ["Teorik temellerinin olmaması", "Çok eski olması", "Deney yapılması", "Altın aramaları"], a: "Teorik temellerinin olmaması", difficulty: 'easy' },
+                { q: "Hangisi simyacıların kimyaya kazandırdığı araçlardan biridir?", options: ["İmbik", "Elektron mikroskobu", "Bilgisayar", "Hassas terazi"], a: "İmbik", difficulty: 'easy' },
+                { q: "Suyun (H2O) yaygın adı nedir?", options: ["Su", "Tuz ruhu", "Kezzap", "Sirke ruhu"], a: "Su", difficulty: 'easy' },
+                { q: "HCl bileşiğinin yaygın adı nedir?", options: ["Tuz ruhu", "Kezzap", "Zaç yağı", "Sönmüş kireç"], a: "Tuz ruhu", difficulty: 'medium' },
+                { q: "Potasyum elementinin sembolü nedir?", options: ["K", "P", "Po", "Pt"], a: "K", difficulty: 'easy' },
+                { q: "Bakır elementinin sembolü nedir?", options: ["Cu", "B", "Ba", "Bk"], a: "Cu", difficulty: 'easy' },
+                { q: "Canlı organizmaların kimyasını inceleyen bilim dalı?", options: ["Biyokimya", "Analitik Kimya", "Nükleer Kimya", "Fizikokimya"], a: "Biyokimya", difficulty: 'easy' },
+                { q: "Karbon temelli bileşikleri inceleyen kimya dalı?", options: ["Organik Kimya", "Anorganik Kimya", "Polimer Kimyası", "Endüstriyel Kimya"], a: "Organik Kimya", difficulty: 'easy' },
+                { q: "Laboratuvarda korozif (aşındırıcı) işareti neyi temsil eder?", options: ["Cilde ve metale zarar verme", "Yanma riski", "Zehirleme", "Patlama"], a: "Cilde ve metale zarar verme", difficulty: 'medium' },
+                { q: "O üzerinde alev sembolü ne anlama gelir?", options: ["Yakıcı", "Yanıcı", "Patlayıcı", "Radyoaktif"], a: "Yakıcı", difficulty: 'medium' },
+                { q: "Elementler için hangisi yanlıştır?", options: ["Fiziksel yollarla ayrışabilirler", "Tek tür atom içerirler", "Sembollerle gösterilirler", "Homojendirler"], a: "Fiziksel yollarla ayrışabilirler", difficulty: 'hard' },
+                { q: "Bileşikler için hangisi doğrudur?", options: ["Belirli bir formülleri vardır", "Bileşenlerinin özelliğini gösterirler", "Fiziksel yöntemle ayrışırlar", "Sadece katı haldedirler"], a: "Belirli bir formülleri vardır", difficulty: 'medium' },
+                { q: "Kükürt elementinin sembolü nedir?", options: ["S", "K", "Cl", "Si"], a: "S", difficulty: 'easy' },
+                { q: "Nitrik asit (HNO3) yaygın adıyla nedir?", options: ["Kezzap", "Zaç yağı", "Tuz ruhu", "Sirke"], a: "Kezzap", difficulty: 'medium' },
+                { q: "Laboratuvarda gözlük takmanın temel amacı nedir?", options: ["Kimyasal sıçramalardan korunmak", "Daha iyi görmek", "Zorunlu olduğu için", "Şık durmak"], a: "Kimyasal sıçramalardan korunmak", difficulty: 'easy' },
+                { q: "Sodyum hidroksit (NaOH) yaygın adı?", options: ["Sud kostik", "Potas kostik", "Sönmüş kireç", "Yatıştırıcı"], a: "Sud kostik", difficulty: 'hard' },
+                { q: "Simyadan kimyaya geçişte en önemli isimlerden biri kimdir?", options: ["Robert Boyle", "Aristo", "Farabi", "İbn-i Sina"], a: "Robert Boyle", difficulty: 'medium' },
+                { q: "Modern kimyanın babası sayılan, kütlenin korunumu kanununu bulan kişi?", options: ["Antoine Lavoisier", "John Dalton", "Dimitri Mendeleev", "Niels Bohr"], a: "Antoine Lavoisier", difficulty: 'medium' },
+                { q: "Hangisi bir kimyasal maddedir?", options: ["Sofra tuzu", "Işık", "Isı", "Ses"], a: "Sofra tuzu", difficulty: 'easy' },
+                { q: "Tahriş edici madde sembolü nedir?", options: ["Ünlem işareti (!)", "Kurukafa", "Alev", "Pervane"], a: "Ünlem işareti (!)", difficulty: 'easy' }
+            ]
+        },
+        {
+            id: 'atom_sistem',
+            name: 'ATOM VE PERİYODİK SİSTEM',
+            desc: 'Atom modelleri, atomun yapısı ve periyodik sistem özellikleri.',
+            content: `<b>1. Atom Modelleri:</b> Dalton (sert küre), Thomson (üzümlü kek), Rutherford (çekirdekli), Bohr (yörüngeli), Modern (bulut modeli).
+            <b>2. Atomun Yapısı:</b> 
+            • <b>Proton (p+):</b> Çekirdekte bulunur, atom numarasını belirler.
+            • <b>Nötron (n0):</b> Çekirdekte bulunur.
+            • <b>Elektron (e-):</b> Çekirdek etrafında bulunur.
+            • <b>İyon:</b> Elektron almış (-) veya vermiş (+) atom.
+            • <b>İzotop:</b> Proton sayısı aynı, nötron sayısı farklı atomlar.
+            <b>3. Periyodik Sistem:</b> Metaller, ametaller, yarı metaller ve soygazlar olarak ayrılır. Soldan sağa iyonlaşma enerjisi ve elektronegatiflik artar, atom yarıçapı azalır.`,
+            questions: [
+                { q: "Atom çekirdeğini ilk keşfeden model hangisidir?", options: ["Rutherford", "Dalton", "Thomson", "Bohr"], a: "Rutherford", difficulty: 'medium' },
+                { q: "Üzümlü kek modeli olarak bilinen atom modeli kimindir?", options: ["Thomson", "Dalton", "Nagaoka", "Aristoteles"], a: "Thomson", difficulty: 'easy' },
+                { q: "Proton sayısı neye eşittir?", options: ["Atom Numarası", "Elektron Sayısı", "Kütle Numarası", "Nötron Sayısı"], a: "Atom Numarası", difficulty: 'easy' },
+                { q: "Bir atom elektron verirse yükü ne olur?", options: ["Pozitif (+)", "Negatif (-)", "Nötr", "Değişmez"], a: "Pozitif (+)", difficulty: 'easy' },
+                { q: "Periyodik sistemde dikey sütunlara ne denir?", options: ["Grup", "Periyot", "Katman", "Orbital"], a: "Grup", difficulty: 'easy' },
+                { q: "Atom yarıçapı periyodik tabloda hangi yönde artar?", options: ["Sola ve aşağıya", "Sağa ve yukarıya", "Sola ve yukarıya", "Sağa ve aşağıya"], a: "Sola ve aşağıya", difficulty: 'medium' },
+                { q: "Hangisi bir soygazdır?", options: ["Helyum (He)", "Hidrojen (H)", "Azot (N)", "Oksijen (O)"], a: "Helyum (He)", difficulty: 'easy' },
+                { q: "Elektronların belirli enerji seviyelerinde (katmanlarda) bulunduğunu söyleyen model?", options: ["Bohr", "Rutherford", "Dalton", "Thomson"], a: "Bohr", difficulty: 'medium' },
+                { q: "Aynı periyotta soldan sağa gidildikçe iyonlaşma enerjisi genellikle nasıl değişir?", options: ["Artar", "Azalır", "Değişmez", "Dalgalanır"], a: "Artar", difficulty: 'medium' },
+                { q: "Metaller periyodik tablonun neresinde yoğunlaşmıştır?", options: ["Sol ve orta", "Sağ üst", "Sadece en alt", "Sadece en sağ"], a: "Sol ve orta", difficulty: 'medium' },
+                { q: "Nötron sayısı nasıl hesaplanır?", options: ["Kütle No - Atom No", "Atom No + Elektron", "Atom No / 2", "Kütle No + Proton"], a: "Kütle No - Atom No", difficulty: 'medium' },
+                { q: "İzotop atomlar için hangisi doğrudur?", options: ["Kimyasal özellikleri aynıdır", "Nötron sayıları aynıdır", "Kütleleri aynıdır", "Fiziksel özellikleri aynıdır"], a: "Kimyasal özellikleri aynıdır", difficulty: 'hard' },
+                { q: "Periyodik cetvelde 7 tane ne vardır?", options: ["Periyot", "Grup", "Soygaz", "Metal"], a: "Periyot", difficulty: 'easy' },
+                { q: "Halojenler periyodik tablonun kaçıncı grubundadır?", options: ["7A (17. Grup)", "1A", "8A", "2A"], a: "7A (17. Grup)", difficulty: 'medium' },
+                { q: "Alkali metaller hangi grupla başlar?", options: ["1A", "2A", "3A", "8A"], a: "1A", difficulty: 'easy' },
+                { q: "Elektron alma isteğine ne denir?", options: ["Elektronegatiflik", "İyonlaşma enerjisi", "Atom çapı", "Nötrleşme"], a: "Elektronegatiflik", difficulty: 'hard' },
+                { q: "Bir atomun çekirdeğinde protonlarla birlikte ne bulunur?", options: ["Nötronlar", "Elektronlar", "Orbitaller", "Işık"], a: "Nötronlar", difficulty: 'easy' },
+                { q: "Dalton atom modelinde hangisi eksiktir?", options: ["Çekirdek ve atom altı parçacıklar", "Atomun küre olması", "Elementlerin tanımı", "Maddenin bölünmezliği"], a: "Çekirdek ve atom altı parçacıklar", difficulty: 'hard' },
+                { q: "Negatif yüklü iyonlara ne denir?", options: ["Anyon", "Katyon", "Nötr", "İzotop"], a: "Anyon", difficulty: 'medium' },
+                { q: "Pozitif yüklü iyonlara ne denir?", options: ["Katyon", "Anyon", "Nötron", "Elektron"], a: "Katyon", difficulty: 'medium' }
+            ]
+        },
+        {
+            id: 'etkilesimler',
+            name: 'KİMYASAL TÜRLER ARASI ETKİLEŞİMLER',
+            desc: 'Güçlü ve zayıf etkileşimler, bağ türleri ve değişimler.',
+            content: `<b>1. Kimyasal Türler:</b> Atom, Molekül, İyon.
+            <b>2. Güçlü Etkileşimler (Kimyasal Bağlar):</b> 
+            • <b>İyonik Bağ:</b> Metal-Ametal (Elektron alışverişi).
+            • <b>Kovalent Bağ:</b> Ametal-Ametal (Elektron ortaklaşması). Polar (farklı atom) ve Apolar (aynı atom).
+            • <b>Metalik Bağ:</b> Metal atomları arası (Elektron denizi).
+            <b>3. Zayıf Etkileşimler (Fiziksel Bağlar):</b> Van der Waals etkileşimleri ve Hidrojen Bağı. Hidrojen bağı en güçlü zayıf etkileşimdir (F, O, N ile H arası).
+            <b>4. Değişimler:</b> Fiziksel (Hal değişimi, çözünme), Kimyasal (Yanma, küflenme, elektroliz).`,
+            questions: [
+                { q: "Hangi etkileşim türü daha güçlüdür?", options: ["İyonik Bağ", "Hidrojen Bağı", "Dipol-Dipol", "London Kuvvetleri"], a: "İyonik Bağ", difficulty: 'easy' },
+                { q: "Metal ve ametal atomları arasında hangi bağ oluşur?", options: ["İyonik Bağ", "Kovalent Bağ", "Metalik Bağ", "Hidrojen Bağı"], a: "İyonik Bağ", difficulty: 'easy' },
+                { q: "Elektron ortaklaşması ile kurulan bağ türü nedir?", options: ["Kovalent Bağ", "İyonik Bağ", "Metalik Bağ", "Van der Waals"], a: "Kovalent Bağ", difficulty: 'medium' },
+                { q: "İki Hidrojen atomu (H-H) arasındaki bağ nasıldır?", options: ["Apolar Kovalent", "Polar Kovalent", "İyonik", "Hidrojen Bağı"], a: "Apolar Kovalent", difficulty: 'medium' },
+                { q: "Suda (H2O) molekülleri arasında hangi ZAYIF bağ etkindir?", options: ["Hidrojen Bağı", "İyonik Bağ", "Metalik Bağ", "London Kuvvetleri"], a: "Hidrojen Bağı", difficulty: 'hard' },
+                { q: "Hangisi fiziksel bir değişimdir?", options: ["Buzun erimesi", "Demirin paslanması", "Kağıdın yanması", "Sütün ekşimesi"], a: "Buzun erimesi", difficulty: 'easy' },
+                { q: "Hangisi kimyasal bir değişimdir?", options: ["Yumurta haşlanması", "Tuzun suda çözünmesi", "Camın kırılması", "Alkolün buharlaşması"], a: "Yumurta haşlanması", difficulty: 'medium' },
+                { q: "Soygazlar arasında sadece hangi zayıf etkileşim bulunur?", options: ["London Kuvvetleri", "Hidrojen Bağı", "Dipol-Dipol", "İyonik"], a: "London Kuvvetleri", difficulty: 'hard' },
+                { q: "Metallerin tel ve levha haline gelebilmesini sağlayan nedir?", options: ["Metalik Bağ", "İyonik Bağ", "Kovalent Bağ", "Hücre yapısı"], a: "Metalik Bağ", difficulty: 'medium' },
+                { q: "NaCl (Yemek tuzu) kristal yapısı nasıldır?", options: ["İyonik örgü", "Moleküler yapı", "Metalik ağ", "Sıvı kristal"], a: "İyonik örgü", difficulty: 'medium' },
+                { q: "Grafit ve elmas hangi bağ türüne sahiptir?", options: ["Ağ örgülü kovalent", "İyonik", "Zayıf London", "Metalik"], a: "Ağ örgülü kovalent", difficulty: 'hard' },
+                { q: "Hangisi bir kimyasal tür DEĞİLDİR?", options: ["Proton", "Atom", "Molekül", "İyon"], a: "Proton", difficulty: 'medium' },
+                { q: "Dipol-dipol etkileşimi hangi tür moleküllerde görülür?", options: ["Polar moleküllerde", "Apolar moleküllerde", "Sadece soygazlarda", "İyonik katılarda"], a: "Polar moleküllerde", difficulty: 'hard' },
+                { q: "Elektronegatiflik farkı arttıkça bağın iyonik karakteri nasıl değişir?", options: ["Artar", "Azalır", "Değişmez", "Sıfırlanır"], a: "Artar", difficulty: 'hard' },
+                { q: "Kömürün yanması hangi tür değişimdir?", options: ["Kimyasal", "Fiziksel", "Nükleer", "Yönlü"], a: "Kimyasal", difficulty: 'easy' },
+                { q: "Su donarken molekülleri arasındaki hangi mesafe artar?", options: ["Moleküller arası boşluk", "Atomlar arası bağ", "Elektron bulutu", "Çekirdek çapı"], a: "Moleküller arası boşluk", difficulty: 'medium' },
+                { q: "Bağ enerjisi 40 kJ/mol'den büyükse genellikle ne tür bağdır?", options: ["Güçlü (Kimyasal)", "Zayıf (Fiziksel)", "London", "Dipol"], a: "Güçlü (Kimyasal)", difficulty: 'hard' },
+                { q: "Lewis yapısında noktalar neyi temsil eder?", options: ["Değerlik elektronlarını", "Protonları", "Nötronları", "Çekirdeği"], a: "Değerlik elektronlarını", difficulty: 'medium' },
+                { q: "Amonyak (NH3) molekülü polar mıdır apolar mı?", options: ["Polar", "Apolar", "İyonik", "Metalik"], a: "Polar", difficulty: 'medium' },
+                { q: "Karbon dioksit (CO2) molekülü polar mıdır apolar mı?", options: ["Apolar", "Polar", "İyonik", "Kovalent değil"], a: "Apolar", difficulty: 'hard' }
+            ]
+        },
+        {
+            id: 'maddenin_halleri',
+            name: 'MADDENİN HALLERİ',
+            desc: 'Katı, sıvı, gaz ve plazma hallerinin özellikleri.',
+            content: `<b>1. Maddenin Halleri:</b> 
+            • <b>Katı:</b> Belirli şekil ve hacim, düşük düzensizlik. Amorf (cam, mum) ve Kristal (iyonik, moleküler, kovalent, metalik).
+            • <b>Sıvı:</b> Belirli hacim, şekil değişkendir. Viskozite (akışa direnç), buhar basıncı ve kaynama noktası önemli kavramlardır.
+            • <b>Gaz:</b> Belirli şekil ve hacim yoktur, yüksek düzensizlik, sıkıştırılabilir.
+            • <b>Plazma:</b> İyonize gaz halidir (güneş, şimşek, floresan).
+            <b>2. Hal Değişimleri:</b> Erime, donma, buharlaşma, yoğuşma, süblimleşme, kırağılaşma.`,
+            questions: [
+                { q: "Maddenin en düzensiz hali hangisidir?", options: ["Gaz", "Katı", "Sıvı", "Plazma"], a: "Gaz", difficulty: 'easy' },
+                { q: "Sıvıların akmaya karşı gösterdiği dirence ne denir?", options: ["Viskozite", "Kapasite", "Özkütle", "Akışkanlık"], a: "Viskozite", difficulty: 'medium' },
+                { q: "Sıcaklık artarsa sıvıların viskozitesi nasıl değişir?", options: ["Azalır", "Artar", "Değişmez", "Sıfır olur"], a: "Azalır", difficulty: 'medium' },
+                { q: "Amorf katılar için hangisi doğrudur?", options: ["Belirli bir erime sıcaklıkları yoktur", "Düzenli istiflenmişlerdir", "Sadece metallerdir", "Sıkıştırılabilirler"], a: "Belirli bir erime sıcaklıkları yoktur", difficulty: 'hard' },
+                { q: "Kuru buzun (katı CO2) doğrudan gaza dönüşmesine ne denir?", options: ["Süblimleşme", "Buharlaşma", "Erime", "Kırağılaşma"], a: "Süblimleşme", difficulty: 'medium' },
+                { q: "Dış basıncın buhar basıncına eşit olduğu sıcaklığa ne denir?", options: ["Kaynama Noktası", "Erime Noktası", "Kritik Sıcaklık", "Bağıl Nem"], a: "Kaynama Noktası", difficulty: 'medium' },
+                { q: "Maddenin iyonize olmuş gaz haline ne ad verilir?", options: ["Plazma", "Buhar", "Süspansiyon", "Aerozol"], a: "Plazma", difficulty: 'easy' },
+                { q: "Moleküller arası çekim gücü fazla olan sıvının kaynama noktası nasıldır?", options: ["Yüksektir", "Düşüktür", "Değişmez", "Sıfırdır"], a: "Yüksektir", difficulty: 'medium' },
+                { q: "Dağ tepesine çıkıldıkça dış basınç düşerse suyun kaynama noktası ne olur?", options: ["Düşer", "Artar", "Değişmez", "100 derece kalır"], a: "Düşer", difficulty: 'hard' },
+                { q: "Hangisi bir kristal katı türüdür?", options: ["İyonik Katı", "Cam", "Plastik", "Lastik"], a: "İyonik Katı", difficulty: 'easy' },
+                { q: "Gazlar için hangisi yanlıştır?", options: ["Tanecikler arası boşluk azdır", "Bulundukları kabı doldururlar", "Sıkıştırılabilirler", "Tanecikleri hızlı hareket eder"], a: "Tanecikler arası boşluk azdır", difficulty: 'easy' },
+                { q: "Balın buzdolabında daha yavaş akması ne ile ilgilidir?", options: ["Sıcaklık ve Viskozite", "Basınç", "Renk", "Hiyerarşi"], a: "Sıcaklık ve Viskozite", difficulty: 'easy' },
+                { q: "Kapalı kapta sıvı ile dengede olan buharın yaptığı basınca ne denir?", options: ["Denge buhar basıncı", "Atmosfer basıncı", "Kısmi basınç", "Kritik basınç"], a: "Denge buhar basıncı", difficulty: 'medium' },
+                { q: "Çamaşırların kuruması hangi olaydır?", options: ["Buharlaşma", "Yoğuşma", "Süblimleşme", "Kırağılaşma"], a: "Buharlaşma", difficulty: 'easy' },
+                { q: "LPG ve LNG hangi haldeki yakıtlardır?", options: ["Sıvılaştırılmış gazlar", "Sadece katı", "Plazma", "Metal alaşımı"], a: "Sıvılaştırılmış gazlar", difficulty: 'medium' },
+                { q: "Elmas ne tür bir kristal katıdır?", options: ["Kovalent Kristal", "İyonik Kristal", "Metalik Kristal", "Moleküler Kristal"], a: "Kovalent Kristal", difficulty: 'hard' },
+                { q: "Havadaki su buharına ne ad verilir?", options: ["Nem", "Plazma", "Çözelti", "Duman"], a: "Nem", difficulty: 'easy' },
+                { q: "Kaynama ne zaman başlar?", options: ["Buhar basıncı = Dış basınç", "Sıcaklık 100 olunca", "Isı artınca", "Molekül kırılınca"], a: "Buhar basıncı = Dış basınç", difficulty: 'medium' },
+                { q: "Kristal katıların en küçük tekrarlayan birimine ne denir?", options: ["Birim hücre", "Molekül", "Atom", "Elektron"], a: "Birim hücre", difficulty: 'hard' },
+                { q: "Maddenin plazma haline örnek hangisidir?", options: ["Yıldırım", "Hava", "Yağmur", "Toprak"], a: "Yıldırım", difficulty: 'easy' }
+            ]
+        },
+        {
+            id: 'doga_kimya',
+            name: 'DOĞA VE KİMYA',
+            desc: 'Su kaynakları, suyun önemi ve çevre kirliliği.',
+            content: `<b>1. Su ve Hayat:</b> Vücudun %60-70'i sudur. Sindirim, besin taşınması ve vücut ısısı dengesi için su şarttır. Su sertliği, içeriğindeki Ca²⁺ ve Mg²⁺ iyonlarından kaynaklanır.
+            <b>2. Çevre Kimyası:</b> 
+            • <b>Hava Kirliliği:</b> CO₂, NOₓ, SOₓ gazları (sera etkisi ve asit yağmurları).
+            • <b>Su ve Toprak Kirliliği:</b> Plastikler, ağır metaller (Hg, Pb, Cd), deterjanlar, endüstriyel atıklar.
+            <b>3. Ozon Tabakası:</b> CFC (kloroflorokarbon) gazları ozon tabakasını inceltir.`,
+            questions: [
+                { q: "Dünyadaki suların yüzde kaçı tatlı su kaynağıdır?", options: ["%3", "%97", "%50", "%1"], a: "%3", difficulty: 'hard' },
+                { q: "Suda sertliğe neden olan başlıca iyonlar hangileridir?", options: ["Kalsiyum ve Magnezyum", "Sodyum ve Potasyum", "Demir ve Bakır", "Altın ve Gümüş"], a: "Kalsiyum ve Magnezyum", difficulty: 'medium' },
+                { q: "Suların klorlanmasının temel amacı nedir?", options: ["Mikropları öldürmek", "Tat vermek", "Berraklaştırmak", "Hacmini artırmak"], a: "Mikropları öldürmek", difficulty: 'easy' },
+                { q: "Asit yağmurlarına en çok hangi gazlar sebep olur?", options: ["SO2 ve NO2", "CO2 ve O2", "N2 ve He", "Ar ve Ne"], a: "SO2 ve NO2", difficulty: 'medium' },
+                { q: "Sera etkisine yol açarak küresel ısınmaya neden olan en temel gaz?", options: ["Karbondioksit (CO2)", "Oksijen (O2)", "Azot (N2)", "Helyum (He)"], a: "Karbondioksit (CO2)", difficulty: 'easy' },
+                { q: "Toprak kirliliğine yol açan en kalıcı madde hangisidir?", options: ["Plastikler", "Yemek artıkları", "Yapraklar", "Kağıtlar"], a: "Plastikler", difficulty: 'easy' },
+                { q: "Ağır metallere (Cıva, Kurşun vb.) nerede rastlanabilir?", options: ["Piller ve endüstriyel atıklar", "Yemek tuzu", "Sofra şekeri", "İçme suyu (ideal)"], a: "Piller ve endüstriyel atıklar", difficulty: 'medium' },
+                { q: "Ozon tabakasının incelmesine neden olan gaz sınıfı?", options: ["CFC (Kloroflorokarbonlar)", "Su buharı", "Oksijen", "Soygazlar"], a: "CFC (Kloroflorokarbonlar)", difficulty: 'hard' },
+                { q: "Su döngüsü neyi ifade eder?", options: ["Suyun yeryüzü ve atmosfer arasındaki devinimi", "Suyun donması", "Baraj yapımı", "Tsunami"], a: "Suyun yeryüzü ve atmosfer arasındaki devinimi", difficulty: 'easy' },
+                { q: "Sert suların ev aletlerine zararı nedir?", options: ["Kireçlenme ve bozulma", "Hızlandırma", "Parlatma", "Hacim artırma"], a: "Kireçlenme ve bozulma", difficulty: 'easy' },
+                { q: "Hangi gaz hava kirliliğine girmez?", options: ["Oksijen (O2)", "Karbonmonoksit (CO)", "Azotoksitler", "Kükürtoksitler"], a: "Oksijen (O2)", difficulty: 'easy' },
+                { q: "Geri dönüşümün çevreye en büyük faydası nedir?", options: ["Doğal kaynakların korunması", "Daha çok enerji harcanması", "Atıkların çoğalması", "Fiyatların artması"], a: "Doğal kaynakların korunması", difficulty: 'medium' },
+                { q: "Toprak kirliliği dolaylı olarak neyi etkiler?", options: ["Gıda zincirini", "Sadece dağları", "Ulaşımı", "Yıldızları"], a: "Gıda zincirini", difficulty: 'easy' },
+                { q: "Havadaki CO2 miktarını ne azaltır?", options: ["Yeşil bitkiler (Fotosentez)", "Araba egzozları", "Fabrikalar", "Solunum"], a: "Yeşil bitkiler (Fotosentez)", difficulty: 'medium' },
+                { q: "Su kirliliği en çok hangi canlı grubunu doğrudan etkiler?", options: ["Sudaki canlılar (Balıklar vb.)", "Kara hayvanları", "Kuşlar", "Böcekler"], a: "Sudaki canlılar (Balıklar vb.)", difficulty: 'easy' },
+                { q: "Organik kirleticiler hangisidir?", options: ["Petrol atıkları", "Cam kırıkları", "Mermer tozu", "Tuz"], a: "Petrol atıkları", difficulty: 'medium' },
+                { q: "Güneşten gelen zararlı UV ışınlarını ne engeller?", options: ["Ozon tabakası", "Bulutlar", "Yağmurlar", "Ağaçlar"], a: "Ozon tabakası", difficulty: 'easy' },
+                { q: "İçilebilir suların pH değeri genellikle hangi aralıkta olmalıdır?", options: ["6.5 - 8.5", "1 - 3", "12 - 14", "5.5"], a: "6.5 - 8.5", difficulty: 'hard' },
+                { q: "Fosil yakıtların aşırı kullanımı neye yol açar?", options: ["Hava kirliliği", "Suların arınması", "Oksijen artışı", "Soğuma"], a: "Hava kirliliği", difficulty: 'easy' },
+                { q: "Hangisi çevre dostu bir enerji kaynağıdır?", options: ["Güneş enerjisi", "Kömür", "Linyit", "Ham petrol"], a: "Güneş enerjisi", difficulty: 'easy' }
+            ]
+        }
+    ],
+
+    grade10: [
+        {
+            id: 'kanunlar',
+            name: 'KİMYANIN TEMEL KANUNLARI VE HESAPLAMALAR',
+            desc: 'Kütlenin korunumu, sabit ve katlı oranlar, mol kavramı ve kimyasal tepkime hesaplamaları.',
+            content: `<b>1. Kimyanın Temel Kanunları:</b>
+            • <b>Kütlenin Korunumu (Lavoisier):</b> Tepkimeye girenlerin kütleleri toplamı, ürünlerin kütleleri toplamına eşittir.
+            • <b>Sabit Oranlar (Proust):</b> Bir bileşiği oluşturan elementlerin kütleleri arasında sabit bir oran vardır (Örn: H₂O'da mH/mO = 1/8).
+            • <b>Katlı Oranlar (Dalton):</b> İki element birden fazla bileşik oluşturduğunda, birinin sabit miktarıyla birleşen diğerinin miktarları arasında tam sayılı bir oran vardır.
+            <b>2. Mol Kavramı:</b>
+            • 1 mol = 6,022x10²³ tanecik (Avogadro Sayısı).
+            • n = m/MA (Mol = Kütle / Molar Kütle).
+            <b>3. Kimyasal Tepkimeler:</b> Yanma, sentez (birleşme), analiz (ayrışma), asit-baz ve çözünme-çökelme tepkimeleri.`,
+            questions: [
+                { q: "Kütlenin Korunumu Kanunu'nu kim bulmuştur?", options: ["Lavoisier", "Proust", "Dalton", "Avogadro"], a: "Lavoisier", difficulty: 'easy' },
+                { q: "1 mol su (H2O) kaç gramdır? (H:1, O:16)", options: ["18", "16", "20", "10"], a: "18", difficulty: 'easy' },
+                { q: "Avogadro sayısı kaçtır?", options: ["6,02x10²³", "6,02x10²²", "1,60x10⁻¹⁹", "3,14x10¹⁰"], a: "6,02x10²³", difficulty: 'easy' },
+                { q: "Aşağıdakilerden hangisi bir analiz (ayrışma) tepkimesidir?", options: ["CaCO3 -> CaO + CO2", "H2 + O2 -> H2O", "NaOH + HCl -> NaCl + H2O", "C + O2 -> CO2"], a: "CaCO3 -> CaO + CO2", difficulty: 'medium' },
+                { q: "Fe2O3 bileşiğinde sabit oran mFe/mO nedir? (Fe:56, O:16)", options: ["7/3", "5/2", "3/1", "8/3"], a: "7/3", difficulty: 'hard' },
+                { q: "N2 ve O2 gazlarından oluşan NO ve NO2 bileşikleri arasındaki katlı oran nedir?", options: ["1/2", "2/3", "3/4", "1/1"], a: "1/2", difficulty: 'medium' },
+                { q: "Yanma tepkimeleri için hangisi ORTAKTIR?", options: ["Oksijen (O2) ile tepkimeye girme", "Alev çıkarma", "Enerji alma", "Sıvı oluşumu"], a: "Oksijen (O2) ile tepkimeye girme", difficulty: 'easy' },
+                { q: "Asit + Baz -> Tuz + Su tepkimesine ne ad verilir?", options: ["Nötrleşme", "Sentez", "Yanma", "Çökelme"], a: "Nötrleşme", difficulty: 'easy' },
+                { q: "11,2 litre hacim kaplayan bir gaz NK'da kaç moldür?", options: ["0.5", "1", "2", "0.25"], a: "0.5", difficulty: 'medium' },
+                { q: "32 gram Metan (CH4) kaç moldür? (C:12, H:1)", options: ["2", "1", "0.5", "4"], a: "2", difficulty: 'medium' },
+                { q: "Tepkimede tamamen tükenen maddeye ne denir?", options: ["Sınırlayıcı bileşen", "Katalizör", "Ürün", "Çözücü"], a: "Sınırlayıcı bileşen", difficulty: 'medium' },
+                { q: "Teorik verim 100g, gerçek verim 80g ise yüzde verim kaçtır?", options: ["%80", "%20", "%100", "%40"], a: "%80", difficulty: 'easy' },
+                { q: "CO2 bileşiğinde kütlece karbon yüzdesi kaçtır? (C:12, O:16)", options: ["27.2", "40", "50", "12"], a: "27.2", difficulty: 'hard' },
+                { q: "Ametallerin oksijence zengin bileşikleri (Örn: SO3) suyla ne oluşturur?", options: ["Asit", "Baz", "Tuz", "Hidrojen gazı"], a: "Asit", difficulty: 'medium' },
+                { q: "Hangi kanun Dalton Atom Teorisi ile doğrudan açıklanabilir?", options: ["Katlı Oranlar", "Kütle Korunumu", "Sabit Oranlar", "Hepsi"], a: "Hepsi", difficulty: 'medium' },
+                { q: "Kapalı bir kapta gerçekleşen tepkimede hangisi KESİNLİKLE korunur?", options: ["Toplam Kütle", "Mol Sayısı", "Hacim", "Molekül Sayısı"], a: "Toplam Kütle", difficulty: 'easy' },
+                { q: "Bağıl atom kütlesi için referans alınan atom hangisidir?", options: ["Karbon-12", "Hidrojen-1", "Oksijen-16", "Helyum-4"], a: "Karbon-12", difficulty: 'medium' },
+                { q: "Gümüş nitrat ve sodyum klorür çözeltileri karıştırılırsa ne olur?", options: ["Çözünme-Çökelme", "Yanma", "Asit-Baz", "Sentez"], a: "Çözünme-Çökelme", difficulty: 'medium' },
+                { q: "CH4 + 2O2 -> CO2 + 2H2O tepkimesinde 0.1 mol CH4 yanarsa kaç mol CO2 oluşur?", options: ["0.1", "0.2", "1", "0.4"], a: "0.1", difficulty: 'medium' },
+                { q: "Mol kütlesi nedir?", options: ["1 mol maddenin gram cinsinden kütlesi", "1 atomun kütlesi", "1 molekülün hacmi", "Yoğunluk"], a: "1 mol maddenin gram cinsinden kütlesi", difficulty: 'easy' }
+            ]
+        },
+        {
+            id: 'karisimlar_10',
+            name: 'KARIŞIMLAR',
+            desc: 'Homojen ve heterojen karışımlar, derişim birimleri ve ayırma teknikleri.',
+            content: `<b>1. Karışım Türleri:</b>
+            • <b>Homojen (Çözelti):</b> Her yerinde aynı özelliği gösteren (Tuzlu su, hava, pirinç).
+            • <b>Heterojen:</b> Süspansiyon (Katı-Sıvı), Emülsiyon (Sıvı-Sıvı), Aerosol (Duman-Sis).
+            <b>2. Derişim Birimleri:</b>
+            • Kütlece % = (Çözünen kütlesi / Çözelti kütlesi) x 100.
+            • ppm (milyonda bir): Çok düşük derişimler için kullanılır.
+            <b>3. Koligatif Özellikler:</b> Çözünen madde derişimine bağlı olan özelliklerdir (Donma noktası düşmesi, kaynama noktası yükselmesi).
+            <b>4. Ayırma Teknikleri:</b> Mıknatıslanma, Erime noktası farkı, Yoğunluk farkı (Ayırma hunisi), Çözünürlük farkı (Kristallendirme), Kaynama noktası farkı (Damıtma).`,
+            questions: [
+                { q: "Aşağıdakilerden hangisi homojen bir karışımdır?", options: ["Hava", "Çamurlu su", "Süt", "Zeytinyağı-su"], a: "Hava", difficulty: 'easy' },
+                { q: "Zeytinyağı ve su karışımı hangi heterojen sınıfa girer?", options: ["Emülsiyon", "Süspansiyon", "Aerosol", "Çözelti"], a: "Emülsiyon", difficulty: 'medium' },
+                { q: "Kütlece %10'luk 200 gram şekerli suda kaç gram şeker vardır?", options: ["20", "10", "40", "100"], a: "20", difficulty: 'easy' },
+                { q: "Kışın yollara tuz dökülmesinin temel sebebi nedir?", options: ["Donma noktasını düşürmek", "Kaynama noktasını yükseltmek", "Yolu parlatmak", "Sürtünmeyi artırmak"], a: "Donma noktasını düşürmek", difficulty: 'easy' },
+                { q: "Mıknatısla ayırma yöntemi hangi ikiliyi ayırabilir?", options: ["Demir tozu - Kum", "Bakır - Çinko", "Tuz - Şeker", "Su - Alkol"], a: "Demir tozu - Kum", difficulty: 'easy' },
+                { q: "Ayrımsal damıtma hangi özelliğin farkından yararlanır?", options: ["Kaynama Noktası", "Yoğunluk", "Çözünürlük", "Tanecik Boyutu"], a: "Kaynama Noktası", difficulty: 'medium' },
+                { q: "Diyaliz yöntemi neyin farkıyla ayırma yapar?", options: ["Tanecik Boyutu", "Yoğunluk", "Erime Noktası", "Basınç"], a: "Tanecik Boyutu", difficulty: 'medium' },
+                { q: "Doymuş bir tuz çözeltisine su eklenirse derişimi nasıl değişir?", options: ["Azalır", "Artar", "Değişmez", "Sıfır olur"], a: "Azalır", difficulty: 'medium' },
+                { q: "Çözünme olayı sırasında 'Benzer benzeri çözer' neyi ifade eder?", options: ["Polarlar polarda çözünür", "Metaller ametalde çözünür", "Sıcaklık artarsa çözünme artar", "Tuz her şeyi çözer"], a: "Polarlar polarda çözünür", difficulty: 'medium' },
+                { q: "Süzme yöntemi hangisini ayırmak için kullanılır?", options: ["Çamurlu su", "Şekerli su", "Alkol-su", "Bakır-Gümüş alaşımı"], a: "Çamurlu su", difficulty: 'easy' },
+                { q: "Koloit karışımlarda Tyndall etkisi nedir?", options: ["Işığın saçılması", "Çökelme", "Renk değişimi", "Isı artışı"], a: "Işığın saçılması", difficulty: 'hard' },
+                { q: "Flotasyon (yüzdürme) ne farkıyla ayırma yapar?", options: ["Yoğunluk", "Kaynama noktası", "Mıknatıslanma", "Işık"], a: "Yoğunluk", difficulty: 'medium' },
+                { q: "Duman hangi tür karışımdır?", options: ["Aerosol", "Emülsiyon", "Süspansiyon", "Adi karışım"], a: "Aerosol", difficulty: 'medium' },
+                { q: "Deniz suyundan içme suyu elde etmek için hangi yöntem kullanılır?", options: ["Ters Ozmoz", "Eleme", "Mıknatıslama", "Süzme"], a: "Ters Ozmoz", difficulty: 'hard' },
+                { q: "Donma noktası düşmesinin bilimsel adı nedir?", options: ["Kriyoskopi", "Ebülyoskopi", "Osmoz", "Hidroliz"], a: "Kriyoskopi", difficulty: 'hard' },
+                { q: "100 ml alkol ve 400 ml su karışımı hacimce % kaçlıktır?", options: ["20", "25", "40", "10"], a: "20", difficulty: 'medium' },
+                { q: "Aşağıdakilerden hangisi koligatif bir özelliktir?", options: ["Ozmotik basınç", "Renk", "Kütle", "Hacim"], a: "Ozmotik basınç", difficulty: 'medium' },
+                { q: "Salkımından üzüm suyu elde etmek için kullanılan -özütleme- yöntemine ne ad verilir?", options: ["Ekstraksiyon", "Destilasyon", "Süzme", "Diyaliz"], a: "Ekstraksiyon", difficulty: 'hard' },
+                { q: "Alaşımlar ne tür karışımlardır?", options: ["Katı-Katı homojen", "Sıvı-Sıvı heterojen", "Kolloid", "Süspansiyon"], a: "Katı-Katı homojen", difficulty: 'medium' },
+                { q: "Hangisi çözeltilerin sabit bir özelliği DEĞİLDİR?", options: ["Kaynama noktası", "Homojenlik", "Tek fazlı görünüm", "Bileşenlerini koruma"], a: "Kaynama noktası", difficulty: 'medium' }
+            ]
+        },
+        {
+            id: 'asit_baz_tuz_10',
+            name: 'ASİTLER, BAZLAR VE TUZLAR',
+            desc: 'Asit-baz özellikleri, pH kavramı, indikatörler ve önemli tuzlar.',
+            content: `<b>1. Genel Özellikler:</b>
+            • <b>Asitler:</b> Tatları ekşidir, aşındırıcıdır, sulu çözeltilerinde H⁺ iyonu artar, turnusolu kırmızı yaparlar (Limon, sirke).
+            • <b>Bazlar:</b> Tatları acıdır, ele kayganlık verirler, sulu çözeltilerinde OH⁻ iyonu artar, turnusolu mavi yaparlar (Sabun, deterjan).
+            <b>2. pH Kavramı:</b> pH < 7 Asit, pH = 7 Nötr, pH > 7 Bazdır.
+            <b>3. Tepkimeler:</b> 
+            • Asit + Baz -> Tuz + Su.
+            • Asit + Metal -> Tuz + H₂ Gazı.
+            <b>4. Yaygın Tuzlar:</b> NaCl (Yemek tuzu), Na₂CO₃ (Çamaşır sodası), NaHCO₃ (Yemek sodası), CaCO₃ (Kireç taşı).`,
+            questions: [
+                { q: "Turnusol kağıdını maviye çeviren madde hangisidir?", options: ["Baz", "Asit", "Tuz", "Saf su"], a: "Baz", difficulty: 'easy' },
+                { q: "pH değeri 2 olan bir çözelti nasıldır?", options: ["Kuvvetli Asit", "Zayıf Baz", "Nötr", "Kuvvetli Baz"], a: "Kuvvetli Asit", difficulty: 'easy' },
+                { q: "Aşağıdakilerden hangisi yaygın bir bazdır?", options: ["Sabun", "Sirke", "Limon suyu", "Akü asidi"], a: "Sabun", difficulty: 'easy' },
+                { q: "Asitlerle metallerin tepkimesinden hangi gaz çıkar?", options: ["Hidrojen (H2)", "Oksijen (O2)", "Karbondioksit (CO2)", "Azot (N2)"], a: "Hidrojen (H2)", difficulty: 'medium' },
+                { q: "Aşağıdakilerden hangisi doğal bir indikatördür?", options: ["Kırmızı lahana suyu", "Fenolftalein", "Metil oranj", "Hidroklorik asit"], a: "Kırmızı lahana suyu", difficulty: 'medium' },
+                { q: "Mide asidini dengelemek için kullanılan ilaçlar ne karakterlidir?", options: ["Bazik", "Asidik", "Nötr", "Metalik"], a: "Bazik", difficulty: 'medium' },
+                { q: "NH3 (Amonyak) bileşiği için hangisi doğrudur?", options: ["Susuz bir bazdır", "Kuvvetli bir asittir", "Tuzdur", "Yanıcı olmayan gazdır"], a: "Susuz bir bazdır", difficulty: 'medium' },
+                { q: "Çamaşır suyunun formülü nedir?", options: ["NaClO", "NaCl", "HCl", "NaOH"], a: "NaClO", difficulty: 'hard' },
+                { q: "Kireç taşının formülü hangisidir?", options: ["CaCO3", "CaO", "Ca(OH)2", "CaCl2"], a: "CaCO3", difficulty: 'medium' },
+                { q: "Yemek sodası olarak bilinen bileşik hangisidir?", options: ["NaHCO3", "Na2CO3", "NaCl", "NaOH"], a: "NaHCO3", difficulty: 'hard' },
+                { q: "Asit yağmurlarına en çok hangi gaz neden olur?", options: ["SO2", "O2", "N2", "Ar"], a: "SO2", difficulty: 'medium' },
+                { q: "pH 7'den 14'e doğru gidildikçe hangi özellik artar?", options: ["Bazik kuvvet", "Asidik kuvvet", "H+ iyon derişimi", "Erilme noktası"], a: "Bazik kuvvet", difficulty: 'easy' },
+                { q: "Tuz ruhu olarak bilinen asit hangisidir?", options: ["HCl", "H2SO4", "HNO3", "CH3COOH"], a: "HCl", difficulty: 'easy' },
+                { q: "Kezzap olarak bilinen asit hangisidir?", options: ["HNO3", "HCl", "H2SO4", "H3PO4"], a: "HNO3", difficulty: 'medium' },
+                { q: "Karınca asidinin biyolojik adı nedir?", options: ["Formik asit", "Sirke asidi", "Tuz ruhu", "Süt asidi"], a: "Formik asit", difficulty: 'medium' },
+                { q: "Zeytinyağı üretiminde asitlik oranı neyi ifade eder?", options: ["Oleik asit miktarını", "Tuz miktarını", "Su miktarını", "Sabun miktarını"], a: "Oleik asit miktarını", difficulty: 'hard' },
+                { q: "Fenolftalein bazik ortamda hangi rengi alır?", options: ["Pembe", "Sarı", "Renksiz", "Kırmızı"], a: "Pembe", difficulty: 'hard' },
+                { q: "Asit ve bazın tam birleşmesiyle oluşan nötrleşme tepkimesinde suyun yanı sıra ne oluşur?", options: ["Tuz", "Gaz", "Alev", "Plastik"], a: "Tuz", difficulty: 'easy' },
+                { q: "Banyodaki kireçlenmeyi çözmek için ne kullanılmalıdır?", options: ["Asitli temizleyici (Kireç çözücü)", "Çamaşır suyu", "Sabun", "Şampuan"], a: "Asitli temizleyici (Kireç çözücü)", difficulty: 'easy' },
+                { q: "Sodyum karbonat (Na2CO3) yaygın adıyla nedir?", options: ["Çamaşır sodası", "Yemek sodası", "Yemek tuzu", "Nişadır"], a: "Çamaşır sodası", difficulty: 'hard' }
+            ]
+        },
+        {
+            id: 'kimya_her_yerde_10',
+            name: 'KİMYA HER YERDE',
+            desc: 'Temizlik maddeleri, polimerler, kozmetikler, ilaçlar ve gıdalar.',
+            content: `<b>1. Temizlik Maddeleri:</b>
+            • <b>Sabun:</b> Bitkisel veya hayvansal yağların bazlarla tepkimesinden oluşur. Doğada kolay parçalanır.
+            • <b>Deterjan:</b> Petrol türevlerinden elde edilir. Sert sularda bile temizler ancak doğada zor parçalanır.
+            <b>2. Polimerler:</b> Kauçuk, polietilen (PE), PVC (kapı-pencere), PET (şişe), Teflon, Kevlar (kurşun geçirmez yelek).
+            <b>3. Kozmetikler:</b> Boyalar, nemlendiriciler, parfümler. Kimyasal katkı içerirler, dikkatli kullanılmalıdır.
+            <b>4. Gıdalar:</b> Hazır gıdalardaki katkı maddeleri (koruyucular, renklendiriciler, emülgatörler). Sızma, riviera ve vindex yağ türleri.`,
+            questions: [
+                { q: "Sabunun hammaddesi nedir?", options: ["Yağ ve Baz", "Petrol", "Cam", "Mermer"], a: "Yağ ve Baz", difficulty: 'easy' },
+                { q: "Deterjanın sabundan en büyük farkı nedir?", options: ["Petrol türevli olması", "Doğal olması", "Sadece sıcak suda temizlemesi", "Zehirsiz olması"], a: "Petrol türevli olması", difficulty: 'medium' },
+                { q: "Yapay kauçuk, PVC ve Teflon hangi madde sınıfına girer?", options: ["Polimer", "Asit", "Metal", "Tuz"], a: "Polimer", difficulty: 'easy' },
+                { q: "Kurşun geçirmez yelek yapımında kullanılan dayanıklı polimer hangisidir?", options: ["Kevlar", "PVC", "PET", "Teflon"], a: "Kevlar", difficulty: 'hard' },
+                { q: "Hazır gıdalarda raf ömrünü uzatmak için ne eklenir?", options: ["Koruyucular", "Su", "Hava", "Şeker"], a: "Koruyucular", difficulty: 'medium' },
+                { q: "Sert sularda bile etkin temizlik yapan madde hangisidir?", options: ["Deterjan", "Sabun", "Kireç", "Kil"], a: "Deterjan", difficulty: 'medium' },
+                { q: "Teflonun kimyasal adı nedir?", options: ["Politetrafloroetilen", "Polivinil klorür", "Polietilen", "Polistiren"], a: "Politetrafloroetilen", difficulty: 'hard' },
+                { q: "Zeytinyağının kokusunu ve rengini iyileştirmek için yapılan işleme ne denir?", options: ["Rafinasyon", "Sızma", "Mayalama", "Oksidasyon"], a: "Rafinasyon", difficulty: 'medium' },
+                { q: "PVC nerelerde kullanılır?", options: ["Kapı ve pencere profillerinde", "İlaç yapımında", "Gübre üretiminde", "Ekmek yapımında"], a: "Kapı ve pencere profillerinde", difficulty: 'easy' },
+                { q: "Pastörizasyon ve UHT işlemi hangi gıda için yaygındır?", options: ["Süt", "Ekmek", "Peynir", "Et"], a: "Süt", difficulty: 'easy' },
+                { q: "İlaçların vücuda en hızlı karıştığı form hangisidir?", options: ["İğne (Enjeksiyon)", "Hap", "Şurup", "Merhem"], a: "İğne (Enjeksiyon)", difficulty: 'medium' },
+                { q: "PET şişelerin 'PET' kısaltması neyi ifade eder?", options: ["Polietilen teraftalat", "Polietilen", "Plastik", "Petrol"], a: "Polietilen teraftalat", difficulty: 'hard' },
+                { q: "Aşağıdakilerden hangisi bir geri dönüşüm sembolüdür?", options: ["Üçgen oklar", "Kurukafa", "Alev", "Ünlem"], a: "Üçgen oklar", difficulty: 'easy' },
+                { q: "Gıdalardaki -Emülgatörler- ne işe yarar?", options: ["Yağ ve suyun karışmasını sağlar", "Tat verir", "Rengi değiştirir", "Sertleştirir"], a: "Yağ ve suyun karışmasını sağlar", difficulty: 'hard' },
+                { q: "Sabun molekülünün 'suyu sevmeyen' kısmına ne denir?", options: ["Hidrofob", "Hidrofil", "Asit", "Alkol"], a: "Hidrofob", difficulty: 'medium' },
+                { q: "Trans yağlar sağlık açısından neden risklidir?", options: ["Kalp damar hastalıklarına yol açar", "Hızlı sindirilir", "Vitamin doludur", "Çok ucuzdur"], a: "Kalp damar hastalıklarına yol açar", difficulty: 'medium' },
+                { q: "Margarine kıvam vermek için hangi işlem yapılır?", options: ["Hidrojenasyon (Doyurma)", "Tuzlama", "Dondurma", "Yakma"], a: "Hidrojenasyon (Doyurma)", difficulty: 'hard' },
+                { q: "Diş macunlarındaki 'Florür' ne amaçla eklenir?", options: ["Diş minesini güçlendirmek", "Beyazlatmak", "Tat vermek", "Köpürtmek"], a: "Diş minesini güçlendirmek", difficulty: 'medium' },
+                { q: "Güneş kremlerindeki SPF değeri neyi belirtir?", options: ["UV koruma faktörünü", "Nem miktarını", "Yağ oranını", "Kokusunu"], a: "UV koruma faktörünü", difficulty: 'easy' },
+                { q: "Polimerlerin doğadaki zararı nedir?", options: ["Çok uzun sürede bozulmaları", "Çok hızlı yanmaları", "Tuzlu olmaları", "Sıvılaşmaları"], a: "Çözünmezlik ve biyobozunur olmamaları", difficulty: 'medium' }
+            ]
+        }
+    ],
+
+    grade12: [
+        {
+            id: 'elektrokimya',
+            name: 'KİMYA VE ELEKTRİK',
+            desc: 'Redoks tepkimeleri, piller, Nernst eşitliği ve elektroliz.',
+            content: `<b>1. Redoks Tepkimeleri:</b> Elektron alışverişi ile gerçekleşen tepkimelerdir. Yükseltgenme (e- verme) ve İndirgenme (e- alma) eş zamanlı olur.
+            <b>2. Galvanik Hücreler (Piller):</b> Kimyasal enerjiyi elektrik enerjisine dönüştürür. Anot (-) yükseltgenme, Katot (+) indirgenme yeridir.
+            <b>3. Nernst Eşitliği:</b> Standart olmayan koşullarda pil potansiyelini hesaplar: E = E° - (0.0592/n) * logQ.
+            <b>4. Elektroliz:</b> Elektrik enerjisi kullanılarak istemsiz kimyasal tepkimelerin gerçekleştirilmesidir. Faraday Kanunları ile devreden geçen yük miktarı ve toplanan madde kütlesi hesaplanır.
+            <b>5. Korozyon:</b> Metallerin çevresel etkilerle aşınmasıdır (Paslanma). Katodik koruma (kurban elektrot) ile engellenebilir.`,
+            questions: [
+                { q: "Redoks tepkimelerinde elektron veren maddeye ne denir?", options: ["Yükseltgenen", "İndirgenen", "Elektrolit", "Katalizör"], a: "Yükseltgenen", difficulty: 'easy' },
+                { q: "Pillerde yükseltgenmenin gerçekleştiği elektrot hangisidir?", options: ["Anot", "Katot", "Tuz köprüsü", "Voltmetre"], a: "Anot", difficulty: 'easy' },
+                { q: "Pil düzeneğinde tuz köprüsünün görevi nedir?", options: ["İyon denkliğini sağlamak", "Elektron taşımak", "Gerilimi artırmak", "Akımı kesmek"], a: "İyon denkliğini sağlamak", difficulty: 'medium' },
+                { q: "Standart pil potansiyeli (E°) ne zaman 0 olur?", options: ["Denge anında", "Başlangıçta", "Sıcaklık artınca", "Dış devre açılınca"], a: "Denge anında", difficulty: 'medium' },
+                { q: "Nernst eşitliği hangi değerleri hesaplamak için kullanılır?", options: ["Standart olmayan pil potansiyeli", "Atom kütlesi", "Işık hızı", "Bağ enerjisi"], a: "Standart olmayan pil potansiyeli", difficulty: 'hard' },
+                { q: "Aşağıdakilerden hangisi bir indirgenme yarı tepkimesidir?", options: ["Cu²⁺ + 2e⁻ -> Cu", "Zn -> Zn²⁺ + 2e⁻", "Na -> Na⁺ + e⁻", "Fe -> Fe³⁺ + 3e⁻"], a: "Cu²⁺ + 2e⁻ -> Cu", difficulty: 'medium' },
+                { q: "Elektrolizde devreden geçen 1 Faradaylık yük kaç mol elektrona eşittir?", options: ["1", "96500", "0.5", "2"], a: "1", difficulty: 'medium' },
+                { q: "Kurban elektrot yöntemi neyi engellemek için kullanılır?", options: ["Korozyon", "Buharlaşma", "Yanma", "Çözünme"], a: "Korozyon", difficulty: 'medium' },
+                { q: "Gümüşle kaplama yapmak için katota hangi metal konulmalıdır?", options: ["Kaplanacak metal", "Gümüş", "Platin", "Bakır"], a: "Kaplanacak metal", difficulty: 'hard' },
+                { q: "Suyun elektrolizinde anotta hangi gaz toplanır?", options: ["Oksijen (O2)", "Hidrojen (H2)", "Klor (Cl2)", "Azot (N2)"], a: "Oksijen (O2)", difficulty: 'hard' },
+                { q: "Lityum-iyon pillerinin en büyük avantajı nedir?", options: ["Şarj edilebilir olmaları", "Ağır olmaları", "Çok ucuz olmaları", "Sıvı elektrolit içermeleri"], a: "Şarj edilebilir olmaları", difficulty: 'easy' },
+                { q: "Redoks tepkimesi denkleştirilirken neyin korunması şarttır?", options: ["Alınan ve verilen elektron sayısı", "Sadece atom sayısı", "Sadece kütle", "Sadece hacim"], a: "Alınan ve verilen elektron sayısı", difficulty: 'medium' },
+                { q: "Standart hidrojen elektrotunun (SHE) potansiyeli kaç Volt kabul edilir?", options: ["0.00", "1.00", "0.59", "1.10"], a: "0.00", difficulty: 'easy' },
+                { q: "Aktifliği fazla olan metal pilde hangi görevi üstlenir?", options: ["Anot", "Katot", "Yalıtkan", "Lamba"], a: "Anot", difficulty: 'medium' },
+                { q: "Kuru pil (Çinko-Karbon) hangi tür hücredir?", options: ["Primer (Şarj edilemez)", "Sekonder (Şarj edilebilir)", "Yakıt hücresi", "Elektrolitik"], a: "Primer (Şarj edilemez)", difficulty: 'medium' },
+                { q: "Alüminyum eldesi hangi yöntemle yapılır?", options: ["Hall-Heroult Elektrolizi", "Yanma", "Süzme", "Kristallendirme"], a: "Hall-Heroult Elektrolizi", difficulty: 'hard' },
+                { q: "Eğer bir tepkimenin E° değeri pozitif (+) ise o tepkime nasıldır?", options: ["İstemli", "İstemsiz", "Dengede", "Yavaş"], a: "İstemli", difficulty: 'medium' },
+                { q: "Bakırın paslanması sonucu oluşan yeşil tabakanın adı nedir?", options: ["Bakır karbonat", "Pas", "Yosun", "Küp"], a: "Bakır karbonat", difficulty: 'hard' },
+                { q: "Demirin galvanizlenmesi ne ile kaplanmasıdır?", options: ["Çinko (Zn)", "Altın (Au)", "Plastik", "Boya"], a: "Çinko (Zn)", difficulty: 'medium' },
+                { q: "Faraday kanununa göre toplanan madde kütlesi hangisiyle doğru orantılıdır?", options: ["Devreden geçen yük miktarı", "Hücrenin hacmi", "Hava sıcaklığı", "Pil ömrü"], a: "Devreden geçen yük miktarı", difficulty: 'easy' }
+            ]
+        },
+        {
+            id: 'karbon_kimyasi',
+            name: 'KARBON KİMYASINA GİRİŞ',
+            desc: 'Organik bileşikler, Lewis formülleri, hibritleşme ve molekül geometrisi.',
+            content: `<b>1. Organik ve Anorganik:</b> Organik bileşikler genellikle C ve H içerir, kovalent bağlara sahiptir. Anorganiklere (Tuz, asit, baz) göre daha yavaş tepkime verirler.
+            <b>2. Karbonun Allotropları:</b> Elmas (en sert), Grafit (iletken), Fulleren (yapay), Grafen (iki boyutlu).
+            <b>3. Hibritleşme ve Geometri:</b>
+            • <b>sp³:</b> Tekli bağlar (Metan - Düzgün dörtyüzlü, 109.5°).
+            • <b>sp²:</b> İkili bağ (Eten - Düzlem üçgen, 120°).
+            • <b>sp:</b> Üçlü bağ (Etin - Doğrusal, 180°).
+            <b>4. Sigma (σ) ve Pi (π) Bağları:</b> Tekli bağlar sigmadır. İkili bağda 1 sigma 1 pi, üçlü bağda 1 sigma 2 pi bağı bulunur.`,
+            questions: [
+                { q: "Karbonun en sert doğal allotropu hangisidir?", options: ["Elmas", "Grafit", "Fulleren", "Nanotüp"], a: "Elmas", difficulty: 'easy' },
+                { q: "Organik kimyanın temel elementi hangisidir?", options: ["Karbon (C)", "Oksijen (O)", "Azot (N)", "Silisyum (Si)"], a: "Karbon (C)", difficulty: 'easy' },
+                { q: "Hibritleşme türü sp³ olan bir molekülün geometrisi nedir?", options: ["Düzgün dörtyüzlü", "Doğrusal", "Düzlem üçgen", "V-şekli"], a: "Düzgün dörtyüzlü", difficulty: 'medium' },
+                { q: "Eten (C2H4) molekülünde karbonlar arası hangi bağlar vardır?", options: ["1 sigma, 1 pi", "2 sigma", "2 pi", "1 sigma, 2 pi"], a: "1 sigma, 1 pi", difficulty: 'medium' },
+                { q: "Grafiti elmastan ayıran en önemli fiziksel özellik nedir?", options: ["Elektrik iletkenliği", "Renk", "Kütle", "Koku"], a: "Elektrik iletkenliği", difficulty: 'medium' },
+                { q: "Molekülün en basit (kaba) formülü neyi verir?", options: ["Elementlerin en basit tam sayı oranını", "Gerçek atom sayısını", "Bağ sayılarını", "Fiziksel hali"], a: "Elementlerin en basit tam sayı oranını", difficulty: 'medium' },
+                { q: "Fullerenler için hangisi doğrudur?", options: ["Yapay allotroplardır", "Sadece doğada bulunurlar", "Yalıtkandırlar", "Sıvıdırlar"], a: "Yapay allotroplardır", difficulty: 'hard' },
+                { q: "Sigma bağı oluşurken orbitaller nasıl örtüşür?", options: ["Uç uca", "Yan yana", "Çapraz", "Örtüşmez"], a: "Uç uca", difficulty: 'hard' },
+                { q: "Pi bağı oluşurken orbitaller nasıl örtüşür?", options: ["Yan yana (dik)", "Uç uca", "Dairesel", "Halka şeklinde"], a: "Yan yana (dik)", difficulty: 'hard' },
+                { q: "CH4 molekülünde bağ açısı yaklaşık kaç derecedir?", options: ["109.5", "180", "120", "90"], a: "109.5", difficulty: 'medium' },
+                { q: "Aşağıdakilerden hangisi bir anorganik bileşiktir?", options: ["NaCl (Tuz)", "CH4 (Metan)", "C2H5OH (Alkol)", "C6H12O6 (Şeker)"], a: "NaCl (Tuz)", difficulty: 'easy' },
+                { q: "VSEPR teorisine göre AX2 yapısındaki molekülün geometrisi nedir?", options: ["Doğrusal", "Açısal", "Üçgen piramit", "Kare düzlem"], a: "Doğrusal", difficulty: 'medium' },
+                { q: "İki boyutlu, tek atom kalınlığındaki karbon yapısına ne denir?", options: ["Grafen", "Fulleren", "Kömür", "Antrasit"], a: "Grafen", difficulty: 'hard' },
+                { q: "Hibritleşme sırasında ne olur?", options: ["Farklı enerjili orbitaller eş enerjili olur", "Çekirdek bölünür", "Proton sayısı değişir", "Elektronlar yok olur"], a: "Farklı enerjili orbitaller eş enerjili olur", difficulty: 'medium' },
+                { q: "CO2 molekülünde karbon atomu hangi hibritleşmeyi yapar?", options: ["sp", "sp2", "sp3", "d2sp3"], a: "sp", difficulty: 'hard' },
+                { q: "NH3 molekülünde kaç tane ortaklanmamış elektron çifti vardır?", options: ["1 çift", "2 çift", "3 çift", "0"], a: "1 çift", difficulty: 'medium' },
+                { q: "Geometrisi düzlem üçgen olan molekülün bağ açısı?", options: ["120°", "180°", "109°", "90°"], a: "120°", difficulty: 'easy' },
+                { q: "Karbon atomu en fazla kaç bağ yapabilir?", options: ["4", "2", "6", "1"], a: "4", difficulty: 'easy' },
+                { q: "Rezonans yapı neyi ifade eder?", options: ["Elektronların farklı konumlarda gösterilebilmesi", "Molekülün patlaması", "Işık saçması", "Donması"], a: "Elektronların farklı konumlarda gösterilebilmesi", difficulty: 'hard' },
+                { q: "Fullerenler ilk nerede sentezlenmiştir?", options: ["Laboratuvarda (Lazerle)", "Uzayda", "Okyanusta", "Volkanlarda"], a: "Laboratuvarda (Lazerle)", difficulty: 'hard' }
+            ]
+        },
+        {
+            id: 'organik_bilesikler',
+            name: 'ORGANİK BİLEŞİKLER',
+            desc: 'Hidrokarbonlar ve fonksiyonel gruplar (Alkol, Eter, Karbonil, Asit, Ester).',
+            content: `<b>1. Hidrokarbonlar:</b>
+            • <b>Alkanlar (Parafinler):</b> Tekli bağlar, CnH2n+2.
+            • <b>Alkenler (Olefinler):</b> En az 1 ikili bağ, CnH2n.
+            • <b>Alkinler (Asetilenler):</b> En az 1 üçlü bağ, CnH2n-2.
+            • <b>Aromatikler:</b> Benzen halkası içerenler.
+            <b>2. Fonksiyonel Gruplar:</b>
+            • <b>Alkoller (-OH):</b> Örn: Etanol.
+            • <b>Eterler (R-O-R):</b> Örn: Dimetil eter.
+            • <b>Aldehitler (-CHO):</b> Örn: Formaldehit.
+            • <b>Ketonlar (R-CO-R):</b> Örn: Aseton.
+            • <b>Karboksilik Asitler (-COOH):</b> Örn: Sirke asidi.
+            • <b>Esterler (-COOR):</b> Hoş kokulu meyve aromaları.`,
+            questions: [
+                { q: "Alkanların genel formülü nedir?", options: ["CnH2n+2", "CnH2n", "CnH2n-2", "CnHn"], a: "CnH2n+2", difficulty: 'easy' },
+                { q: "En basit hidrokarbon (1 karbonlu alkan) hangisidir?", options: ["Metan", "Etan", "Propan", "Bütan"], a: "Metan", difficulty: 'easy' },
+                { q: "Benzen halkası içeren bileşiklere ne denir?", options: ["Aromatik", "Alifatik", "Siklo", "Polimer"], a: "Aromatik", difficulty: 'medium' },
+                { q: "Aseton hangi fonksiyonel gruba girer?", options: ["Keton", "Aldehit", "Alkol", "Eter"], a: "Keton", difficulty: 'medium' },
+                { q: "Sirke asidinin (Asetik asit) formülü nedir?", options: ["CH3COOH", "HCOOH", "CH3OH", "C2H5OH"], a: "CH3COOH", difficulty: 'medium' },
+                { q: "Alkollerin ayırt edici fonksiyonel grubu hangisidir?", options: ["-OH", "-CHO", "-COOH", "-NH2"], a: "-OH", difficulty: 'easy' },
+                { q: "Meyvelere hoş koku veren organik bileşik sınıfı?", options: ["Esterler", "Alkinler", "Eterler", "Alkanlar"], a: "Esterler", difficulty: 'hard' },
+                { q: "Doymamış hidrokarbonlar hangileridir?", options: ["Alken ve Alkin", "Alkan ve Alken", "Sadece Alkin", "Aromatikler"], a: "Alken ve Alkin", difficulty: 'medium' },
+                { q: "Formaldehit hangi gruptadır?", options: ["Aldehit", "Keton", "Ester", "Fenol"], a: "Aldehit", difficulty: 'medium' },
+                { q: "Lokman ruhu olarak bilinen eter hangisidir?", options: ["Dietil eter", "Dimetil eter", "Metil alkol", "Benzin"], a: "Dietil eter", difficulty: 'hard' },
+                { q: "Polimerleşebilen hidrokarbonlar hangileridir?", options: ["Alkenler", "Alkanlar", "Soygazlar", "Sikloalkanlar"], a: "Alkenler", difficulty: 'medium' },
+                { q: "Gliserin (Gliserol) ne tür bir alkoldür?", options: ["Polialkol", "Monoalkol", "Eter", "Aldehit"], a: "Polialkol", difficulty: 'hard' },
+                { q: "Karıncalarda bulunan en basit karboksilik asit?", options: ["Formik asit", "Asetik asit", "Propionik asit", "Bütirik asit"], a: "Formik asit", difficulty: 'medium' },
+                { q: "Alkinlerin en basit üyesi (Asetilen) kaç karbonludur?", options: ["2", "1", "3", "4"], a: "2", difficulty: 'medium' },
+                { q: "Hangisi yakıt olarak kullanılan bir alkoldür?", options: ["Etanol", "Metan", "Eter", "Glikoz"], a: "Etanol", difficulty: 'easy' },
+                { q: "Fehling ve Tollens çözeltileri hangi grubu tanımak içindir?", options: ["Aldehitler", "Ketonlar", "Alkanlar", "Eterler"], a: "Aldehitler", difficulty: 'hard' },
+                { q: "Yağ asitleri ile alkollerin tepkimesinden ne oluşur?", options: ["Ester ve Su", "Alkan", "Tuz", "Polimer"], a: "Ester ve Su", difficulty: 'hard' },
+                { q: "Doymuş bir yağ asidi hangisidir?", options: ["Stearik asit", "Oleik asit", "Linoleik asit", "Hiçbiri"], a: "Stearik asit", difficulty: 'hard' },
+                { q: "Karbon sayısı arttıkça alkanların kaynama noktası nasıl değişir?", options: ["Artar", "Azalır", "Değişmez", "Önce artar sonra azalır"], a: "Artar", difficulty: 'easy' },
+                { q: "İzomerlik nedir?", options: ["Kapalı formülü aynı, açık formülü farklı olma", "Aynı molekül olma", "Sadece metal olma", "Farklı element olma"], a: "Kapalı formülü aynı, açık formülü farklı olma", difficulty: 'medium' }
+            ]
+        },
+        {
+            id: 'enerji_kaynaklari_12',
+            name: 'ENERJİ KAYNAKLARI VE SÜRDÜRÜLEBİLİRLİK',
+            desc: 'Fosil yakıtlar, nükleer ve yenilenebilir enerji, sürdürebilirlik.',
+            content: `<b>1. Fosil Yakıtlar:</b> Kömür, petrol ve doğal gazdır. Rezervleri sınırlıdır, CO₂ emisyonu ile küresel ısınmaya yol açarlar.
+            <b>2. Nükleer Enerji:</b> Atom çekirdeğinin parçalanması (fisyon) veya birleşmesi (füzyon) ile elde edilir. Karbon ayak izi düşüktür ancak atık yönetimi zordur.
+            <b>3. Yenilenebilir Enerji:</b> Güneş, rüzgar, jeotermal, biyokütle ve hidroelektrik enerji. Sürdürülebilirlik için kritiktir.
+            <b>4. Sürdürülebilirlik:</b> Gelecek nesillerin ihtiyaçlarını tehlikeye atmadan bugünkü ihtiyaçların karşılanmasıdır.`,
+            questions: [
+                { q: "Hangisi yenilenebilir bir enerji kaynağıdır?", options: ["Rüzgar", "Kömür", "Petrol", "Doğal gaz"], a: "Rüzgar", difficulty: 'easy' },
+                { q: "Fosil yakıtların yanması sonucu açığa çıkan ve sera etkisine neden olan temel gaz?", options: ["CO2", "O2", "N2", "Ar"], a: "CO2", difficulty: 'easy' },
+                { q: "Gelecekteki hidrojen enerjisinin en büyük avantajı nedir?", options: ["Sadece su buharı üretmesi", "Çok ucuz olması", "Her yerde bulunması", "Zehirli olması"], a: "Sadece su buharı üretmesi", difficulty: 'medium' },
+                { q: "Hangisi bir nükleer yakıttır?", options: ["Uranyum", "Kömür", "Odun", "Alkol"], a: "Uranyum", difficulty: 'easy' },
+                { q: "Sürdürülebilirlik ilkesi neyi savunur?", options: ["Kaynakların verimli kullanılmasını", "Daha çok harcamayı", "Hızlı tüketimi", "Sadece bugün yaşamayı"], a: "Kaynakların verimli kullanılmasını", difficulty: 'easy' },
+                { q: "Biyoyakıtlar hangi kaynaktan elde edilir?", options: ["Bitkisel ve hayvansal atıklardan", "Yer altından", "Güneşten", "Rüzgardan"], a: "Bitkisel ve hayvansal atıklardan", difficulty: 'medium' },
+                { q: "Hangisi nükleer enerji için yanlıştır?", options: ["Çok fazla CO2 üretir", "Tehlikelidir", "Verimi yüksektir", "Uranyum kullanılır"], a: "Çok fazla CO2 üretir", difficulty: 'medium' },
+                { q: "Güneş panelleri hangi enerji dönüşümünü yapar?", options: ["Işık -> Elektrik", "Isı -> Hareket", "Ses -> Işık", "Kimyasal -> Potansiyel"], a: "Işık -> Elektrik", difficulty: 'easy' },
+                { q: "Karbon ayak izi nedir?", options: ["Bir kişinin doğaya bıraktığı CO2 miktarı", "Mürekkep lekesi", "Kömür ocağı", "Ayakkabı numarası"], a: "Bir kişinin doğaya bıraktığı CO2 miktarı", difficulty: 'medium' },
+                { q: "Jeotermal enerji kaynağı nedir?", options: ["Yer altı sıcak suları", "Rüzgar", "Dalga", "Güneş"], a: "Yer altı sıcak suları", difficulty: 'easy' },
+                { q: "Hidroelektrik santraller (HES) nerede kurulur?", options: ["Baraj ve akarsularda", "Çöllerde", "Madenlerde", "Şehir merkezinde"], a: "Baraj ve akarsularda", difficulty: 'easy' },
+                { q: "Nükleer atıkların depolanması neden zordur?", options: ["Radyoaktif oldukları için", "Çok ağır oldukları için", "Sıvı oldukları için", "Koktukları için"], a: "Radyoaktif oldukları için", difficulty: 'medium' },
+                { q: "Hangisi temiz enerji kapsamında DEĞİLDİR?", options: ["Linyit kömürü", "Hidrojen", "Güneş", "Jeotermal"], a: "Linyit kömürü", difficulty: 'easy' },
+                { q: "Kömürün en kalorili (en yaşlı) türü hangisidir?", options: ["Antrasit", "Linyit", "Turba", "Taş kömürü"], a: "Antrasit", difficulty: 'hard' },
+                { q: "Petrol rafinerisinde ürünler hangi yönteme göre ayrılır?", options: ["Ayrımsal Damıtma", "Süzme", "Diyaliz", "Eleme"], a: "Ayrımsal Damıtma", difficulty: 'medium' },
+                { q: "Sürdürülebilir bir dünya için hangisi yapılmalıdır?", options: ["Geri dönüşüm", "Daha fazla plastik kullanımı", "Ormanların kesilmesi", "İsrafın artması"], a: "Geri dönüşüm", difficulty: 'easy' },
+                { q: "Nükleer füzyon nerede gerçekleşir?", options: ["Güneş ve yıldızlarda", "Mutfakta", "Araba motorunda", "Pillerde"], a: "Güneş ve yıldızlarda", difficulty: 'hard' },
+                { q: "Rüzgar türbinleri en çok nerede verimlidir?", options: ["Açık deniz ve yüksek tepelerde", "Orman diplerinde", "Kapalı binalarda", "Mağaralarda"], a: "Açık deniz ve yüksek tepelerde", difficulty: 'easy' },
+                { q: "Biyokütle enerjisi hangi süreçle elde edilebilir?", options: ["Fermantasyon ve yakma", "Donma", "Elektroliz", "Mıknatıslama"], a: "Fermantasyon ve yakma", difficulty: 'hard' },
+                { q: "Enerji verimliliği ne demektir?", options: ["Aynı işi daha az enerjiyle yapmak", "Hiç enerji harcamamak", "Sürekli ışık yakmak", "Büyük makineler kullanmak"], a: "Aynı işi daha az enerjiyle yapmak", difficulty: 'easy' }
+            ]
+        }
+    ],
+
     grade11: [
         {
             id: 'org_sema',

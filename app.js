@@ -15,7 +15,10 @@ const app = {
         isVIP: false,
         vipTheme: null,
         totalGames: parseInt(localStorage.getItem('totalGames') || '0'),
+        grade9_stats: JSON.parse(localStorage.getItem('grade9_stats') || '{}'),
+        grade10_stats: JSON.parse(localStorage.getItem('grade10_stats') || '{}'),
         grade11_stats: JSON.parse(localStorage.getItem('grade11_stats') || '{}'),
+        grade12_stats: JSON.parse(localStorage.getItem('grade12_stats') || '{}'),
         currentDifficulty: 'all',
         currentTopicId: null
     },
@@ -558,7 +561,10 @@ const app = {
 
         if (pageId === 'page-periodic-lab') this.renderPeriodicTable();
         if (pageId === 'page-tablolar') this.renderTablolar('cations');
+        if (pageId === 'page-grade9') this.renderGrade9();
+        if (pageId === 'page-grade10') this.renderGrade10();
         if (pageId === 'page-grade11') this.renderGrade11();
+        if (pageId === 'page-grade12') this.renderGrade12();
         if (pageId === 'page-stats') this.renderStats();
         if (pageId === 'page-badges') this.renderBadges();
         if (pageId === 'page-homework') this.loadHomeworkList();
@@ -845,12 +851,273 @@ const app = {
         this.speak(`${item.name}. ${item.desc || ''}`);
     },
 
+    // --- GRADE 9 SYSTEM ---
+    renderGrade9() {
+        const grid = document.querySelector('.grade9-grid');
+        if (!grid) return;
+        grid.innerHTML = KIMYALAB_DATA.grade9.map(topic => `
+            <div class="game-card animate-slide-up" style="background:#4ade80; min-height:140px; justify-content:center; align-items:flex-start; padding:20px;" onclick="app.showGrade9Detail('${topic.id}')">
+                <i class="fa-solid fa-atom"></i>
+                <h3 style="font-size:1.2rem; margin-bottom:5px;">${topic.name}</h3>
+                <p style="font-size:0.8rem; opacity:0.8;">${topic.desc}</p>
+            </div>
+        `).join('');
+    },
+
+    showGrade9Detail(topicId) {
+        this.state.currentTopicId = topicId;
+        const topic = KIMYALAB_DATA.grade9.find(t => t.id === topicId);
+        if (!topic) return;
+
+        const detail = document.getElementById('grade9-detail');
+        const title = document.getElementById('g9-title');
+        const desc = document.getElementById('g9-desc');
+        const content = document.getElementById('g9-content');
+        
+        title.textContent = topic.name;
+        desc.textContent = topic.desc;
+        content.innerHTML = topic.content.replace(/\n/g, '<br>');
+        
+        this.setG9Difficulty('all', true);
+        this.setG9Mode('study');
+
+        detail.classList.remove('hidden');
+        detail.scrollIntoView({ behavior: 'smooth' });
+        this.playSound('click');
+        this.speak(`${topic.name}. ${topic.desc}`);
+    },
+
+    setG9Mode(mode) {
+        const tabStudy = document.getElementById('tab-g9-study');
+        const tabQuiz = document.getElementById('tab-g9-quiz');
+        const areaStudy = document.getElementById('g9-study-area');
+        const areaQuiz = document.getElementById('g9-quiz-container');
+        if (!tabStudy || !tabQuiz) return;
+        if (mode === 'study') {
+            tabStudy.classList.add('active-match'); tabQuiz.classList.remove('active-match');
+            areaStudy.style.display = 'block'; areaQuiz.style.display = 'none';
+        } else {
+            tabStudy.classList.remove('active-match'); tabQuiz.classList.add('active-match');
+            areaStudy.style.display = 'none'; areaQuiz.style.display = 'block';
+        }
+        this.playSound('click');
+    },
+
+    setG9Difficulty(diff, skipSound = false) {
+        this.state.currentDifficulty = diff;
+        const topicId = this.state.currentTopicId;
+        const topic = KIMYALAB_DATA.grade9.find(t => t.id === topicId);
+        if (!topic) return;
+
+        let filteredQuestions = diff === 'all' ? topic.questions : topic.questions.filter(q => q.difficulty === diff);
+        const questionsArea = document.getElementById('g9-questions');
+        if (!questionsArea) return;
+
+        questionsArea.innerHTML = filteredQuestions.map((q, i) => `
+            <div class="glass-card animate-slide-up g9-question-card" style="margin-bottom:20px; background:var(--bg-white)">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem">
+                    <p style="font-weight:700; flex:1; padding-right:10px;">Soru ${i+1}: ${q.q}</p>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:5px">
+                        <span class="badge-${q.difficulty || 'easy'}">${(q.difficulty || 'easy').toUpperCase()}</span>
+                        <button class="btn-hint" onclick="app.toggleG9Hint(this)"><i class="fa-solid fa-lightbulb"></i> İpucu</button>
+                    </div>
+                </div>
+                <div class="hint-text" style="display:none; padding:10px; background:rgba(251, 192, 45, 0.1); border-radius:8px; margin-bottom:10px; font-size:0.9rem; border-left:4px solid var(--primary)">${q.hint || 'İpucu yok.'}</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
+                    ${q.options.map(opt => `<button class="btn-back q-opt" style="font-size:0.85rem; padding:12px" onclick="app.checkG9Answer(this, '${opt.replace(/'/g, "\\'")}', '${q.a.replace(/'/g, "\\'")}', '${(q.explanation || '').replace(/'/g, "\\'")}')">${opt}</button>`).join('')}
+                </div>
+                <div class="explanation-box" style="display:none; margin-top:15px; padding:15px; background:rgba(37, 99, 235, 0.05); border-radius:10px; border-left:4px solid var(--success)">
+                    <div style="font-weight:800; color:var(--primary); margin-bottom:5px;"><i class="fa-solid fa-circle-info"></i> Çözüm</div>
+                    <div class="explanation-content">${q.explanation || 'Bilgi yok.'}</div>
+                </div>
+            </div>
+        `).join('') || '<p style="text-align:center; padding:2rem; opacity:0.5">Henüz soru eklenmedi.</p>';
+
+        this.updateG9StatsUI();
+        if(!skipSound) this.playSound('click');
+    },
+
+    toggleG9Hint(btn) {
+        const card = btn.closest('.g9-question-card');
+        const hintEl = card.querySelector('.hint-text');
+        const isHidden = window.getComputedStyle(hintEl).display === 'none';
+        hintEl.style.display = isHidden ? 'block' : 'none';
+        btn.innerHTML = isHidden ? '<i class="fa-solid fa-eye-slash"></i> Kapat' : '<i class="fa-solid fa-lightbulb"></i> İpucu';
+        if(isHidden) this.playSound('click');
+    },
+
+    checkG9Answer(btn, selected, correct, explanation) {
+        if (btn.classList.contains('answered')) return;
+        const card = btn.closest('.g9-question-card');
+        const topicId = this.state.currentTopicId;
+        if (!this.state.grade9_stats[topicId]) this.state.grade9_stats[topicId] = { correct: 0, answered: [] };
+        const questionText = card.querySelector('p').innerText;
+        if (this.state.grade9_stats[topicId].answered.includes(questionText)) return;
+
+        const isCorrect = selected === correct;
+        if (isCorrect) {
+            btn.style.background = 'var(--success)'; btn.style.color = 'white';
+            this.playSound('correct'); this.state.grade9_stats[topicId].correct++;
+            this.state.grade9_stats[topicId].answered.push(questionText);
+            this.addScore(10); localStorage.setItem('grade9_stats', JSON.stringify(this.state.grade9_stats));
+            confetti({ particleCount: 30, spread: 40, origin: { y: 0.7 } });
+        } else {
+            btn.style.background = 'var(--danger)'; btn.style.color = 'white';
+            this.playSound('wrong'); btn.classList.add('animate-shake');
+        }
+        const explainBox = card.querySelector('.explanation-box');
+        if (explainBox) {
+            explainBox.style.display = 'block';
+            if (!isCorrect) {
+                explainBox.style.borderColor = 'var(--danger)';
+                explainBox.querySelector('.explanation-content').innerHTML = `<b style="color:var(--danger)">Cevap: ${correct}</b><br>${explanation}`;
+            }
+        }
+        card.querySelectorAll('.q-opt').forEach(b => {
+            b.classList.add('answered');
+            if (b.innerText === correct) { b.style.background = 'var(--success)'; b.style.color = 'white'; b.style.fontWeight = '800'; }
+        });
+        this.updateG9StatsUI();
+    },
+
+    updateG9StatsUI() {
+        const topicId = this.state.currentTopicId;
+        const topic = KIMYALAB_DATA.grade9.find(t => t.id === topicId);
+        const stats = this.state.grade9_stats[topicId] || { correct: 0, answered: [] };
+        const totalScoreEl = document.getElementById('g9-total-score');
+        const topicStatsEl = document.getElementById('g9-current-topic-stats');
+        if (!totalScoreEl || !topicStatsEl) return;
+        const total = topic ? topic.questions.length : 0;
+        const rate = total > 0 ? Math.round((stats.correct / total) * 100) : 0;
+        totalScoreEl.innerHTML = `🔥 Başarı: %${rate}`;
+        topicStatsEl.innerHTML = `🎯 ${stats.correct} / ${total}`;
+    },
+
+    closeGrade9Detail() { document.getElementById('grade9-detail').classList.add('hidden'); this.playSound('click'); },
+
+    // --- GRADE 10 SYSTEM ---
+    renderGrade10() {
+        const grid = document.querySelector('.grade10-grid');
+        if (!grid) return;
+        grid.innerHTML = KIMYALAB_DATA.grade10.map(topic => `
+            <div class="game-card animate-slide-up" style="background:#3b82f6; min-height:140px; justify-content:center; align-items:flex-start; padding:20px;" onclick="app.showGrade10Detail('${topic.id}')">
+                <i class="fa-solid fa-flask-vial"></i>
+                <h3 style="font-size:1.2rem; margin-bottom:5px;">${topic.name}</h3>
+                <p style="font-size:0.8rem; opacity:0.8;">${topic.desc}</p>
+            </div>
+        `).join('');
+    },
+
+    showGrade10Detail(topicId) {
+        this.state.currentTopicId = topicId;
+        const topic = KIMYALAB_DATA.grade10.find(t => t.id === topicId);
+        if (!topic) return;
+        const detail = document.getElementById('grade10-detail');
+        const title = document.getElementById('g10-title');
+        const desc = document.getElementById('g10-desc');
+        const content = document.getElementById('g10-content');
+        title.textContent = topic.name; desc.textContent = topic.desc;
+        content.innerHTML = topic.content.replace(/\n/g, '<br>');
+        this.setG10Difficulty('all', true); this.setG10Mode('study');
+        detail.classList.remove('hidden'); detail.scrollIntoView({ behavior: 'smooth' });
+        this.playSound('click'); this.speak(`${topic.name}. ${topic.desc}`);
+    },
+
+    setG10Mode(mode) {
+        const tabStudy = document.getElementById('tab-g10-study'); const tabQuiz = document.getElementById('tab-g10-quiz');
+        const areaStudy = document.getElementById('g10-study-area'); const areaQuiz = document.getElementById('g10-quiz-container');
+        if (!tabStudy || !tabQuiz) return;
+        if (mode === 'study') {
+            tabStudy.classList.add('active-match'); tabQuiz.classList.remove('active-match');
+            areaStudy.style.display = 'block'; areaQuiz.style.display = 'none';
+        } else {
+            tabStudy.classList.remove('active-match'); tabQuiz.classList.add('active-match');
+            areaStudy.style.display = 'none'; areaQuiz.style.display = 'block';
+        }
+        this.playSound('click');
+    },
+
+    setG10Difficulty(diff, skipSound = false) {
+        this.state.currentDifficulty = diff; const topicId = this.state.currentTopicId;
+        const topic = KIMYALAB_DATA.grade10.find(t => t.id === topicId); if (!topic) return;
+        let filtered = diff === 'all' ? topic.questions : topic.questions.filter(q => q.difficulty === diff);
+        const questionsArea = document.getElementById('g10-questions'); if (!questionsArea) return;
+        questionsArea.innerHTML = filtered.map((q, i) => `
+            <div class="glass-card animate-slide-up g10-question-card" style="margin-bottom:20px; background:var(--bg-white)">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem">
+                    <p style="font-weight:700; flex:1; padding-right:10px;">Soru ${i+1}: ${q.q}</p>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:5px">
+                        <span class="badge-${q.difficulty || 'easy'}">${(q.difficulty || 'easy').toUpperCase()}</span>
+                        <button class="btn-hint" onclick="app.toggleG10Hint(this)"><i class="fa-solid fa-lightbulb"></i> İpucu</button>
+                    </div>
+                </div>
+                <div class="hint-text" style="display:none; padding:10px; background:rgba(251, 192, 45, 0.1); border-radius:8px; margin-bottom:10px;">${q.hint || 'İpucu yok.'}</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
+                    ${q.options.map(opt => `<button class="btn-back q-opt" style="font-size:0.85rem; padding:12px" onclick="app.checkG10Answer(this, '${opt.replace(/'/g, "\\'")}', '${q.a.replace(/'/g, "\\'")}', '${(q.explanation || '').replace(/'/g, "\\'")}')">${opt}</button>`).join('')}
+                </div>
+                <div class="explanation-box" style="display:none; margin-top:15px; padding:15px; background:rgba(37, 99, 235, 0.05); border-radius:10px; border-left:4px solid var(--success)">
+                    <div style="font-weight:800; color:var(--primary); margin-bottom:5px;">Çözüm</div>
+                    <div class="explanation-content">${q.explanation || ''}</div>
+                </div>
+            </div>
+        `).join('') || '<p style="text-align:center; padding:2rem; opacity:0.5">Henüz soru eklenmedi.</p>';
+        this.updateG10StatsUI(); if(!skipSound) this.playSound('click');
+    },
+
+    toggleG10Hint(btn) {
+        const card = btn.closest('.g10-question-card'); const hintEl = card.querySelector('.hint-text');
+        const isHidden = window.getComputedStyle(hintEl).display === 'none';
+        hintEl.style.display = isHidden ? 'block' : 'none';
+        btn.innerHTML = isHidden ? '<i class="fa-solid fa-eye-slash"></i> Kapat' : '<i class="fa-solid fa-lightbulb"></i> İpucu';
+        if(isHidden) this.playSound('click');
+    },
+
+    checkG10Answer(btn, selected, correct, explanation) {
+        if (btn.classList.contains('answered')) return;
+        const card = btn.closest('.g10-question-card'); const topicId = this.state.currentTopicId;
+        if (!this.state.grade10_stats[topicId]) this.state.grade10_stats[topicId] = { correct: 0, answered: [] };
+        const questionText = card.querySelector('p').innerText;
+        if (this.state.grade10_stats[topicId].answered.includes(questionText)) return;
+        const isCorrect = selected === correct;
+        if (isCorrect) {
+            btn.style.background = 'var(--success)'; btn.style.color = 'white';
+            this.playSound('correct'); this.state.grade10_stats[topicId].correct++;
+            this.state.grade10_stats[topicId].answered.push(questionText);
+            this.addScore(10); localStorage.setItem('grade10_stats', JSON.stringify(this.state.grade10_stats));
+            confetti({ particleCount: 30, spread: 40, origin: { y: 0.7 } });
+        } else {
+            btn.style.background = 'var(--danger)'; btn.style.color = 'white';
+            this.playSound('wrong'); btn.classList.add('animate-shake');
+        }
+        const explainBox = card.querySelector('.explanation-box');
+        if (explainBox) {
+            explainBox.style.display = 'block';
+            if (!isCorrect) explainBox.querySelector('.explanation-content').innerHTML = `<b style="color:var(--danger)">Cevap: ${correct}</b><br>${explanation}`;
+        }
+        card.querySelectorAll('.q-opt').forEach(b => {
+            b.classList.add('answered');
+            if (b.innerText === correct) { b.style.background = 'var(--success)'; b.style.color = 'white'; b.style.fontWeight = '800'; }
+        });
+        this.updateG10StatsUI();
+    },
+
+    updateG10StatsUI() {
+        const topicId = this.state.currentTopicId; const topic = KIMYALAB_DATA.grade10.find(t => t.id === topicId);
+        const stats = this.state.grade10_stats[topicId] || { correct: 0, answered: [] };
+        const totalScoreEl = document.getElementById('g10-total-score'); const topicStatsEl = document.getElementById('g10-current-topic-stats');
+        if (!totalScoreEl || !topicStatsEl) return;
+        const total = topic ? topic.questions.length : 0; const rate = total > 0 ? Math.round((stats.correct / total) * 100) : 0;
+        totalScoreEl.innerHTML = `🔥 Başarı: %${rate}`; topicStatsEl.innerHTML = `🎯 ${stats.correct} / ${total}`;
+    },
+
+    closeGrade10Detail() { document.getElementById('grade10-detail').classList.add('hidden'); this.playSound('click'); },
+
+    // --- GRADE 11 SYSTEM ---
     renderGrade11() {
         const grid = document.querySelector('.grade11-grid');
         if (!grid) return;
-
         grid.innerHTML = KIMYALAB_DATA.grade11.map(topic => `
-            <div class="game-card animate-slide-up" style="background:var(--accent); min-height:140px; justify-content:center; align-items:flex-start; padding:20px;" onclick="app.showGrade11Detail('${topic.id}')">
+            <div class="game-card animate-slide-up" style="background:#fbbf24; min-height:140px; justify-content:center; align-items:flex-start; padding:20px;" onclick="app.showGrade11Detail('${topic.id}')">
                 <i class="fa-solid fa-book-bookmark"></i>
                 <h3 style="font-size:1.2rem; margin-bottom:5px;">${topic.name}</h3>
                 <p style="font-size:0.8rem; opacity:0.8;">${topic.desc}</p>
@@ -1060,6 +1327,129 @@ const app = {
         document.getElementById('grade11-detail').classList.add('hidden');
         this.playSound('click');
     },
+
+    // --- GRADE 12 SYSTEM ---
+    renderGrade12() {
+        const grid = document.querySelector('.grade12-grid');
+        if (!grid) return;
+        grid.innerHTML = KIMYALAB_DATA.grade12.map(topic => `
+            <div class="game-card animate-slide-up" style="background:#8b5cf6; min-height:140px; justify-content:center; align-items:flex-start; padding:20px;" onclick="app.showGrade12Detail('${topic.id}')">
+                <i class="fa-solid fa-bolt"></i>
+                <h3 style="font-size:1.2rem; margin-bottom:5px;">${topic.name}</h3>
+                <p style="font-size:0.8rem; opacity:0.8;">${topic.desc}</p>
+            </div>
+        `).join('');
+    },
+
+    showGrade12Detail(topicId) {
+        this.state.currentTopicId = topicId;
+        const topic = KIMYALAB_DATA.grade12.find(t => t.id === topicId);
+        if (!topic) return;
+        const detail = document.getElementById('grade12-detail');
+        const title = document.getElementById('g12-title');
+        const desc = document.getElementById('g12-desc');
+        const content = document.getElementById('g12-content');
+        title.textContent = topic.name; desc.textContent = topic.desc;
+        content.innerHTML = topic.content.replace(/\n/g, '<br>');
+        this.setG12Difficulty('all', true); this.setG12Mode('study');
+        detail.classList.remove('hidden'); detail.scrollIntoView({ behavior: 'smooth' });
+        this.playSound('click'); this.speak(`${topic.name}. ${topic.desc}`);
+    },
+
+    setG12Mode(mode) {
+        const tabStudy = document.getElementById('tab-g12-study'); const tabQuiz = document.getElementById('tab-g12-quiz');
+        const areaStudy = document.getElementById('g12-study-area'); const areaQuiz = document.getElementById('g12-quiz-container');
+        if (!tabStudy || !tabQuiz) return;
+        if (mode === 'study') {
+            tabStudy.classList.add('active-match'); tabQuiz.classList.remove('active-match');
+            areaStudy.style.display = 'block'; areaQuiz.style.display = 'none';
+        } else {
+            tabStudy.classList.remove('active-match'); tabQuiz.classList.add('active-match');
+            areaStudy.style.display = 'none'; areaQuiz.style.display = 'block';
+        }
+        this.playSound('click');
+    },
+
+    setG12Difficulty(diff, skipSound = false) {
+        this.state.currentDifficulty = diff; const topicId = this.state.currentTopicId;
+        const topic = KIMYALAB_DATA.grade12.find(t => t.id === topicId); if (!topic) return;
+        let filtered = diff === 'all' ? topic.questions : topic.questions.filter(q => q.difficulty === diff);
+        const questionsArea = document.getElementById('g12-questions'); if (!questionsArea) return;
+        questionsArea.innerHTML = filtered.map((q, i) => `
+            <div class="glass-card animate-slide-up g12-question-card" style="margin-bottom:20px; background:var(--bg-white)">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem">
+                    <p style="font-weight:700; flex:1; padding-right:10px;">Soru ${i+1}: ${q.q}</p>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:5px">
+                        <span class="badge-${q.difficulty || 'easy'}">${(q.difficulty || 'easy').toUpperCase()}</span>
+                        <button class="btn-hint" onclick="app.toggleG12Hint(this)"><i class="fa-solid fa-lightbulb"></i> İpucu</button>
+                    </div>
+                </div>
+                <div class="hint-text" style="display:none; padding:10px; background:rgba(251, 192, 45, 0.1); border-radius:8px; margin-bottom:10px;">${q.hint || 'İpucu yok.'}</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
+                    ${q.options.map(opt => `<button class="btn-back q-opt" style="font-size:0.85rem; padding:12px" onclick="app.checkG12Answer(this, '${opt.replace(/'/g, "\\'")}', '${q.a.replace(/'/g, "\\'")}', '${(q.explanation || '').replace(/'/g, "\\'")}')">${opt}</button>`).join('')}
+                </div>
+                <div class="explanation-box" style="display:none; margin-top:15px; padding:15px; background:rgba(37, 99, 235, 0.05); border-radius:10px; border-left:4px solid var(--success)">
+                    <div style="font-weight:800; color:var(--primary); margin-bottom:5px;">Çözüm</div>
+                    <div class="explanation-content">${q.explanation || ''}</div>
+                </div>
+            </div>
+        `).join('') || '<p style="text-align:center; padding:2rem; opacity:0.5">Henüz soru eklenmedi.</p>';
+        this.updateG12StatsUI(); if(!skipSound) this.playSound('click');
+    },
+
+    toggleG12Hint(btn) {
+        const card = btn.closest('.g12-question-card'); const hintEl = card.querySelector('.hint-text');
+        const isHidden = window.getComputedStyle(hintEl).display === 'none';
+        hintEl.style.display = isHidden ? 'block' : 'none';
+        btn.innerHTML = isHidden ? '<i class="fa-solid fa-eye-slash"></i> Kapat' : '<i class="fa-solid fa-lightbulb"></i> İpucu';
+        if(isHidden) this.playSound('click');
+    },
+
+    checkG12Answer(btn, selected, correct, explanation) {
+        if (btn.classList.contains('answered')) return;
+        const card = btn.closest('.g12-question-card'); const topicId = this.state.currentTopicId;
+        if (!this.state.grade12_stats[topicId]) this.state.grade12_stats[topicId] = { correct: 0, answered: [] };
+        const questionText = card.querySelector('p').innerText;
+        if (this.state.grade12_stats[topicId].answered.includes(questionText)) return;
+        const isCorrect = selected === correct;
+        if (isCorrect) {
+            btn.style.background = 'var(--success)'; btn.style.color = 'white';
+            this.playSound('correct'); this.state.grade12_stats[topicId].correct++;
+            this.state.grade12_stats[topicId].answered.push(questionText);
+            this.addScore(10); localStorage.setItem('grade12_stats', JSON.stringify(this.state.grade12_stats));
+            confetti({ particleCount: 30, spread: 40, origin: { y: 0.7 } });
+        } else {
+            btn.style.background = 'var(--danger)'; btn.style.color = 'white';
+            this.playSound('wrong'); btn.classList.add('animate-shake');
+        }
+        const explainBox = card.querySelector('.explanation-box');
+        if (explainBox) {
+            explainBox.style.display = 'block';
+            if (!isCorrect) explainBox.querySelector('.explanation-content').innerHTML = `<b style="color:var(--danger)">Cevap: ${correct}</b><br>${explanation}`;
+        }
+        card.querySelectorAll('.q-opt').forEach(b => {
+            b.classList.add('answered');
+            if (b.innerText === correct) { b.style.background = 'var(--success)'; b.style.color = 'white'; b.style.fontWeight = '800'; }
+        });
+        this.updateG12StatsUI();
+    },
+
+    updateG12StatsUI() {
+        const topicId = this.state.currentTopicId; const topic = KIMYALAB_DATA.grade12.find(t => t.id === topicId);
+        const stats = this.state.grade12_stats[topicId] || { correct: 0, answered: [] };
+        const totalScoreEl = document.getElementById('g12-total-score'); const topicStatsEl = document.getElementById('g12-current-topic-stats');
+        if (!totalScoreEl || !topicStatsEl) return;
+        const total = topic ? topic.questions.length : 0; const rate = total > 0 ? Math.round((stats.correct / total) * 100) : 0;
+        totalScoreEl.innerHTML = `🔥 Başarı: %${rate}`; topicStatsEl.innerHTML = `🎯 ${stats.correct} / ${total}`;
+    },
+
+    closeGrade12Detail() { document.getElementById('grade12-detail').classList.add('hidden'); this.playSound('click'); },
+
+    resetG9Success() { if(confirm("9. sınıf ilerlemeni sıfırlamak istiyor musun?")) { this.state.grade9_stats = {}; localStorage.setItem('grade9_stats', JSON.stringify({})); this.updateG9StatsUI(); this.setG9Difficulty('all'); } },
+    resetG10Success() { if(confirm("10. sınıf ilerlemeni sıfırlamak istiyor musun?")) { this.state.grade10_stats = {}; localStorage.setItem('grade10_stats', JSON.stringify({})); this.updateG10StatsUI(); this.setG10Difficulty('all'); } },
+    resetG11Success() { if(confirm("11. sınıf ilerlemeni sıfırlamak istiyor musun?")) { this.state.grade11_stats = {}; localStorage.setItem('grade11_stats', JSON.stringify({})); this.updateG11StatsUI(); this.setG11Difficulty('all'); } },
+    resetG12Success() { if(confirm("12. sınıf ilerlemeni sıfırlamak istiyor musun?")) { this.state.grade12_stats = {}; localStorage.setItem('grade12_stats', JSON.stringify({})); this.updateG12StatsUI(); this.setG12Difficulty('all'); } },
+
 
     speak(text) {
         if (!this.state.soundEnabled || !window.speechSynthesis) return;

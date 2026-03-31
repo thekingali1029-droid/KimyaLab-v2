@@ -91,7 +91,10 @@
                 <a href="#" class="nav-item" data-target="page-games"><i class="fa-solid fa-gamepad"></i> <span>Oyun Modları</span></a>
                 <a href="#" class="nav-item" data-target="page-tablolar"><i class="fa-solid fa-book-open"></i> <span>Ders Materyalleri</span></a>
                 <a href="#" class="nav-item" data-target="page-periodic-lab"><i class="fa-solid fa-atom"></i> <span>P. Tablo Lab</span></a>
+                <a href="#" class="nav-item" data-target="page-grade9"><i class="fa-solid fa-graduation-cap"></i> <span>9. Sınıf</span></a>
+                <a href="#" class="nav-item" data-target="page-grade10"><i class="fa-solid fa-graduation-cap"></i> <span>10. Sınıf</span></a>
                 <a href="#" class="nav-item" data-target="page-grade11"><i class="fa-solid fa-graduation-cap"></i> <span>11. Sınıf</span></a>
+                <a href="#" class="nav-item" data-target="page-grade12"><i class="fa-solid fa-graduation-cap"></i> <span>12. Sınıf</span></a>
                 <a href="#" class="nav-item" data-target="page-homework"><i class="fa-solid fa-file-pen"></i> <span>Ödevler & Sınıf</span></a>
                 <a href="#" class="nav-item" id="nav-item-admin" data-target="page-admin" style="display:none; color:var(--danger); border-left-color:var(--danger)"><i class="fa-solid fa-shield-halved"></i> <span>YÖNETİCİ</span></a>
 
@@ -231,7 +234,95 @@
                 </div>
             </div>
 
-            <!-- PAGE 4: GRADE 11 -->
+            <!-- PAGE 4: GRADE 9 -->
+            <div id="page-grade9" class="spa-page hidden">
+                <h2 style="margin-bottom:2rem">9. Sınıf Kimya Odası 🎓</h2>
+                <div class="grade9-grid">
+                    <!-- Topic cards will be injected here -->
+                </div>
+                
+                <div id="grade9-detail" class="glass-card animate-slide-up hidden" style="margin-top:20px; border:1px solid var(--primary); background:rgba(37, 99, 235, 0.02)">
+                    <div class="g11-header-container">
+                        <div id="g9-header">
+                            <h3 id="g9-title" style="color:var(--primary); font-size:1.8rem; margin-bottom:0.5rem">Başlık</h3>
+                            <p id="g9-desc" style="color:var(--text-muted); font-weight:600">Açıklama</p>
+                        </div>
+                        <button class="btn-back" onclick="app.closeGrade9Detail()"><i class="fa-solid fa-times"></i></button>
+                    </div>
+                    
+                    <div style="display:flex; gap:10px; margin-bottom: 2rem; flex-wrap:wrap;">
+                        <button class="btn-back active-match" id="tab-g9-study" onclick="app.setG9Mode('study')" style="flex:1; font-weight:800; border-radius:10px;"><i class="fa-solid fa-book-open"></i> Konu Çalış</button>
+                        <button class="btn-back" id="tab-g9-quiz" onclick="app.setG9Mode('quiz')" style="flex:1; font-weight:800; border-radius:10px;"><i class="fa-solid fa-pen-nib"></i> Alıştırma Çöz</button>
+                    </div>
+
+                    <div id="g9-study-area">
+                        <div id="g9-content" class="glass-card" style="line-height:1.8; font-size:1.05rem; margin-bottom:1rem; color:var(--text-main); background:var(--bg-white)"></div>
+                    </div>
+
+                    <div id="g9-quiz-container" style="display:none;">
+                        <div id="g9-stat-bar" class="glass-card g11-stat-bar">
+                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:10px;">
+                                <span id="g9-total-score" style="font-weight:800; color:var(--primary); font-size:1.1rem">🔥 Başarı: %0</span>
+                                <button class="btn-primary" onclick="app.resetG9Success()" style="background:var(--danger); border:none; padding:4px 12px; font-size:0.7rem; border-radius:8px;">Sıfırla 🧹</button>
+                            </div>
+                        </div>
+
+                        <div id="g9-quiz-area" class="glass-card" style="background:var(--bg-main); border-style:dashed">
+                            <h4 style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center">
+                                <span><i class="fa-solid fa-vial-circle-check"></i> Kavrama Testi</span>
+                                <span id="g9-current-topic-stats" style="font-size:0.9rem; color:var(--text-muted)"></span>
+                            </h4>
+                            <div id="g9-questions"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 5: GRADE 10 -->
+            <div id="page-grade10" class="spa-page hidden">
+                <h2 style="margin-bottom:2rem">10. Sınıf Kimya Odası 🎓</h2>
+                <div class="grade10-grid">
+                    <!-- Topic cards will be injected here -->
+                </div>
+                
+                <div id="grade10-detail" class="glass-card animate-slide-up hidden" style="margin-top:20px; border:1px solid var(--primary); background:rgba(37, 99, 235, 0.02)">
+                    <div class="g11-header-container">
+                        <div id="g10-header">
+                            <h3 id="g10-title" style="color:var(--primary); font-size:1.8rem; margin-bottom:0.5rem">Başlık</h3>
+                            <p id="g10-desc" style="color:var(--text-muted); font-weight:600">Açıklama</p>
+                        </div>
+                        <button class="btn-back" onclick="app.closeGrade10Detail()"><i class="fa-solid fa-times"></i></button>
+                    </div>
+                    
+                    <div style="display:flex; gap:10px; margin-bottom: 2rem; flex-wrap:wrap;">
+                        <button class="btn-back active-match" id="tab-g10-study" onclick="app.setG10Mode('study')" style="flex:1; font-weight:800; border-radius:10px;"><i class="fa-solid fa-book-open"></i> Konu Çalış</button>
+                        <button class="btn-back" id="tab-g10-quiz" onclick="app.setG10Mode('quiz')" style="flex:1; font-weight:800; border-radius:10px;"><i class="fa-solid fa-pen-nib"></i> Alıştırma Çöz</button>
+                    </div>
+
+                    <div id="g10-study-area">
+                        <div id="g10-content" class="glass-card" style="line-height:1.8; font-size:1.05rem; margin-bottom:1rem; color:var(--text-main); background:var(--bg-white)"></div>
+                    </div>
+
+                    <div id="g10-quiz-container" style="display:none;">
+                        <div id="g10-stat-bar" class="glass-card g11-stat-bar">
+                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:10px;">
+                                <span id="g10-total-score" style="font-weight:800; color:var(--primary); font-size:1.1rem">🔥 Başarı: %0</span>
+                                <button class="btn-primary" onclick="app.resetG10Success()" style="background:var(--danger); border:none; padding:4px 12px; font-size:0.7rem; border-radius:8px;">Sıfırla 🧹</button>
+                            </div>
+                        </div>
+
+                        <div id="g10-quiz-area" class="glass-card" style="background:var(--bg-main); border-style:dashed">
+                            <h4 style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center">
+                                <span><i class="fa-solid fa-vial-circle-check"></i> Kavrama Testi</span>
+                                <span id="g10-current-topic-stats" style="font-size:0.9rem; color:var(--text-muted)"></span>
+                            </h4>
+                            <div id="g10-questions"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 5: GRADE 11 -->
             <div id="page-grade11" class="spa-page hidden">
                 <h2 style="margin-bottom:2rem">11. Sınıf Kimya Odası 🎓</h2>
                 <div class="grade11-grid">
@@ -341,7 +432,51 @@
                 </div>
             </div>
 
-            <!-- PAGE 6: HOMEWORK -->
+            <!-- PAGE 7: GRADE 12 -->
+            <div id="page-grade12" class="spa-page hidden">
+                <h2 style="margin-bottom:2rem">12. Sınıf Kimya Odası 🎓</h2>
+                <div class="grade12-grid">
+                    <!-- Topic cards will be injected here -->
+                </div>
+                
+                <div id="grade12-detail" class="glass-card animate-slide-up hidden" style="margin-top:20px; border:1px solid var(--primary); background:rgba(37, 99, 235, 0.02)">
+                    <div class="g11-header-container">
+                        <div id="g12-header">
+                            <h3 id="g12-title" style="color:var(--primary); font-size:1.8rem; margin-bottom:0.5rem">Başlık</h3>
+                            <p id="g12-desc" style="color:var(--text-muted); font-weight:600">Açıklama</p>
+                        </div>
+                        <button class="btn-back" onclick="app.closeGrade12Detail()"><i class="fa-solid fa-times"></i></button>
+                    </div>
+                    
+                    <div style="display:flex; gap:10px; margin-bottom: 2rem; flex-wrap:wrap;">
+                        <button class="btn-back active-match" id="tab-g12-study" onclick="app.setG12Mode('study')" style="flex:1; font-weight:800; border-radius:10px;"><i class="fa-solid fa-book-open"></i> Konu Çalış</button>
+                        <button class="btn-back" id="tab-g12-quiz" onclick="app.setG12Mode('quiz')" style="flex:1; font-weight:800; border-radius:10px;"><i class="fa-solid fa-pen-nib"></i> Alıştırma Çöz</button>
+                    </div>
+
+                    <div id="g12-study-area">
+                        <div id="g12-content" class="glass-card" style="line-height:1.8; font-size:1.05rem; margin-bottom:1rem; color:var(--text-main); background:var(--bg-white)"></div>
+                    </div>
+
+                    <div id="g12-quiz-container" style="display:none;">
+                        <div id="g12-stat-bar" class="glass-card g11-stat-bar">
+                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:10px;">
+                                <span id="g12-total-score" style="font-weight:800; color:var(--primary); font-size:1.1rem">🔥 Başarı: %0</span>
+                                <button class="btn-primary" onclick="app.resetG12Success()" style="background:var(--danger); border:none; padding:4px 12px; font-size:0.7rem; border-radius:8px;">Sıfırla 🧹</button>
+                            </div>
+                        </div>
+
+                        <div id="g12-quiz-area" class="glass-card" style="background:var(--bg-main); border-style:dashed">
+                            <h4 style="margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center">
+                                <span><i class="fa-solid fa-vial-circle-check"></i> Kavrama Testi</span>
+                                <span id="g12-current-topic-stats" style="font-size:0.9rem; color:var(--text-muted)"></span>
+                            </h4>
+                            <div id="g12-questions"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 8: HOMEWORK -->
             <div id="page-homework" class="spa-page hidden">
                 <h2 style="margin-bottom:2rem"><i class="fa-solid fa-file-pen"></i> Mevcut Ödevler & Sınıf</h2>
                 <div id="student-homework-list" class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
