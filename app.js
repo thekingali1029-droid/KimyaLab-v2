@@ -2026,6 +2026,7 @@ const app = {
                                 <button class="admin-action-btn" onclick="app.adminAdjustScore('${k}', 100)" title="+100 Puan"><i class="fa-solid fa-chevron-up"></i></button>
                                 <button class="admin-action-btn" onclick="app.adminAdjustScore('${k}', -100)" title="-100 Puan"><i class="fa-solid fa-chevron-down"></i></button>
                                 <button class="admin-action-btn" onclick="app.adminChangeUserPassword('${k}')" title="Şifre Değiştir" style="background:#f59e0b; color:white; border:none;"><i class="fa-solid fa-key"></i></button>
+                                <button class="admin-action-btn" onclick="app.adminSendMessageToUser('${k}')" title="Özel Mesaj Gönder" style="background:var(--primary); color:black; border:none;"><i class="fa-solid fa-paper-plane"></i></button>
                                 <button class="admin-action-btn btn-danger" onclick="app.adminDeleteUser('${k}')" title="Kalıcı Olarak Sil"><i class="fa-solid fa-trash"></i></button>
                                 <button class="admin-action-btn" onclick="app.adminBanUser('${k}', ${!isBanned})" title="${isBanned ? 'Engeli Kaldır' : 'Engelle'}">
                                     <i class="fa-solid ${isBanned ? 'fa-user-check' : 'fa-user-slash'}"></i>
@@ -2188,6 +2189,20 @@ const app = {
         } catch (e) { alert("Hata: " + e.message); }
     },
 
+    async adminSendMessageToUser(userKey) {
+        const msg = prompt(`${userKey} kullanıcısına gönderilecek mesajı yazın:`);
+        if (!msg) return;
+
+        try {
+            const payload = { id: Date.now(), msg: msg, time: Date.now(), from: 'Yönetici' };
+            await fetch(this.getCloudURL() + `users/${userKey}/messages.json`, { 
+                method: 'POST', 
+                body: JSON.stringify(payload) 
+            });
+            alert("Mesaj başarıyla iletildi! 📩");
+        } catch (e) { alert("Hata: " + e.message); }
+    },
+
     async adminDeleteUser(userKey) {
         if(!confirm("KALICI Silinsin mi?")) return;
         await fetch(this.getCloudURL() + `users/${userKey}.json`, { method: 'DELETE' });
@@ -2247,21 +2262,40 @@ const app = {
         feed.innerHTML = '<p style="text-align:center; padding:50px; opacity:0.5"><i class="fa-solid fa-spinner fa-spin"></i> Duyurular yükleniyor...</p>';
         
         try {
-            const res = await fetch(this.getCloudURL() + "system_messages.json");
-            const data = await res.json();
-            if (!data) {
+            const userKey = this.state.currentUsername.toLowerCase();
+            
+            // 1. Fetch Global Messages
+            const resGlobal = await fetch(this.getCloudURL() + "system_messages.json");
+            const globalData = await resGlobal.json() || {};
+            
+            // 2. Fetch Private Messages
+            const resPrivate = await fetch(this.getCloudURL() + `users/${userKey}/messages.json`);
+            const privateData = await resPrivate.json() || {};
+            
+            let combined = [];
+
+            // Add Global
+            Object.values(globalData).forEach(m => combined.push({...m, type: 'global'}));
+            // Add Private
+            Object.values(privateData).forEach(m => combined.push({...m, type: 'private'}));
+            
+            // Sort by time
+            combined.sort((a, b) => b.time - a.time);
+
+            if (combined.length === 0) {
                 feed.innerHTML = '<div class="glass-card" style="text-align:center; padding:50px; opacity:0.5">Henüz yayınlanmış bir duyuru bulunmuyor.</div>';
                 return;
             }
 
             let html = '';
-            const msgs = Object.values(data).reverse().slice(0, 20); // Son 20 duyuru
-            msgs.forEach(m => {
+            combined.forEach(m => {
                 const date = new Date(m.time).toLocaleString('tr-TR');
+                const isPrivate = (m.type === 'private');
+                
                 html += `
-                    <div class="glass-card animate-slide-up" style="border-left:4px solid var(--primary); padding:20px; margin-bottom:15px">
+                    <div class="glass-card animate-slide-up" style="border-left:4px solid ${isPrivate ? 'var(--accent)' : 'var(--primary)'}; padding:20px; margin-bottom:15px; background:${isPrivate ? 'rgba(255,133,161,0.05)' : 'rgba(255,255,255,0.02)'}">
                         <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.75rem; font-weight:700; color:var(--text-muted)">
-                            <span>📣 SİSTEM DUYURUSU</span>
+                            <span>${isPrivate ? '💌 SANA ÖZEL MESAJ' : '📣 SİSTEM DUYURUSU'}</span>
                             <span>${date}</span>
                         </div>
                         <p style="font-size:1.1rem; color:white; line-height:1.6; font-weight:600;">${m.msg}</p>
