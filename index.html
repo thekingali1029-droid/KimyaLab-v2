@@ -1020,8 +1020,29 @@
                 </div>
             </div>
 
-            <div id="tournament-names-container" class="profile-stats-grid" style="margin-bottom:30px;">
+            <div id="tournament-names-container" class="profile-stats-grid" style="margin-bottom:20px;">
                 <!-- Dynamic Inputs -->
+            </div>
+
+            <div style="display:flex; gap:15px; margin-bottom:30px; flex-wrap:wrap">
+                <div style="flex:1">
+                    <label style="display:block; margin-bottom:10px; color:var(--text-muted); font-size:0.9rem;">Saniye (Tur Başı):</label>
+                    <select id="tourney-time" class="btn-back" style="width:100%; border-radius:10px; padding:10px;">
+                        <option value="15">15 Saniye (Zor)</option>
+                        <option value="30" selected>30 Saniye (Orta)</option>
+                        <option value="45">45 Saniye (Kolay)</option>
+                        <option value="60">60 Saniye (Çok Kolay)</option>
+                    </select>
+                </div>
+                <div style="flex:1">
+                    <label style="display:block; margin-bottom:10px; color:var(--text-muted); font-size:0.9rem;">İpucu Sayısı (Takım Başı):</label>
+                    <select id="tourney-hints" class="btn-back" style="width:100%; border-radius:10px; padding:10px;">
+                        <option value="0">0 İpucu (Zor)</option>
+                        <option value="1">1 İpucu</option>
+                        <option value="3" selected>3 İpucu (Standart)</option>
+                        <option value="5">5 İpucu (Kolay)</option>
+                    </select>
+                </div>
             </div>
 
             <button class="btn-primary" onclick="app.startTournament()">Turnuvayı Başlat! 🚀</button>

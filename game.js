@@ -128,7 +128,8 @@ window.gameManager = {
         this.currentMode = randomMode;
         
         this.resetState();
-        this.timeLeft = 30; // 30 seconds for tournament as per rule
+        const activeTeam = this.tournamentTeams[this.currentTeamIdx];
+        this.timeLeft = activeTeam && activeTeam.timeLimit ? activeTeam.timeLimit : 30;
         this.updateLivesUI();
         this.updateComboUI();
 

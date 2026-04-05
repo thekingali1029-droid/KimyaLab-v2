@@ -1943,17 +1943,8 @@ const app = {
 
     // TOURNAMENT LOGIC
     showTournamentSetup() {
-        // Direkt olarak kurulum ekranını atlayıp 3 takımla başlatıyoruz
-        this.state.tournamentTeamCount = 3;
-        const teams = [];
-        for (let i = 1; i <= 3; i++) {
-            teams.push({ name: `Takım ${i}`, score: 0, lives: 5, hints: 3, active: true });
-        }
-
-        if (window.gameManager) {
-            this.playSound('click');
-            gameManager.initTournament(teams);
-        }
+        this.switchPage('page-tournament-setup');
+        this.setTournamentTeams(3); // Default
     },
 
     setTournamentTeams(count) {
@@ -1979,10 +1970,16 @@ const app = {
     },
 
     startTournament() {
+        const timeEl = document.getElementById('tourney-time');
+        const hintsEl = document.getElementById('tourney-hints');
+        
+        const tourneyTime = timeEl ? parseInt(timeEl.value) : 30;
+        const hintsCount = hintsEl ? parseInt(hintsEl.value) : 3;
+
         const teams = [];
         for (let i = 1; i <= this.state.tournamentTeamCount; i++) {
             const name = document.getElementById(`t-name-${i}`).value || `Takım ${i}`;
-            teams.push({ name: name, score: 0, lives: 5, hints: 3, active: true });
+            teams.push({ name: name, score: 0, lives: 5, hints: hintsCount, timeLimit: tourneyTime, active: true });
         }
 
         if (window.gameManager) {
