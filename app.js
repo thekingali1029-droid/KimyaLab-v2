@@ -4,7 +4,9 @@ const app = {
     state: {
         currentUser: null,
         score: 0,
-        dailyTarget: 500, // ZORLAŞTIRILDI
+        dailyTarget: 500,
+        weeklyScore: 0,
+        weeklyTarget: 2500,
         currentPage: 'page-home',
         isDarkMode: localStorage.getItem('theme') === 'dark',
         soundEnabled: true,
@@ -520,6 +522,7 @@ const app = {
         // Only set from local if state is currently empty/zero (prevents double set)
         if (this.state.score === 0 && savedData.score > 0) {
             this.state.score = savedData.score || 0;
+            this.state.weeklyScore = savedData.weeklyScore || 0;
             this.state.totalGames = savedData.totalGames || 0;
             this.state.maxCombo = savedData.maxCombo || 0;
             this.state.badges = savedData.badges || [];
@@ -739,6 +742,12 @@ const app = {
         if (this.els.dailyProgress) this.els.dailyProgress.style.width = `${progress}%`;
         if (this.els.pointsNeeded) this.els.pointsNeeded.textContent = `${this.state.score} / ${this.state.dailyTarget} Puan`;
 
+        const wProgress = Math.min((this.state.weeklyScore / this.state.weeklyTarget) * 100, 100);
+        const wProgEl = document.getElementById('weekly-progress');
+        const wPointsEl = document.getElementById('weekly-points-needed');
+        if (wProgEl) wProgEl.style.width = `${wProgress}%`;
+        if (wPointsEl) wPointsEl.textContent = `${this.state.weeklyScore} / ${this.state.weeklyTarget} Puan`;
+
         // Wrong Questions Sync
         const wrongCard = document.getElementById('wrong-questions-card');
         const wrongCount = document.getElementById('stat-wrong-count');
@@ -844,13 +853,28 @@ const app = {
         const details = document.getElementById('element-details');
         if (!details) return;
         details.style.display = 'block';
+        
+        this.playSound('click');
         details.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center">
-                <h3>${el.name} (${el.s})</h3>
-                <span style="background:var(--primary); color:white; padding:5px 10px; border-radius:10px; font-weight:800">#${el.n}</span>
+            <div class="glass-card animate-slide-up" style="border-top: 4px solid var(--primary); padding:20px; background:rgba(255,255,255,0.02)">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:15px;">
+                    <div>
+                        <h3 style="font-size:1.8rem; color:var(--primary); text-transform:uppercase; letter-spacing:1px">${el.name}</h3>
+                        <span style="font-size:0.8rem; color:var(--text-muted); font-weight:800; opacity:0.8">${el.cat.toUpperCase()}</span>
+                    </div>
+                    <div style="background:var(--primary); color:white; width:60px; height:60px; border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 10px 20px var(--primary-glow)">
+                        <span style="font-size:0.7rem; opacity:0.8">#${el.n}</span>
+                        <span style="font-size:1.5rem; font-weight:900">${el.s}</span>
+                    </div>
+                </div>
+                <p style="font-size:1rem; line-height:1.6; color:var(--text-main); margin-bottom:20px; background:rgba(255,255,255,0.02); padding:15px; border-radius:10px; border-left:3px solid var(--primary)">
+                    ${el.desc || 'Bu element hakkında henüz detaylı bilgi eklenmedi bilim insanı! 🧪'}
+                </p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div class="glass-card" style="padding:10px; font-size:0.75rem; text-align:center"><b>Grup:</b> ${el.cat}</div>
+                    <div class="glass-card" style="padding:10px; font-size:0.75rem; text-align:center"><b>Durum:</b> Stabil</div>
+                </div>
             </div>
-            <p style="margin-top:10px"><b>Kategori:</b> ${el.cat.toUpperCase()}</p>
-            <p style="margin-top:10px; color:var(--text-muted); font-size:0.9rem; line-height:1.5;">${el.desc || 'Bu element hakkında henüz detaylı bilgi eklenmedi.'}</p>
         `;
         this.speak(`${el.name}. ${el.desc || ''}`);
     },
@@ -865,17 +889,23 @@ const app = {
         this.playSound('click');
         details.style.display = 'block';
         details.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom:15px">
-                <h3 style="color:var(--primary); font-size:1.5rem;">${item.name}</h3>
-                <span class="glass-card" style="padding:5px 15px; font-weight:800; color:var(--primary-glow); font-size:1.2rem; border-color:var(--primary)">${item.symbol || item.s}</span>
+            <div class="glass-card animate-slide-up" style="border-top: 4px solid var(--primary); padding:20px; background:rgba(255,255,255,0.02)">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:15px">
+                    <div>
+                        <h3 style="color:var(--primary); font-size:1.6rem; letter-spacing:1px">${item.name}</h3>
+                        <span style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; font-weight:800">${category.replace('cations', 'Katyon').replace('anions', 'Anyon')}</span>
+                    </div>
+                    <span class="glass-card" style="padding:10px 20px; font-weight:900; color:var(--primary); font-size:1.8rem; border-color:var(--primary); box-shadow:0 5px 15px var(--primary-glow)">${item.symbol || item.s}</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.03); padding:20px; border-radius:15px; margin-bottom:15px; border:1px dashed var(--border-color)">
+                    <p style="color:var(--text-main); line-height:1.6; font-size:1rem; font-style:italic">
+                        "${item.desc || 'Bu madde hakkında henüz detaylı bilgi eklenmedi bilim dostu! 🧪'}"
+                    </p>
+                </div>
+                ${item.charge ? `<div class="glass-card" style="padding:10px 15px; display:inline-block; font-size:0.85rem; color:var(--primary); font-weight:800">Yük: ${item.charge}</div>` : ''}
             </div>
-            <p style="color:var(--text-main); line-height:1.6; font-size:1rem;">
-                ${item.desc || 'Bu madde hakkında henüz detaylı bilgi eklenmedi bilim dostu! 🧪'}
-            </p>
-            ${item.charge ? `<p style="margin-top:10px; font-size:0.85rem; color:var(--text-muted)"><b>Yük / Grup:</b> ${item.charge}</p>` : ''}
         `;
 
-        // Scroll to details on mobile
         details.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         this.speak(`${item.name}. ${item.desc || ''}`);
     },
@@ -1568,11 +1598,11 @@ const app = {
 
     applyVIPTheme(themeType) {
         const t = themeType || this.state.vipTheme || 'pink';
+        this.state.vipTheme = t;
 
-        // Tüm tema class'larını temizle
+        // Clean up themes
         document.body.classList.remove('dark-theme', 'theme-vip-pink', 'theme-vip-pink-dark', 'theme-vip-blue', 'theme-vip-blue-dark');
 
-        // Seçilen VIP temasını uygula
         if (t === 'blue') {
             document.body.classList.add('theme-vip-blue');
             if (this.state.isDarkMode) document.body.classList.add('theme-vip-blue-dark');
@@ -1580,15 +1610,34 @@ const app = {
             document.body.classList.add('theme-vip-pink');
             if (this.state.isDarkMode) document.body.classList.add('theme-vip-pink-dark');
         }
+        
+        // Render effects
+        this.renderVIPEffects();
+        this.renderVIPThemes(); // Update switcher if open
+    },
 
-        // Tema butonunu güncelle
-        if (this.els.themeBtn) {
-            this.els.themeBtn.innerHTML = this.state.isDarkMode
-                ? '<i class="fa-solid fa-sun"></i>'
-                : '<i class="fa-solid fa-moon"></i>';
-        }
+    renderVIPThemes() {
+        const list = document.getElementById('vip-theme-list');
+        const section = document.getElementById('vip-theme-section');
+        if (!list || !section || !this.state.isVIP) return;
 
-        // Parçacık efektlerini oluştur
+        section.style.display = 'block';
+        const themes = [
+            { id: 'pink', name: 'Enchanted Empress', color: '#ff85a1' },
+            { id: 'blue', name: 'Royal Sapphire', color: '#3b82f6' }
+        ];
+
+        list.innerHTML = themes.map(t => `
+            <button class="btn-back ${this.state.vipTheme === t.id ? 'active-match' : ''}" 
+                onclick="app.applyVIPTheme('${t.id}')" 
+                style="font-size:0.7rem; padding:10px; border-color:${t.color}">
+                <i class="fa-solid fa-gem" style="color:${t.color}"></i><br>${t.name}
+            </button>
+        `).join('');
+    },
+
+    renderVIPEffects() {
+        const t = this.state.vipTheme || 'pink';
         const container = document.getElementById('butterfly-container');
         if (!container) return;
         container.innerHTML = '';
@@ -1721,6 +1770,8 @@ const app = {
             const b = KIMYALAB_DATA.badges.find(x => x.id === bid);
             return `<div class="mini-badge"><i class="fa-solid ${b.icon}"></i> ${b.name}</div>`;
         }).join('') || '<p style="font-size:0.8rem; color:var(--text-muted)">Henüz rozet kazanılmadı.</p>';
+
+        this.renderVIPThemes();
     },
 
     closeProfileModal() {
@@ -1785,10 +1836,11 @@ const app = {
 
     addScore(points) {
         this.state.score += points;
+        this.state.weeklyScore += points;
         this.saveUserData();
         this.updateStats();
 
-        // Achievement checks for current session score
+        // Achievement checks
         if (this.state.score >= 100) this.awardBadge('b_caylak');
         if (this.state.score >= 500) this.awardBadge('b_profesor');
         if (this.state.score >= 1000) this.awardBadge('b_legend');
@@ -1800,6 +1852,7 @@ const app = {
         const userSaveKey = `kimyalab_user_${this.state.currentUsername.toLowerCase()}`;
         const dataToSave = {
             score: this.state.score,
+            weeklyScore: this.state.weeklyScore,
             totalGames: this.state.totalGames,
             maxCombo: this.state.maxCombo,
             badges: this.state.badges

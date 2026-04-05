@@ -132,11 +132,22 @@
                     <div class="glass-card animate-slide-up">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem">
                             <h3 style="margin:0"><i class="fa-solid fa-bullseye" style="color:var(--primary)"></i> GÜNLÜK HEDEF</h3>
-                            <span style="background:linear-gradient(90deg, var(--danger), #ff8a00); color:white; padding:4px 12px; border-radius:30px; font-size:0.65rem; font-weight:900; letter-spacing:1px">HARDCORE</span>
+                            <span style="background:linear-gradient(90deg, var(--danger), #ff8a00); color:white; padding:4px 12px; border-radius:30px; font-size:0.65rem; font-weight:900; letter-spacing:1px">AKTİF</span>
                         </div>
                         <p id="points-needed" style="font-weight:800; font-size:1.5rem; color:var(--primary); margin-bottom:15px;">0 / 500 Puan</p>
                         <div style="height:14px; background:rgba(255,255,255,0.05); border-radius:10px; overflow:hidden; border:1px solid var(--border-color)">
                             <div id="daily-progress" style="width:0%; height:100%; background:linear-gradient(90deg, var(--primary), var(--secondary)); box-shadow: 0 0 15px var(--primary-glow); transition:width 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card animate-slide-up" style="border-left: 4px solid var(--success);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem">
+                            <h3 style="margin:0"><i class="fa-solid fa-bullseye" style="color:var(--success)"></i> HAFTALIK HEDEF</h3>
+                            <span style="background:var(--success); color:white; padding:4px 12px; border-radius:30px; font-size:0.65rem; font-weight:900; letter-spacing:1px">ÖDÜLLÜ</span>
+                        </div>
+                        <p id="weekly-points-needed" style="font-weight:800; font-size:1.5rem; color:var(--success); margin-bottom:15px;">0 / 2500 Puan</p>
+                        <div style="height:14px; background:rgba(255,255,255,0.05); border-radius:10px; overflow:hidden; border:1px solid var(--border-color)">
+                            <div id="weekly-progress" style="width:0%; height:100%; background:linear-gradient(90deg, var(--success), #34d399); box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); transition:width 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)"></div>
                         </div>
                     </div>
 
@@ -882,6 +893,11 @@
                     <h4 style="margin-bottom:10px;"><i class="fa-solid fa-image-portrait"></i> Avatar Değiştir</h4>
                     <div id="avatar-list" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-bottom:20px;"></div>
                     
+                    <div id="vip-theme-section" style="display:none; margin-bottom:20px;">
+                        <h4 style="margin-bottom:10px;"><i class="fa-solid fa-wand-magic-sparkles"></i> V.I.P Tema Seçimi</h4>
+                        <div id="vip-theme-list" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+                    </div>
+
                     <h4 style="margin-bottom:10px;"><i class="fa-solid fa-trophy"></i> İstatistiklerim</h4>
                     <div class="profile-stats-grid">
                         <div class="glass-card" style="padding:10px; font-size:0.8rem;"><b>Toplam Puan:</b> <span id="stat-total-score">0</span></div>
