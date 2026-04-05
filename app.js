@@ -1943,8 +1943,17 @@ const app = {
 
     // TOURNAMENT LOGIC
     showTournamentSetup() {
-        this.switchPage('page-tournament-setup');
-        this.setTournamentTeams(3); // Default
+        // Direkt olarak kurulum ekranını atlayıp 3 takımla başlatıyoruz
+        this.state.tournamentTeamCount = 3;
+        const teams = [];
+        for (let i = 1; i <= 3; i++) {
+            teams.push({ name: `Takım ${i}`, score: 0, lives: 5, hints: 3, active: true });
+        }
+
+        if (window.gameManager) {
+            this.playSound('click');
+            gameManager.initTournament(teams);
+        }
     },
 
     setTournamentTeams(count) {
