@@ -197,8 +197,8 @@ window.gameManager = {
 
     resetState() {
         if (this.interval) clearInterval(this.interval);
-        const times = { easy: 90, normal: 60, hard: 30 };
-        this.timeLeft = this.isTournament ? 30 : (times[this.difficulty] || 60);
+        const times = { easy: 60, normal: 45, hard: 25 };
+        this.timeLeft = this.isTournament ? 25 : (times[this.difficulty] || 45);
         
         const timerEl = document.getElementById('game-timer');
         if (timerEl) {
@@ -511,7 +511,7 @@ window.gameManager = {
 
         this.combo++;
         if (this.combo > this.maxCombo) this.maxCombo = this.combo;
-        const pts = (this.isTournament ? 50 : 10) + (this.combo * 5);
+        const pts = (this.isTournament ? 40 : 8) + (this.combo * 4);
         this.score += pts;
 
         if (this.isTournament) {
@@ -541,6 +541,11 @@ window.gameManager = {
 
         this.combo = 0;
         this.lives--;
+        
+        // Point Penalty
+        const penalty = this.isTournament ? 20 : 5;
+        this.score = Math.max(0, this.score - penalty);
+        if (window.app && !this.isTournament) window.app.addScore(-penalty);
 
         if (this.isTournament) {
             this.tournamentTeams[this.currentTeamIdx].lives = this.lives;
