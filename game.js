@@ -72,6 +72,7 @@ window.gameManager = {
 
     nextTournamentTurn() {
         if (!this.isTournament) return;
+        if (this.interval) clearInterval(this.interval);
 
         const activeTeams = this.tournamentTeams.filter(t => t.active);
         
@@ -565,6 +566,7 @@ window.gameManager = {
             this.tournamentTeams[this.currentTeamIdx].lives = this.lives;
             if (this.lives <= 0) {
                 this.tournamentTeams[this.currentTeamIdx].active = false;
+                if (this.interval) clearInterval(this.interval);
             }
             this.updateTournamentUI();
         }
