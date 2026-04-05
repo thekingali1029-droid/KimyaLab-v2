@@ -926,23 +926,21 @@ const app = {
         const topic = KIMYALAB_DATA.grade9.find(t => t.id === topicId);
         if (!topic) return;
 
-        const detail = document.getElementById('grade9-detail');
-        const title = document.getElementById('g9-title');
-        const desc = document.getElementById('g9-desc');
-        const content = document.getElementById('g9-content');
-        
-        title.textContent = topic.name;
-        desc.textContent = topic.desc;
-        content.innerHTML = topic.content.replace(/\n/g, '<br>');
-        
+        document.getElementById('g9-title').textContent = topic.name;
+        document.getElementById('g9-desc').textContent = topic.desc;
+        document.getElementById('g9-content').innerHTML = topic.content.replace(/\n/g, '<br>');
+
         this.setG9Difficulty('all', true);
         this.setG9Mode('study');
 
-        detail.classList.remove('hidden');
-        detail.scrollIntoView({ behavior: 'smooth' });
+        // Open modal
+        const modal = document.getElementById('grade9-modal');
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+
         this.playSound('click');
-        this.speak(`${topic.name}. ${topic.desc}`);
     },
+
 
     setG9Mode(mode) {
         const tabStudy = document.getElementById('tab-g9-study');
@@ -1054,7 +1052,12 @@ const app = {
         topicStatsEl.innerHTML = `🎯 ${stats.correct} / ${total}`;
     },
 
-    closeGrade9Detail() { document.getElementById('grade9-detail').classList.add('hidden'); this.playSound('click'); },
+    closeGrade9Detail() {
+        const modal = document.getElementById('grade9-modal');
+        if (modal) modal.style.display = 'none';
+        document.body.style.overflow = '';
+        this.playSound('click');
+    },
 
     // --- GRADE 10 SYSTEM ---
     renderGrade10() {
