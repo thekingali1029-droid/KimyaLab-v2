@@ -46,6 +46,10 @@ const app = {
         setInterval(() => this.checkGlobalBroadcast(), 120000); // Check every 2 mins
         
         console.log("KimyaLab v2 Başlatıldı!");
+        
+        // Modal background close
+        const m = document.getElementById('chem-modal');
+        if (m) m.onclick = (e) => { if(e.target === m) m.classList.remove('active'); };
     },
 
     async checkGlobalBroadcast() {
