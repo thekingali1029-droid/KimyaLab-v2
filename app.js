@@ -972,7 +972,9 @@ const app = {
         const questionsArea = document.getElementById('g9-questions');
         if (!questionsArea) return;
 
-        questionsArea.innerHTML = filteredQuestions.map((q, i) => `
+        questionsArea.innerHTML = filteredQuestions.map((q, i) => {
+            const hint = q.hint || app.generateHint(q);
+            return `
             <div class="glass-card animate-slide-up g9-question-card" style="margin-bottom:20px; background:var(--bg-white)">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem">
                     <p style="font-weight:700; flex:1; padding-right:10px;">Soru ${i+1}: ${q.q}</p>
@@ -981,19 +983,54 @@ const app = {
                         <button class="btn-hint" onclick="app.toggleG9Hint(this)"><i class="fa-solid fa-lightbulb"></i> İpucu</button>
                     </div>
                 </div>
-                <div class="hint-text" style="display:none; padding:10px; background:rgba(251, 192, 45, 0.1); border-radius:8px; margin-bottom:10px; font-size:0.9rem; border-left:4px solid var(--primary)">${q.hint || 'İpucu yok.'}</div>
+                <div class="hint-text" style="display:none; padding:12px 15px; background:linear-gradient(135deg,rgba(251,192,45,0.12),rgba(251,192,45,0.05)); border-radius:10px; margin-bottom:10px; font-size:0.9rem; border-left:4px solid #f59e0b; animation:slideUpFade 0.3s ease;">
+                    <div style="font-weight:800; color:#d97706; margin-bottom:5px;"><i class="fa-solid fa-lightbulb"></i> İpucu</div>
+                    ${hint}
+                </div>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
                     ${q.options.map(opt => `<button class="btn-back q-opt" style="font-size:0.85rem; padding:12px" onclick="app.checkG9Answer(this, '${opt.replace(/'/g, "\\'")}', '${q.a.replace(/'/g, "\\'")}', '${(q.explanation || '').replace(/'/g, "\\'")}')">${opt}</button>`).join('')}
                 </div>
                 <div class="explanation-box" style="display:none; margin-top:15px; padding:15px; background:rgba(37, 99, 235, 0.05); border-radius:10px; border-left:4px solid var(--success)">
                     <div style="font-weight:800; color:var(--primary); margin-bottom:5px;"><i class="fa-solid fa-circle-info"></i> Çözüm</div>
-                    <div class="explanation-content">${q.explanation || 'Bilgi yok.'}</div>
+                    <div class="explanation-content">${q.explanation || `Doğru cevap: <b>${q.a}</b>`}</div>
                 </div>
-            </div>
-        `).join('') || '<p style="text-align:center; padding:2rem; opacity:0.5">Henüz soru eklenmedi.</p>';
+            </div>`;
+        }).join('') || '<p style="text-align:center; padding:2rem; opacity:0.5">Henüz soru eklenmedi.</p>';
+
 
         this.updateG9StatsUI();
         if(!skipSound) this.playSound('click');
+    },
+
+    // 🔦 Akıllı İpucu Üretici
+    generateHint(q) {
+        const answer = q.a;
+        const first = answer[0].toUpperCase();
+        const len = answer.length;
+
+        // Underline pattern: first char visible, rest as _
+        const blanks = answer.split('').map((c, i) => {
+            if (i === 0) return `<b style="color:#d97706">${c}</b>`;
+            if (c === ' ') return '&nbsp;';
+            return '_';
+        }).join('');
+
+        // Eliminate one wrong option
+        const wrongOptions = q.options.filter(o => o !== answer);
+        const eliminated = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+
+        // Contextual clue from answer length range
+        let lengthClue = '';
+        if (len <= 4) lengthClue = 'Kısa bir cevap (4 harf veya daha az).';
+        else if (len <= 8) lengthClue = 'Orta uzunlukta bir cevap.';
+        else lengthClue = 'Uzun bir cevap sözcüğü.';
+
+        return `
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <div>🔤 <b>İlk harf:</b> "<b style="color:#d97706;font-size:1.1rem">${first}</b>" — Cevap: <span style="letter-spacing:3px; font-family:monospace">${blanks}</span></div>
+                <div>📏 <b>Uzunluk:</b> ${len} karakter — ${lengthClue}</div>
+                <div>❌ <b>Bu seçenek yanlış:</b> <span style="text-decoration:line-through; opacity:0.6">${eliminated}</span></div>
+            </div>`;
     },
 
     toggleG9Hint(btn) {
@@ -1004,6 +1041,7 @@ const app = {
         btn.innerHTML = isHidden ? '<i class="fa-solid fa-eye-slash"></i> Kapat' : '<i class="fa-solid fa-lightbulb"></i> İpucu';
         if(isHidden) this.playSound('click');
     },
+
 
     checkG9Answer(btn, selected, correct, explanation) {
         if (btn.classList.contains('answered')) return;
