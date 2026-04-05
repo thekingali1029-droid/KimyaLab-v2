@@ -510,10 +510,13 @@ window.gameManager = {
     },
 
     handleCorrect(btn, nextFn) {
-        // Disable ALL buttons in container immediately to prevent "sızma"
-        document.querySelectorAll('#game-container button, #game-container .btn-back').forEach(b => {
-            b.style.pointerEvents = 'none';
-        });
+        // Disable buttons to prevent spam clicks (but target only the specific button in classic mode to allow other matches)
+        if (this.currentMode !== 'classic') {
+            document.querySelectorAll('#game-container button, #game-container .btn-back').forEach(b => {
+                b.style.pointerEvents = 'none';
+            });
+        }
+        btn.style.pointerEvents = 'none';
 
         this.combo++;
         if (this.combo > this.maxCombo) this.maxCombo = this.combo;
@@ -540,10 +543,14 @@ window.gameManager = {
     },
 
     handleWrong(btn, qObj = null) {
-        // Disable ALL buttons immediately to prevent "sızma"
-        document.querySelectorAll('#game-container button, #game-container .btn-back').forEach(b => {
-            b.style.pointerEvents = 'none';
-        });
+        // Disable buttons immediately to prevent "sızma"
+        if (this.currentMode !== 'classic') {
+            document.querySelectorAll('#game-container button, #game-container .btn-back').forEach(b => {
+                b.style.pointerEvents = 'none';
+            });
+        } else {
+            btn.style.pointerEvents = 'none';
+        }
 
         this.combo = 0;
         this.lives--;
@@ -581,10 +588,14 @@ window.gameManager = {
 
         setTimeout(() => {
             // Re-enable buttons after shake (only if game continues)
-            if (this.lives > 0 && !this.isTournament) {
-                document.querySelectorAll('#game-container button, #game-container .btn-back').forEach(b => {
-                    b.style.pointerEvents = '';
-                });
+            if (this.lives > 0) {
+                if (this.currentMode !== 'classic') {
+                    document.querySelectorAll('#game-container button, #game-container .btn-back').forEach(b => {
+                        b.style.pointerEvents = '';
+                    });
+                } else {
+                    btn.style.pointerEvents = '';
+                }
                 btn.classList.remove('animate-shake');
                 btn.style.borderColor = '';
                 btn.style.color = '';
