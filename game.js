@@ -24,6 +24,7 @@ window.gameManager = {
         this.currentMode = mode;
         this.difficulty = difficulty;
         this.customQuestions = customQuestions;
+        this.isTournament = false;
         this.score = 0;
         this.combo = 0;
         this.lives = 5;
