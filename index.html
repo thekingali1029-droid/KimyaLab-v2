@@ -867,6 +867,57 @@
             <p id="reward-desc" style="font-weight:600; color:var(--text-muted); margin-bottom:2rem;">Yeni bir başarı kazandın!</p>
             <button class="btn-primary" onclick="app.closeRewardModal()">Harika! 🚀</button>
         </div>
+
+    <!-- TABLE SELECTION MODAL -->
+    <div id="table-selection-modal" class="modal-backdrop">
+        <div class="glass-card animate-slide-up" style="max-width:960px; width:95%; text-align:left; padding:40px; border-radius:40px;">
+            <button class="btn-back" onclick="app.closeTableSelectModal()" style="margin-bottom:20px; border:none; background:none; color:var(--text-muted); font-weight:700;">
+                <i class="fa-solid fa-arrow-left"></i> Geri
+            </button>
+            <h1 style="margin-bottom:2.5rem; font-size:2.2rem; display:flex; align-items:center; gap:15px; color:var(--text-main)">
+                <span class="glass-card" style="padding:10px; color:var(--primary); border:none;"><i class="fa-solid fa-clipboard-list"></i></span> Tablo Seç
+            </h1>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:20px;">
+                
+                <!-- KATYONLAR -->
+                <div class="glass-card animate-hover" style="padding:30px 20px; text-align:center; border-radius:30px; border-top:5px solid #fbc02d;">
+                    <i class="fa-solid fa-bolt" style="font-size:3rem; color:#fbc02d; margin-bottom:20px;"></i>
+                    <h3 style="font-size:1.4rem; margin-bottom:10px;">Katyonlar</h3>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">Tablo 2.1</p>
+                    <p style="font-size:0.8rem; font-weight:700; margin-bottom:25px;">12 element</p>
+                    <button class="btn-primary" onclick="app.selectTable('cations')" style="background:#10b981; border:none; width:100%; padding:12px; border-radius:12px;">Başla →</button>
+                </div>
+
+                <!-- ANYONLAR -->
+                <div class="glass-card animate-hover" style="padding:30px 20px; text-align:center; border-radius:30px; border-top:5px solid #6366f1;">
+                    <i class="fa-solid fa-microscope" style="font-size:3rem; color:#6366f1; margin-bottom:20px;"></i>
+                    <h3 style="font-size:1.4rem; margin-bottom:10px;">Anyonlar</h3>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">Tablo 2.2</p>
+                    <p style="font-size:0.8rem; font-weight:700; margin-bottom:25px;">17 element</p>
+                    <button class="btn-primary" onclick="app.selectTable('anions')" style="background:#6366f1; border:none; width:100%; padding:12px; border-radius:12px;">Başla →</button>
+                </div>
+
+                <!-- METALLER -->
+                <div class="glass-card animate-hover" style="padding:30px 20px; text-align:center; border-radius:30px; border-top:5px solid #ec4899;">
+                    <i class="fa-solid fa-flask-vial" style="font-size:3rem; color:#ec4899; margin-bottom:20px;"></i>
+                    <h3 style="font-size:1.4rem; margin-bottom:10px;">Metaller</h3>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">Tablo 2.3</p>
+                    <p style="font-size:0.8rem; font-weight:700; margin-bottom:25px;">30+ element</p>
+                    <button class="btn-primary" onclick="app.selectTable('metals')" style="background:#ec4899; border:none; width:100%; padding:12px; border-radius:12px;">Başla →</button>
+                </div>
+
+                <!-- İLK 20 ELEMENT -->
+                <div class="glass-card animate-hover" style="padding:30px 20px; text-align:center; border-radius:30px; border-top:5px solid #f97316;">
+                    <i class="fa-solid fa-dna" style="font-size:3rem; color:#f97316; margin-bottom:20px;"></i>
+                    <h3 style="font-size:1.4rem; margin-bottom:10px;">İlk 20 Element</h3>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:5px;">Periyodik Tablo</p>
+                    <p style="font-size:0.8rem; font-weight:700; margin-bottom:25px;">20 element</p>
+                    <button class="btn-primary" onclick="app.selectTable('first20')" style="background:#f97316; border:none; width:100%; padding:12px; border-radius:12px;">Başla →</button>
+                </div>
+
+            </div>
+        </div>
     </div>
 
     <!-- GAME DIFFICULTY MODAL -->

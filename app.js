@@ -21,6 +21,8 @@ const app = {
         grade10_stats: JSON.parse(localStorage.getItem('grade10_stats') || '{}'),
         grade11_stats: JSON.parse(localStorage.getItem('grade11_stats') || '{}'),
         grade12_stats: JSON.parse(localStorage.getItem('grade12_stats') || '{}'),
+        selectedGameMode: null,
+        selectedTable: null,
         currentDifficulty: 'all',
         currentTopicId: null
     },
@@ -1694,10 +1696,28 @@ const app = {
         }
     },
 
+    openTableSelectModal(mode) {
+        this.state.selectedGameMode = mode;
+        const modal = document.getElementById('table-selection-modal');
+        if (modal) modal.classList.add('active');
+    },
+
+    closeTableSelectModal() {
+        const modal = document.getElementById('table-selection-modal');
+        if (modal) modal.classList.remove('active');
+    },
+
+    selectTable(tableKey) {
+        this.state.selectedTable = tableKey;
+        this.closeTableSelectModal();
+        this.openDifficultyModal(this.state.selectedGameMode);
+    },
+
     openDifficultyModal(mode) {
         this.state.selectedGameMode = mode;
         const modal = document.getElementById('difficulty-modal');
         if (modal) modal.classList.add('active');
+        this.playSound('click');
     },
 
     closeDifficultyModal() {
@@ -1710,9 +1730,21 @@ const app = {
         const overlay = document.getElementById('game-overlay');
         if (overlay) overlay.classList.remove('hidden');
 
-        if (window.gameManager) {
-            window.gameManager.init(this.state.selectedGameMode, difficulty, this.state.customHomeworkQuestions);
+        let customPool = null;
+        if (this.state.selectedTable) {
+            const t = this.state.selectedTable;
+            if (t === 'cations') customPool = KIMYALAB_DATA.cations;
+            else if (t === 'anions') customPool = KIMYALAB_DATA.anions;
+            else if (t === 'metals') customPool = KIMYALAB_DATA.elements.filter(e => e.cat && e.cat.includes('metal'));
+            else if (t === 'first20') customPool = KIMYALAB_DATA.elements.slice(0, 20);
         }
+
+        if (window.gameManager) {
+            window.gameManager.init(this.state.selectedGameMode, difficulty, customPool || this.state.customHomeworkQuestions);
+        }
+        
+        // Reset table for next time
+        this.state.selectedTable = null;
     },
 
     showProfileModal() {
@@ -1760,9 +1792,14 @@ const app = {
     startGame(mode, customQuestions = null) {
         this.state.totalGames++;
         localStorage.setItem('totalGames', this.state.totalGames);
-        this.state.customHomeworkQuestions = customQuestions; // Save for the difficulty modal jump
+        this.state.customHomeworkQuestions = customQuestions; 
         this.updateStats();
-        this.openDifficultyModal(mode);
+        
+        if (mode === 'quiz' || customQuestions) {
+            this.openDifficultyModal(mode);
+        } else {
+            this.openTableSelectModal(mode);
+        }
     },
 
     showDashboard() {
