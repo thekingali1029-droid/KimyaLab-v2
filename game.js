@@ -702,7 +702,39 @@ window.gameManager = {
 
     startTimer() {
         if (this.interval) clearInterval(this.interval);
-        // Timer disabled per user request
+        
+        // Süre sayacı sadece Turnuvada aktif olsun (veya istenirse normalde de açılabilir, şimdilik turnuvada)
+        if (!this.isTournament) {
+            const timerEl = document.getElementById('game-timer');
+            if (timerEl) timerEl.classList.add('hidden');
+            return;
+        }
+
+        const timerEl = document.getElementById('game-timer');
+        if (timerEl) {
+            timerEl.classList.remove('hidden');
+            timerEl.textContent = this.timeLeft;
+        }
+
+        this.interval = setInterval(() => {
+            this.timeLeft--;
+            if (timerEl) {
+                timerEl.textContent = this.timeLeft;
+                if (this.timeLeft <= 5) {
+                    timerEl.style.color = 'var(--danger)';
+                    timerEl.classList.add('animate-shake');
+                } else {
+                    timerEl.style.color = '';
+                    timerEl.classList.remove('animate-shake');
+                }
+            }
+
+            if (this.timeLeft <= 0) {
+                clearInterval(this.interval);
+                this.currentTeamIdx++;
+                this.nextTournamentTurn();
+            }
+        }, 1000);
     },
 
     endGame(msg) {
