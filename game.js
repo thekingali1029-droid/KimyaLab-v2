@@ -336,8 +336,14 @@ window.gameManager = {
     },
 
     renderMatch() {
-        // Use simplified pool for easier answers
-        const items = utils.shuffleArray(KIMYALAB_DATA.fusionQuestions).slice(0, 5);
+        // Normalize pool from customQuestions (selected table) or fallback
+        const pool = (this.isRetryMode ? this.wrongQuestions : (this.customQuestions || KIMYALAB_DATA.fusionQuestions))
+            .map(item => ({
+                s: item.s || item.symbol,
+                name: item.name || item.n || item.q // handle quiz objects too
+            }));
+
+        const items = utils.shuffleArray(pool).slice(0, 5);
         const symbols = utils.shuffleArray([...items]);
         const names = utils.shuffleArray([...items]);
         
@@ -398,7 +404,8 @@ window.gameManager = {
                     activeSymEl = null;
                 } else {
                     // Wrong Match
-                    this.handleWrong(d, activeSym);
+                    const qObj = activeSym ? { name: activeSym.name, s: activeSym.s } : null;
+                    this.handleWrong(d, qObj);
                     if (activeSymEl) {
                         activeSymEl.style.borderColor = 'var(--danger)';
                         setTimeout(() => {
@@ -474,7 +481,7 @@ window.gameManager = {
         
         this.isRetryMode = true;
         this.score = 0;
-        this.lives = 5;
+        this.lives = 99; // Unlimited lives for learning
         this.quizIdx = 0;
         
         this.resetState();
@@ -494,11 +501,11 @@ window.gameManager = {
             this.initFusionMode(container);
         } else if (this.currentMode === 'fill') {
             this.initFillMode(container);
+        } else if (this.currentMode === 'classic') {
+            this.initClassicMode(container);
         } else {
-            // Fallback for classic or others
             this.initQuizMode(container); 
         }
-        this.startTimer();
     },
 
     handleCorrect(btn, nextFn) {
