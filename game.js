@@ -202,9 +202,7 @@ window.gameManager = {
         
         const timerEl = document.getElementById('game-timer');
         if (timerEl) {
-            timerEl.classList.remove('hidden');
-            const span = timerEl.querySelector('span');
-            if (span) span.textContent = this.timeLeft;
+            timerEl.classList.add('hidden');
         }
     },
 
@@ -685,20 +683,7 @@ window.gameManager = {
 
     startTimer() {
         if (this.interval) clearInterval(this.interval);
-        this.interval = setInterval(() => {
-            this.timeLeft--;
-            const el = document.getElementById('game-timer');
-            if (el) {
-                const span = el.querySelector('span');
-                if (span) span.textContent = this.timeLeft;
-            }
-            if (this.timeLeft <= 0) {
-                if (this.isTournament) {
-                    this.currentTeamIdx++;
-                    this.nextTournamentTurn();
-                } else this.endGame("Süre Doldu! ⌛");
-            }
-        }, 1000);
+        // Timer disabled per user request
     },
 
     endGame(msg) {
