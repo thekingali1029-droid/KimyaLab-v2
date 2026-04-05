@@ -1943,8 +1943,12 @@ const app = {
 
     // TOURNAMENT LOGIC
     showTournamentSetup() {
-        this.switchPage('page-tournament-setup');
+        document.getElementById('page-tournament-setup').classList.add('active');
         this.setTournamentTeams(3); // Default
+    },
+
+    closeTournamentSetup() {
+        document.getElementById('page-tournament-setup').classList.remove('active');
     },
 
     setTournamentTeams(count) {
@@ -1984,6 +1988,7 @@ const app = {
 
         if (window.gameManager) {
             this.playSound('click');
+            this.closeTournamentSetup();
             gameManager.initTournament(teams);
         }
     },

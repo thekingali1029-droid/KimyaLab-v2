@@ -1004,10 +1004,10 @@
         </div>
     </div>
 
-    <!-- Tournament Setup Page -->
-    <div id="page-tournament-setup" class="spa-page hidden animate-slide-up">
-        <div class="modal-content glass-card" style="max-width:600px; margin:50px auto; padding:40px; position:relative;">
-            <button class="btn-back" onclick="app.switchPage('page-games')" style="position:absolute; top:20px; right:20px"><i class="fa-solid fa-xmark"></i></button>
+    <!-- Tournament Setup Modal -->
+    <div id="page-tournament-setup" class="modal-backdrop" style="display:flex; justify-content:center; align-items:center;">
+        <div class="glass-card animate-slide-up" style="max-width:600px; width:95%; padding:40px; border-radius:30px; position:relative;">
+            <button class="btn-back" onclick="app.closeTournamentSetup()" style="position:absolute; top:20px; right:20px; padding:5px 10px;"><i class="fa-solid fa-xmark"></i></button>
             <h2 style="text-align:center; color:var(--primary); margin-bottom:2rem;"><i class="fa-solid fa-users-gear"></i> Turnuva Kurulumu</h2>
             
             <div style="margin-bottom:20px;">
