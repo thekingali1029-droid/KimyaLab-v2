@@ -350,6 +350,7 @@ const KIMYALAB_DATA = {
     ],
     grade9: [
         {
+            semester: 1,
             id: 'kimya_bilimi',
             name: 'KİMYA BİLİMİ',
             desc: 'Simyadan kimyaya, kimya disiplinleri, sembolik dil ve güvenlik işaretleri.',
@@ -360,7 +361,33 @@ const KIMYALAB_DATA = {
             • <b>Bileşikler:</b> En az iki farklı atomun kimyasal bağlarla bağlanmasıdır (Örn: H₂O, HCl, NaCl).
             <b>4. Güvenlik:</b> Yanıcı, yakıcı, korozif, toksik, tahriş edici ve çevreye zararlı işaretleri laboratuvar güvenliği için kritiktir.`,
             questions: [
+                { q: "Aşağıdakilerden hangisi simyanın özelliklerinden biridir?", options: ["Deneyler tekrarlanabilir", "Bilimsel yöntem kullanılır", "Sistemli bilgi içermez", "Matematiksel hesaplamalar yapılır"], a: "Sistemli bilgi içermez", difficulty: 'easy' },
+                { q: "Aşağıdakilerden hangisi kimyanın alt dallarından biri değildir?", options: ["Analitik kimya", "Organik kimya", "Astronomi", "Biyokimya"], a: "Astronomi", difficulty: 'easy' },
+                { q: "Aşağıdakilerden hangisi kimyacıların çalışma alanlarından biri değildir?", options: ["İlaç üretimi", "Gıda sektörü", "Uzay teleskopu üretimi", "Çevre analizi"], a: "Uzay teleskopu üretimi", difficulty: 'easy' },
+                { q: "'Na' sembolü hangi elementi temsil eder?", options: ["Azot", "Sodyum", "Neon", "Nikel"], a: "Sodyum", difficulty: 'easy' },
+                { q: "Aşağıdaki bileşiklerden hangisi suyu gösterir?", options: ["CO₂", "H₂O", "O₂", "H₂"], a: "H₂O", difficulty: 'easy' },
+                { q: "Laboratuvarda aşağıdakilerden hangisi yapılmamalıdır?", options: ["Koruyucu gözlük takmak", "Kimyasalı koklarken el ile yönlendirmek", "Maddeleri tatmak", "Eldiven kullanmak"], a: "Maddeleri tatmak", difficulty: 'easy' },
+                { q: "Aşağıdaki atom modellerinden hangisi ilk bilimsel modeldir?", options: ["Bohr", "Dalton", "Thomson", "Rutherford"], a: "Dalton", difficulty: 'easy' },
+                { q: "Elektronu keşfeden bilim insanı kimdir?", options: ["Dalton", "Rutherford", "Thomson", "Bohr"], a: "Thomson", difficulty: 'medium' },
+                { q: "Atomun çekirdeğini keşfeden kimdir?", options: ["Dalton", "Thomson", "Rutherford", "Bohr"], a: "Rutherford", difficulty: 'medium' },
+                { q: "Aşağıdakilerden hangisi atomun temel parçacıklarından biri değildir?", options: ["Proton", "Elektron", "Nötron", "Molekül"], a: "Molekül", difficulty: 'easy' },
+                { q: "Atom numarası neyi gösterir?", options: ["Nötron sayısını", "Proton sayısını", "Elektron sayısını", "Kütleyi"], a: "Proton sayısını", difficulty: 'easy' },
+                { q: "Kütle numarası neye eşittir?", options: ["Proton", "Nötron", "Proton + nötron", "Elektron"], a: "Proton + nötron", difficulty: 'easy' },
+                { q: "Periyodik tabloda yatay sıralara ne denir?", options: ["Grup", "Periyot", "Katman", "Seri"], a: "Periyot", difficulty: 'easy' },
+                { q: "Aynı gruptaki elementler için ne söylenir?", options: ["Atom numaraları aynıdır", "Özellikleri benzerdir", "Hepsi metaldir", "Elektron sayıları aynıdır"], a: "Özellikleri benzerdir", difficulty: 'easy' },
+                { q: "Aşağıdakilerden hangisi soy gazdır?", options: ["Oksijen", "Azot", "Neon", "Karbon"], a: "Neon", difficulty: 'easy' },
+                { q: "Aşağıdakilerden hangisi kimyasal türdür?", options: ["Atom", "Molekül", "İyon", "Hepsi"], a: "Hepsi", difficulty: 'easy' },
+                { q: "Elektron veren atom ne olur?", options: ["Anyon", "Katyon", "Molekül", "Nötron"], a: "Katyon", difficulty: 'easy' },
+                { q: "Elektron alan atom ne olur?", options: ["Katyon", "Anyon", "Atom", "Proton"], a: "Anyon", difficulty: 'easy' },
+                { q: "İyonik bağ hangi türler arasında oluşur?", options: ["Ametal-ametal", "Metal-ametal", "Metal-metal", "Soy gazlar"], a: "Metal-ametal", difficulty: 'easy' },
+                { q: "Kovalent bağ hangi türler arasında oluşur?", options: ["Metal-metal", "Metal-ametal", "Ametal-ametal", "Soy gaz"], a: "Ametal-ametal", difficulty: 'easy' },
+                { q: "Metalik bağ nerede görülür?", options: ["Ametallerde", "Metallerde", "Gazlarda", "Tuzlarda"], a: "Metallerde", difficulty: 'easy' },
+                { q: "Aşağıdakilerden hangisi zayıf etkileşimdir?", options: ["İyonik bağ", "Kovalent bağ", "Hidrojen bağı", "Metalik bağ"], a: "Hidrojen bağı", difficulty: 'medium' },
+                { q: "Hidrojen bağı hangi atomlarla oluşur?", options: ["H + C", "H + O", "H + Na", "H + Fe"], a: "H + O", difficulty: 'medium' },
+                { q: "Van der Waals kuvvetleri nasıldır?", options: ["Çok güçlü", "Orta güçlü", "Zayıf", "Kimyasal bağdır"], a: "Zayıf", difficulty: 'easy' },
+                { q: "Aşağıdakilerden hangisi fiziksel değişim değildir?", options: ["Buzun erimesi", "Kağıdın yanması", "Suyun buharlaşması", "Tuzun çözünmesi"], a: "Kağıdın yanması", difficulty: 'easy' },
                 { q: "Simyanın bilim sayılmamasının temel nedeni nedir?", options: ["Teorik temellerinin olmaması", "Çok eski olması", "Deney yapılması", "Altın aramaları"], a: "Teorik temellerinin olmaması", difficulty: 'easy' },
+
                 { q: "Hangisi simyacıların kimyaya kazandırdığı araçlardan biridir?", options: ["İmbik", "Elektron mikroskobu", "Bilgisayar", "Hassas terazi"], a: "İmbik", difficulty: 'easy' },
                 { q: "Suyun (H2O) yaygın adı nedir?", options: ["Su", "Tuz ruhu", "Kezzap", "Sirke ruhu"], a: "Su", difficulty: 'easy' },
                 { q: "HCl bileşiğinin yaygın adı nedir?", options: ["Tuz ruhu", "Kezzap", "Zaç yağı", "Sönmüş kireç"], a: "Tuz ruhu", difficulty: 'medium' },
@@ -414,6 +441,7 @@ const KIMYALAB_DATA = {
             ]
         },
         {
+            semester: 1,
             id: 'atom_sistem',
             name: 'ATOM VE PERİYODİK SİSTEM',
             desc: 'Atom modelleri, atomun yapısı ve periyodik sistem özellikleri.',
@@ -480,6 +508,7 @@ const KIMYALAB_DATA = {
             ]
         },
         {
+            semester: 1,
             id: 'etkilesimler',
             name: 'KİMYASAL TÜRLER ARASI ETKİLEŞİMLER',
             desc: 'Güçlü ve zayıf etkileşimler, bağ türleri ve değişimler.',
@@ -545,6 +574,7 @@ const KIMYALAB_DATA = {
             ]
         },
         {
+            semester: 2,
             id: 'maddenin_halleri',
             name: 'MADDENİN HALLERİ',
             desc: 'Katı, sıvı, gaz ve plazma hallerinin özellikleri.',
@@ -578,6 +608,7 @@ const KIMYALAB_DATA = {
             ]
         },
         {
+            semester: 2,
             id: 'doga_kimya',
             name: 'DOĞA VE KİMYA',
             desc: 'Su kaynakları, suyun önemi ve çevre kirliliği.',

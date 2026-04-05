@@ -887,14 +887,39 @@ const app = {
     renderGrade9() {
         const grid = document.querySelector('.grade9-grid');
         if (!grid) return;
-        grid.innerHTML = KIMYALAB_DATA.grade9.map(topic => `
+
+        const s1 = KIMYALAB_DATA.grade9.filter(t => t.semester === 1);
+        const s2 = KIMYALAB_DATA.grade9.filter(t => t.semester === 2);
+        const other = KIMYALAB_DATA.grade9.filter(t => !t.semester);
+
+        const cardHtml = (topic) => `
             <div class="game-card animate-slide-up" style="background:#4ade80; min-height:140px; justify-content:center; align-items:flex-start; padding:20px;" onclick="app.showGrade9Detail('${topic.id}')">
                 <i class="fa-solid fa-atom"></i>
                 <h3 style="font-size:1.2rem; margin-bottom:5px;">${topic.name}</h3>
                 <p style="font-size:0.8rem; opacity:0.8;">${topic.desc}</p>
             </div>
-        `).join('');
+        `;
+
+        let html = '';
+        if (s1.length > 0) {
+            html += `<div style="grid-column:1/-1; border-left:4px solid var(--primary); padding:8px 15px; background:rgba(37,99,235,0.08); border-radius:8px; margin-top:10px;">
+                <h3 style="color:var(--primary); margin:0; font-size:1rem; letter-spacing:1px;">📘 1. DÖNEM KONULARI</h3>
+            </div>`;
+            html += s1.map(cardHtml).join('');
+        }
+        if (s2.length > 0) {
+            html += `<div style="grid-column:1/-1; border-left:4px solid #10b981; padding:8px 15px; background:rgba(16,185,129,0.08); border-radius:8px; margin-top:20px;">
+                <h3 style="color:#10b981; margin:0; font-size:1rem; letter-spacing:1px;">📗 2. DÖNEM KONULARI</h3>
+            </div>`;
+            html += s2.map(cardHtml).join('');
+        }
+        if (other.length > 0) {
+            html += other.map(cardHtml).join('');
+        }
+
+        grid.innerHTML = html;
     },
+
 
     showGrade9Detail(topicId) {
         this.state.currentTopicId = topicId;
