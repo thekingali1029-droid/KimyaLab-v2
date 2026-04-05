@@ -793,64 +793,88 @@ const app = {
     },
 
     showElementInfo(el) {
-        const details = document.getElementById('element-details');
-        if (!details) return;
-        details.style.display = 'block';
+        const modal = document.getElementById('chem-modal');
+        const content = document.getElementById('chem-modal-content');
+        if (!modal || !content) return;
         
         this.playSound('click');
-        details.innerHTML = `
-            <div class="glass-card animate-slide-up" style="border-top: 4px solid var(--primary); padding:20px; background:rgba(255,255,255,0.02)">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:15px;">
-                    <div>
-                        <h3 style="font-size:1.8rem; color:var(--primary); text-transform:uppercase; letter-spacing:1px">${el.name}</h3>
-                        <span style="font-size:0.8rem; color:var(--text-muted); font-weight:800; opacity:0.8">${el.cat.toUpperCase()}</span>
-                    </div>
-                    <div style="background:var(--primary); color:white; width:60px; height:60px; border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 10px 20px var(--primary-glow)">
-                        <span style="font-size:0.7rem; opacity:0.8">#${el.n}</span>
-                        <span style="font-size:1.5rem; font-weight:900">${el.s}</span>
-                    </div>
-                </div>
-                <p style="font-size:1rem; line-height:1.6; color:var(--text-main); margin-bottom:20px; background:rgba(255,255,255,0.02); padding:15px; border-radius:10px; border-left:3px solid var(--primary)">
-                    ${el.desc || 'Bu element hakkında henüz detaylı bilgi eklenmedi bilim insanı! 🧪'}
+        modal.classList.add('active');
+        
+        content.innerHTML = `
+            <div class="modal-header-grad" style="background: linear-gradient(135deg, #0d9488, #34d399);">
+                <button class="modal-close-btn" onclick="document.getElementById('chem-modal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button>
+                <div class="modal-pill">ÖZEL KİMYASAL YAPI</div>
+                <h1 style="font-size:4.5rem; margin:0; line-height:1; font-weight:900;">${el.s}</h1>
+                <h2 style="font-size:2rem; margin:10px 0 0 0; opacity:0.9;">${el.name}</h2>
+            </div>
+            <div style="padding:30px; background:rgba(255,255,255,0.02)">
+                <div class="modal-pill modal-pill-teal" style="font-size:0.6rem;">Ramazan Hoca Notu 📝</div>
+                <p style="font-size:1rem; line-height:1.6; color:white; margin-bottom:25px; opacity:0.9;">
+                    ${el.desc || `${el.name}, doğada bulunan temel bir elementtir. Kimyasal reaksiyonlarda ve laboratuvar çalışmalarında ${el.cat} grubunun özelliklerini sergiler.`}
                 </p>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                    <div class="glass-card" style="padding:10px; font-size:0.75rem; text-align:center"><b>Grup:</b> ${el.cat}</div>
-                    <div class="glass-card" style="padding:10px; font-size:0.75rem; text-align:center"><b>Durum:</b> Stabil</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                    <div class="modal-stat-card">
+                        <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:5px;">SEMBOL</div>
+                        <div style="font-size:1.4rem; font-weight:900; color:#14b8a6">${el.s}</div>
+                    </div>
+                    <div class="modal-stat-card">
+                        <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:5px;">ATOM NO</div>
+                        <div style="font-size:1.4rem; font-weight:900; color:#14b8a6">#${el.n}</div>
+                    </div>
                 </div>
             </div>
+            <button class="btn-teal-action" onclick="app.speak('${el.name}. ${el.desc || ''}')">
+                <i class="fa-solid fa-volume-high"></i> Sesli Dinleme
+            </button>
         `;
-        this.speak(`${el.name}. ${el.desc || ''}`);
     },
 
     showItemInfo(symbol, category) {
         const item = KIMYALAB_DATA[category].find(x => (x.symbol || x.s) === symbol);
         if (!item) return;
 
-        const details = document.getElementById('item-details');
-        if (!details) return;
-
+        const modal = document.getElementById('chem-modal');
+        const content = document.getElementById('chem-modal-content');
+        if (!modal || !content) return;
+        
         this.playSound('click');
-        details.style.display = 'block';
-        details.innerHTML = `
-            <div class="glass-card animate-slide-up" style="border-top: 4px solid var(--primary); padding:20px; background:rgba(255,255,255,0.02)">
-                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:15px">
-                    <div>
-                        <h3 style="color:var(--primary); font-size:1.6rem; letter-spacing:1px">${item.name}</h3>
-                        <span style="font-size:0.7rem; color:var(--text-muted); text-transform:uppercase; font-weight:800">${category.replace('cations', 'Katyon').replace('anions', 'Anyon')}</span>
-                    </div>
-                    <span class="glass-card" style="padding:10px 20px; font-weight:900; color:var(--primary); font-size:1.8rem; border-color:var(--primary); box-shadow:0 5px 15px var(--primary-glow)">${item.symbol || item.s}</span>
-                </div>
-                <div style="background:rgba(255,255,255,0.03); padding:20px; border-radius:15px; margin-bottom:15px; border:1px dashed var(--border-color)">
-                    <p style="color:var(--text-main); line-height:1.6; font-size:1rem; font-style:italic">
-                        "${item.desc || 'Bu madde hakkında henüz detaylı bilgi eklenmedi bilim dostu! 🧪'}"
-                    </p>
-                </div>
-                ${item.charge ? `<div class="glass-card" style="padding:10px 15px; display:inline-block; font-size:0.85rem; color:var(--primary); font-weight:800">Yük: ${item.charge}</div>` : ''}
-            </div>
-        `;
+        modal.classList.add('active');
 
-        details.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        this.speak(`${item.name}. ${item.desc || ''}`);
+        const colors = {
+            compounds: 'linear-gradient(135deg, #1d4ed8, #60a5fa)',
+            acidsBases: 'linear-gradient(135deg, #e11d48, #fb7185)',
+            cations: 'linear-gradient(135deg, #7c3aed, #a78bfa)',
+            anions: 'linear-gradient(135deg, #059669, #34d399)'
+        };
+        const grad = colors[category] || 'linear-gradient(135deg, #6b7280, #9ca3af)';
+
+        content.innerHTML = `
+            <div class="modal-header-grad" style="background: ${grad}">
+                <button class="modal-close-btn" onclick="document.getElementById('chem-modal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button>
+                <div class="modal-pill">${category.toUpperCase()}</div>
+                <h1 style="font-size:4rem; margin:0; line-height:1; font-weight:900;">${item.symbol || item.s}</h1>
+                <h2 style="font-size:1.8rem; margin:10px 0 0 0; opacity:0.9;">${item.name || item.n}</h2>
+            </div>
+            <div style="padding:30px; background:rgba(255,255,255,0.02)">
+                <div class="modal-pill modal-pill-teal" style="font-size:0.6rem;">Ramazan Hoca Notu 📝</div>
+                <p style="font-size:0.95rem; line-height:1.6; color:white; margin-bottom:25px; opacity:0.9;">
+                    ${item.desc || `Bu kimyasal yapı, ${item.name || item.n} olarak bilinir. Elementlerin atomik düzeydeki etkileşimi sonucu oluşmuş kritik bir bileşendir.`}
+                </p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                    <div class="modal-stat-card">
+                        <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:5px;">FONKSİYONEL SEMBOL</div>
+                        <div style="font-size:1.4rem; font-weight:900; color:#14b8a6">${item.symbol || item.s}</div>
+                    </div>
+                    <div class="modal-stat-card">
+                        <div style="font-size:0.6rem; color:var(--text-muted); text-transform:uppercase; margin-bottom:5px;">YÜK / DURUM</div>
+                        <div style="font-size:1.4rem; font-weight:900; color:#14b8a6">${item.charge || 'STABİL'}</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-teal-action" onclick="app.speak('${item.name || item.n}. ${item.desc || ''}')">
+                <i class="fa-solid fa-volume-high"></i> Sesli Dinleme
+            </button>
+        `;
     },
 
     // --- GRADE 9 SYSTEM ---
