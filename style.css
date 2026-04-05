@@ -1196,17 +1196,17 @@ body.theme-vip-pink.theme-vip-pink-dark ::-webkit-scrollbar-thumb {
 }
 
 .modal-backdrop.active {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     pointer-events: all !important;
 }
 
-
-/* --- OVERRIDE FOR RE-RELOCATED MODAL --- */
 #modal-backdrop {
-    display: none !important;
+    display: none;
 }
 #modal-backdrop.active {
     display: flex !important;
-    pointer-events: all !important;
 }
 
 #level-up-modal {
