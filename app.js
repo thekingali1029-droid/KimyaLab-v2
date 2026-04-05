@@ -2025,6 +2025,7 @@ const app = {
                                 <button class="admin-action-btn btn-success" onclick="app.adminAwardBadge('${k}')" title="Rozet Ver"><i class="fa-solid fa-medal"></i></button>
                                 <button class="admin-action-btn" onclick="app.adminAdjustScore('${k}', 100)" title="+100 Puan"><i class="fa-solid fa-chevron-up"></i></button>
                                 <button class="admin-action-btn" onclick="app.adminAdjustScore('${k}', -100)" title="-100 Puan"><i class="fa-solid fa-chevron-down"></i></button>
+                                <button class="admin-action-btn" onclick="app.adminChangeUserPassword('${k}')" title="Şifre Değiştir" style="background:#f59e0b; color:white; border:none;"><i class="fa-solid fa-key"></i></button>
                                 <button class="admin-action-btn btn-danger" onclick="app.adminDeleteUser('${k}')" title="Kalıcı Olarak Sil"><i class="fa-solid fa-trash"></i></button>
                                 <button class="admin-action-btn" onclick="app.adminBanUser('${k}', ${!isBanned})" title="${isBanned ? 'Engeli Kaldır' : 'Engelle'}">
                                     <i class="fa-solid ${isBanned ? 'fa-user-check' : 'fa-user-slash'}"></i>
@@ -2173,6 +2174,20 @@ const app = {
         this.loadAdminUsers();
     },
 
+    async adminChangeUserPassword(userKey) {
+        const newPass = prompt(`${userKey} için YENİ şifreyi girin:`);
+        if (!newPass) return;
+        
+        try {
+            await fetch(this.getCloudURL() + `users/${userKey}/profile/password.json`, { 
+                method: 'PUT', 
+                body: JSON.stringify(newPass) 
+            });
+            alert("Şifre başarıyla güncellendi! 🔑");
+            this.loadAdminUsers();
+        } catch (e) { alert("Hata: " + e.message); }
+    },
+
     async adminDeleteUser(userKey) {
         if(!confirm("KALICI Silinsin mi?")) return;
         await fetch(this.getCloudURL() + `users/${userKey}.json`, { method: 'DELETE' });
@@ -2180,7 +2195,7 @@ const app = {
     },
 
     async adminResetAllScores() {
-        if (prompt("SIFIRLA yazın:") !== 'SIFIRLA') return;
+        if (prompt("Tüm puanları sıfırlamak için SIFIRLA yazın:") !== 'SIFIRLA') return;
         const res = await fetch(this.getCloudURL() + "users.json");
         const users = await res.json();
         for (let k in users) {
@@ -2188,6 +2203,27 @@ const app = {
         }
         alert("Puanlar Sıfırlandı!");
         this.loadAdminUsers();
+    },
+
+    async adminDeleteAllUsersExceptAwm() {
+        const pass = prompt("DİKKAT: awm hariç TÜM hesaplar silinecek! Onaylamak için 'TEMİZLE' yazın:");
+        if (pass !== 'TEMİZLE') return;
+        
+        try {
+            const res = await fetch(this.getCloudURL() + "users.json");
+            const users = await res.json();
+            if (!users) return;
+
+            let count = 0;
+            for (let k in users) {
+                if (k.toLowerCase() !== 'awm') {
+                    await fetch(this.getCloudURL() + `users/${k}.json`, { method: 'DELETE' });
+                    count++;
+                }
+            }
+            alert(`${count} Öğrenci hesabı başarıyla silindi. Sadece 'awm' hesabı korundu.`);
+            this.loadAdminUsers();
+        } catch (e) { alert("Hata: " + e.message); }
     },
 
     async adminSendGlobalMessage() {
