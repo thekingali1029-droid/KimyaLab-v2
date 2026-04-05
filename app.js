@@ -200,7 +200,7 @@ const app = {
         this.state.loginMode = mode;
         const normalTab = document.getElementById('tab-normal');
         const registerTab = document.getElementById('tab-register');
-        const guestTab = document.getElementById('tab-guest');
+        const teacherTab = document.getElementById('tab-teacher');
         const passBlock = document.getElementById('pass-block');
         const userInput = document.getElementById('username-input');
         const passInput = document.getElementById('password-input');
@@ -209,9 +209,9 @@ const app = {
         const emailBlock = document.getElementById('email-block');
         const emailInput = document.getElementById('email-input');
 
-        normalTab.classList.remove('active-match');
+        if(normalTab) normalTab.classList.remove('active-match');
         if(registerTab) registerTab.classList.remove('active-match');
-        guestTab.classList.remove('active-match');
+        if(teacherTab) teacherTab.classList.remove('active-match');
         if(forgotLink) forgotLink.style.display = 'inline-block';
         if(emailBlock) emailBlock.style.display = 'none';
         if(emailInput) emailInput.required = false;
@@ -246,6 +246,14 @@ const app = {
             userInput.placeholder = "Kayıtlı Kullanıcı Adınız";
             if(passInput) passInput.placeholder = "YENİ Şifreniz (Değiştirmek için)";
             if(submitBtn) submitBtn.innerHTML = "Şifreyi Değiştir 🔄";
+            if(forgotLink) forgotLink.style.display = 'none';
+        } else if (mode === 'teacher') {
+            const tTab = document.getElementById('tab-teacher');
+            if(tTab) tTab.classList.add('active-match');
+            passBlock.style.display = 'flex';
+            userInput.placeholder = "Öğretmen / Yönetici Adı";
+            if(passInput) passInput.placeholder = "Yönetici Şifresi";
+            if(submitBtn) submitBtn.innerHTML = "Güvenli Giriş <i class='fa-solid fa-shield'></i>";
             if(forgotLink) forgotLink.style.display = 'none';
         }
         this.playSound('click');
@@ -333,13 +341,13 @@ const app = {
                 setTimeout(() => this.setLoginMode('normal'), 3000);
 
             } else {
-                // NORMAL LOGIN
+                // NORMAL LOGIN / TEACHER LOGIN
                 let res = await fetch(this.getCloudURL() + "users/" + userKey + ".json");
                 let cloudData = await res.json();
 
-                // MASTER ADMIN OVERRIDE (awm:kct)
+                // MASTER TEACHER / ADMIN OVERRIDE
                 if (userKey === 'awm' && p === 'kct') {
-                    this.state.currentUser = 'AWM YÖNETİCİ';
+                    this.state.currentUser = 'YÖNETİCİ ÖĞRETMEN';
                     this.state.currentUsername = 'awm';
                     this.state.isVIP = false;
                     this.state.isAdmin = true;
@@ -426,8 +434,11 @@ const app = {
             dashScr.classList.add('active');
         }
 
-        // Royal Name Display with Tiara for VIP
+        // Royal Name Display with Shield for Teacher
         let nameHtml = this.state.currentUser;
+        if (this.state.isAdmin) {
+            nameHtml = `<i class="fa-solid fa-user-shield" style="color:var(--danger); filter:drop-shadow(0 0 8px rgba(239, 68, 68, 0.4)); margin-right:8px;"></i>${this.state.currentUser}`;
+        }
 
         // --- NEW: CLOUD WARNING MESSAGE CHECK ---
         const userSaveKey = `kimyalab_user_${this.state.currentUsername.toLowerCase()}`;
