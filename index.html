@@ -871,14 +871,54 @@
 
     <!-- GAME DIFFICULTY MODAL -->
     <div id="difficulty-modal" class="modal-backdrop">
-        <div class="glass-card animate-slide-up" style="max-width:400px; text-align:center; margin: auto;">
-            <h2 style="margin-bottom:1.5rem">Zorluk Seç ✨</h2>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-                <button class="btn-back" onclick="app.startGameWithDifficulty('easy')" style="border-color:#10b981; color:#10b981">Kolay (90sn, +10 Puan)</button>
-                <button class="btn-back" onclick="app.startGameWithDifficulty('normal')" style="border-color:#3b82f6; color:#3b82f6">Normal (60sn, +20 Puan)</button>
-                <button class="btn-back" onclick="app.startGameWithDifficulty('hard')" style="border-color:#ef4444; color:#ef4444">Zor (30sn, +50 Puan)</button>
+        <div class="glass-card animate-slide-up" style="max-width:950px; width:95%; text-align:left; padding:40px; border-radius:40px;">
+            <button class="btn-back" onclick="app.closeDifficultyModal()" style="margin-bottom:20px; border:none; background:none; color:var(--text-muted); font-weight:700;">
+                <i class="fa-solid fa-arrow-left"></i> Geri
+            </button>
+            <h1 style="margin-bottom:2.5rem; font-size:2.2rem; display:flex; align-items:center; gap:15px; color:var(--text-main)">
+                <span style="color:#fbc02d">⚡</span> Zorluk Seç
+            </h1>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px;">
+                
+                <!-- KOLAY -->
+                <div class="glass-card" style="padding:40px 30px; text-align:center; border-radius:35px; border-top:5px solid #10b981; position:relative;">
+                    <div style="width:70px; height:70px; background:#10b981; border:8px solid rgba(16, 185, 129, 0.2); border-radius:50%; margin:0 auto 25px auto;"></div>
+                    <h3 style="font-size:1.8rem; margin-bottom:20px;">Kolay</h3>
+                    <ul style="list-style:none; padding:0; margin-bottom:30px; text-align:left; color:var(--text-muted); font-size:1rem; line-height:2;">
+                        <li><i class="fa-solid fa-check" style="color:#10b981; margin-right:8px;"></i> Az soru sayısı</li>
+                        <li><i class="fa-solid fa-check" style="color:#10b981; margin-right:8px;"></i> Süre yok</li>
+                        <li><i class="fa-solid fa-check" style="color:#10b981; margin-right:8px;"></i> Tek tablo</li>
+                    </ul>
+                    <button class="btn-primary" onclick="app.startGameWithDifficulty('easy')" style="background: linear-gradient(90deg, #0d9488, #4ade80); border:none; width:100%; padding:15px; border-radius:15px;">Seç →</button>
+                </div>
+
+                <!-- ORTA -->
+                <div class="glass-card" style="padding:40px 30px; text-align:center; border-radius:35px; border-top:5px solid #fbc02d; background:rgba(251, 192, 45, 0.05); position:relative; transform: scale(1.05); z-index:10; border:1px solid rgba(251, 192, 45, 0.3)">
+                    <div style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); background:rgba(251, 192, 45, 0.15); color:#fbc02d; font-size:0.7rem; font-weight:800; padding:5px 15px; border-radius:20px; border:1px solid rgba(251, 192, 45, 0.3);">⭐ Önerilen</div>
+                    <div style="width:70px; height:70px; background:#fbc02d; border:8px solid rgba(251, 192, 45, 0.2); border-radius:50%; margin:0 auto 25px auto;"></div>
+                    <h3 style="font-size:1.8rem; margin-bottom:20px;">Orta</h3>
+                    <ul style="list-style:none; padding:0; margin-bottom:30px; text-align:left; color:var(--text-muted); font-size:1rem; line-height:2;">
+                        <li><i class="fa-solid fa-check" style="color:#fbc02d; margin-right:8px;"></i> Daha fazla soru</li>
+                        <li><i class="fa-solid fa-check" style="color:#fbc02d; margin-right:8px;"></i> Süre var</li>
+                        <li><i class="fa-solid fa-check" style="color:#fbc02d; margin-right:8px;"></i> Tek tablo</li>
+                    </ul>
+                    <button class="btn-primary" onclick="app.startGameWithDifficulty('normal')" style="background: linear-gradient(90deg, #3b82f6, #6366f1); border:none; width:100%; padding:15px; border-radius:15px;">Seç →</button>
+                </div>
+
+                <!-- ZOR -->
+                <div class="glass-card" style="padding:40px 30px; text-align:center; border-radius:35px; border-top:5px solid #ef4444; position:relative;">
+                    <div style="width:70px; height:70px; background:#ef4444; border:8px solid rgba(239, 68, 68, 0.2); border-radius:50%; margin:0 auto 25px auto;"></div>
+                    <h3 style="font-size:1.8rem; margin-bottom:20px;">Zor</h3>
+                    <ul style="list-style:none; padding:0; margin-bottom:30px; text-align:left; color:var(--text-muted); font-size:1rem; line-height:2;">
+                        <li><i class="fa-solid fa-check" style="color:#ef4444; margin-right:8px;"></i> Tüm sorular</li>
+                        <li><i class="fa-solid fa-check" style="color:#ef4444; margin-right:8px;"></i> Kısa süre</li>
+                        <li><i class="fa-solid fa-check" style="color:#ef4444; margin-right:8px;"></i> Karışık tablolar</li>
+                    </ul>
+                    <button class="btn-primary" onclick="app.startGameWithDifficulty('hard')" style="background: linear-gradient(90deg, #ef4444, #f43f5e); border:none; width:100%; padding:15px; border-radius:15px;">Seç →</button>
+                </div>
+
             </div>
-            <button class="btn-back" onclick="app.closeDifficultyModal()" style="margin-top:1.5rem; width:100%">Vazgeç</button>
         </div>
     </div>
 
